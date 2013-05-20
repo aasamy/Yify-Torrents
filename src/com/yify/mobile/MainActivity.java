@@ -24,17 +24,18 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	private class GetUpcoming extends AsyncTask<String, Integer, ArrayList<UpcomingObject>> {
+	private class GetUpcoming extends AsyncTask<String, Integer, ArrayList<ListObject>> {
 
 		@Override
-		protected ArrayList<UpcomingObject> doInBackground(String... arg0) {
+		protected ArrayList<ListObject> doInBackground(String... arg0) {
 			ApiManager manager = new ApiManager();
-			return manager.getUpcoming();
+			return manager.getList(null, null, null, 0, 20, 1,
+					null, null);
 			
 		}
 		
 		@Override
-		public void onPostExecute(ArrayList<UpcomingObject> response) {
+		public void onPostExecute(ArrayList<ListObject> response) {
 			Log.d("Async", "AsyncTask started");
 			if(response.size() != 0) {
 				
