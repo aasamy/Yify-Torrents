@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
+	
+	DatabaseManager db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		db = new DatabaseManager(this);
 	}
 
 	@Override
@@ -24,28 +26,47 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	private class GetUpcoming extends AsyncTask<String, Integer, ArrayList<ListObject>> {
+	private class GetUpcoming extends AsyncTask<String, Integer, ArrayList<CommentObject>> {
 
 		@Override
-		protected ArrayList<ListObject> doInBackground(String... arg0) {
+		protected ArrayList<CommentObject> doInBackground(String... arg0) {
 			ApiManager manager = new ApiManager();
-			return manager.getList(null, null, null, 0, 20, 1,
-					null, null);
+			
+			String[] results = manager.login("jacktimblin@gmail.com", "monster1");
+			
+			Log.d("response", results[0]);
+			
+			if(results.length > 1) {
+				db.addAuth(results[0], Integer.parseInt(results[1]), results[2]);
+			}
+			
+			AuthObject auth = db.getLoggedInUser();
+			
+			if(auth != null) {
+				
+				Log.d("User", "User is Logged in: " + auth.getUser().getUsername() + ", Join date is: " + auth.getUser().getJoinDate());
+				
+			}
+			
+			return manager.getMovieComments(34345454);
 			
 		}
 		
 		@Override
-		public void onPostExecute(ArrayList<ListObject> response) {
+		public void onPostExecute(ArrayList<CommentObject> response) {
 			Log.d("Async", "AsyncTask started");
-			if(response.size() != 0) {
+			
+			if((response != null) && (response.size() != 0)) {
 				
 				for(int i = 0; i < response.size(); i++) {
 					
-					Log.d("Entry", response.get(i).getMovieTitle());
+					Log.d("Comment", response.get(i).getText());
 					
 				}
 				
 			}
+			
+			Log.d("Comment", "No comments found.");
 			
 		}
 		
