@@ -17,14 +17,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-
+/**
+ * This is the class that controls the API requests to the YIFY API.
+ * @author Jacklaaa89
+ *
+ */
 public class ApiManager {
-	
+	/**
+	 * ther baseurl to use for api requests.
+	 */
 	private String baseURL = "http://yify-torrents.com/api/";
-	
+	/**
+	 * Constructor - may become useful in the future.
+	 */
 	public ApiManager() {
 	}
-	
+	/**
+	 * grabs the upcoming films list from the API.
+	 * @return ArrayList<UpcomingObject> the array of upcoming films.
+	 */
 	public ArrayList<UpcomingObject> getUpcoming() {
 		
 		ArrayList<UpcomingObject> results = new ArrayList<UpcomingObject>();
@@ -75,7 +86,19 @@ public class ApiManager {
 		return results;
 		
 	}
-	
+	/**
+	 * this method is essentially the base search method for the whole application, you can return All movies or filter it down
+	 * based on the params provided.
+	 * @param keywords the keywords to search for.
+	 * @param quality the quality to filter to can be either 1080p, 720p or 3D.
+	 * @param genre the genre to filter to visit  {@link http://www.imdb.com/genres/} for valid genres.
+	 * @param rating the rating to filter to, can between 0-9
+	 * @param limit the amount of results to limit to, default is 20.
+	 * @param set the startIndex for the returned results. i.e set 2 on limit 20 will return results 21-40
+	 * @param sort what to sort the results by, can be either date, seeds, peers, size, alphabet, rating, downloaded.
+	 * @param order whether to return the results asc or desc.
+	 * @return ArrayList<ListObject> the array of movie data.
+	 */
 	public ArrayList<ListObject> getList(String keywords, String quality, String genre,
 			int rating, int limit, int set, String sort, String order) {
 		
@@ -146,7 +169,11 @@ public class ApiManager {
 		return data;
 		
 	}
-	
+	/**
+	 * grabs complete information for a single movie based on the movieID.
+	 * @param id the movieID to search for.
+	 * @return ItemObject the complete movie item on success, null on failure.
+	 */
 	public ItemObject getMovieDetails(int id) {
 		
 		ItemObject lo = null;
@@ -216,7 +243,14 @@ public class ApiManager {
 		return lo;
 	}
 	
-	
+	/**
+	 * complete API calling method can handle GET or POST requests.
+	 * @param url the URL object to start the connection with.
+	 * @param method the method of variable transport, i,e POST or GET
+	 * @param params if the method is POST the variable string has to be defined here, if get this can be NULL as
+	 * parameters are appended to the end of the initial URL.
+	 * @return String the response from the server in its raw string form.
+	 */
 	private String callApi(URL url, String method, String params) {
 		String result = "";
 		
@@ -310,7 +344,13 @@ public class ApiManager {
 		
 		return result;
 	}
-	
+	/**
+	 * registers a new user onto the website.
+	 * @param username the username to use.
+	 * @param password the password to use.
+	 * @param email the email to link to the account.
+	 * @return String the error message on failure or null on success.
+	 */
 	public String register(String username, String password, String email) {
 		
 		String result = "";
@@ -331,8 +371,7 @@ public class ApiManager {
 					      "password=" + URLEncoder.encode(password, "UTF-8") + "&" + 
 					      "username=" + URLEncoder.encode(username, "UTF-8"));
 			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				return "There has been an error processing your request.";
 			}
 			
 			JSONObject data = null;
@@ -353,16 +392,22 @@ public class ApiManager {
 				
 				String s = data.optString("success");
 				
-				result = s;
+				if(!s.equals("")) {
+					return null;
+				}
 				
 			}
 			
 		}
 		
-		return result;
+		return "There was an error processing your request" /*<-- should not reach this point. */;
 		
 	}
-	
+	/**
+	 * validates a registration using the verification code found in the validation email sent to the user.
+	 * @param verificationCode the validation code sent to the user after a new user registers.
+	 * @return String the error message on failure, or null on success.
+	 */
 	public String registerConfirm(String verificationCode) {
 		
 		String result = "";
@@ -397,16 +442,26 @@ public class ApiManager {
 				
 				String s = data.optString("success");
 				
-				result = s;
+				if(!s.equals("")) {
+					return null;
+				}
 				
 			}
 			
 		}
 		
-		return result;
+		return "There was a problem processing your request.";
 		
 	}
-	
+	/**
+	 * this functions acts as a virtual 'login' function, and returns a unique 'hash' to use to
+	 * do account related tasks. The hash is valid for as long as it is kept. May have to put my own validation 
+	 * on the hash to make the user re login after a certain time.
+	 * @param username the username your assingned when you registered.
+	 * @param password the password for your account.
+	 * @return String[] a string array with an error message on failure, an array of account data on success, including the hash, userID and 
+	 * username of the account holder.
+	 */
 	public String[] login(String username, String password) {
 		
 		URL url = null;
@@ -442,7 +497,11 @@ public class ApiManager {
 		return result;
 		
 	}
-	
+	/**
+	 * grabs public account information based on the unique account ID.
+	 * @param userID the accountID of the account holder.
+	 * @return UserObject the user object on success, null on failure.
+	 */
 	public UserObject getUserFromID(int userID) {
 		
 		UserObject user = null;
@@ -488,7 +547,11 @@ public class ApiManager {
 		return user;
 		
 	}
-	
+	/**
+	 * gets the comments for a single movie based on the movieID.
+	 * @param movieID the unique of the movie.
+	 * @return ArrayList<CommentObject> the array of comments, or an empty array if there is no comments.
+	 */
 	public ArrayList<CommentObject> getMovieComments(int movieID) {
 		
 		ArrayList<CommentObject> data = new ArrayList<CommentObject>();
@@ -557,6 +620,110 @@ public class ApiManager {
 			
 		}
 		return data;
+	}
+	/**
+	 * post a message to a movie using a login hash.
+	 * @param message the message to post.
+	 * @param movieID the movie to post to.
+	 * @param replyID the comment to reply to, if this is -1 this comment is not replying, it is a new comment.
+	 * @param hash the login hash of the current user.
+	 * @return String returns error message on failure, null on success.
+	 */
+	public String postComment(String message, int movieID, int replyID, String hash) {
+		
+		String result = "";
+		String response = "";
+		URL url = null;
+		
+		String reply = (replyID == -1) ? "&replyid=" : "&replyid=" + replyID;
+		
+		try {
+			url = new URL(this.baseURL + "commentpost.json");
+			
+			response = this.callApi(url, "POST", "text=" + URLEncoder.encode(message, "UTF-8") + reply + 
+					"&hash=" + hash + "&movieid=" + movieID);
+			
+		} catch (Exception e) {
+			return "Your comment could not posted at this time.";
+		}
+		
+		if(url != null) {
+			
+			JSONObject r = null;
+			
+			try {
+				r = new JSONObject(response);
+			} catch (JSONException e) {
+				return "Your comment could not be posted at this time.";
+			}
+			
+			if(r != null) {
+				String err = r.optString("error");
+				
+				if(!err.equals("")) {
+					return err;
+				}
+				
+				result = r.optString("status");
+				
+				if(!result.equals("")) {
+					return null;
+				}
+				
+			}
+			
+		}
+		
+		return "Your comment could not be posted at this time.";
+		
+	}
+	/**
+	 * update the logged in users personal profile. The only required param is active, the rest can be null if they
+	 * do not need updating. The oldPassword and newPassword both need to not be null if this param is to be sent to the
+	 * API.
+	 * @param hash the login hash for the current user.
+	 * @param active 1 or 0 the active status for the account.
+	 * @param about the new about you text for the profile.
+	 * @param oldPassword the old password for confirmation
+	 * @param newPassword the new password, the old password is required.
+	 * @param avatar the img src for the new image to use as the users profile picture.
+	 * @return String returns error message on failure, null on success.
+	 */
+	public String updateProfile(String hash, int active, String about,
+			String oldPassword, String newPassword, String avatar) {
+		
+		String result = "";
+		URL url = null;
+		
+		String atext = (about != null) ? "" : "&about=" + about;
+		String apassword = ((oldPassword != null) && (newPassword != null)) ? "&oldpassword=" + oldPassword + "&newpassword=" + newPassword : "";
+		String aAvatar = (avatar != null) ? "&avatar=" + avatar : "";
+		
+		try {
+			url = new URL(this.baseURL + "editprofile.json");
+			
+			String response = this.callApi(url, "POST", "hash=" + hash + "&active=" + active + atext + apassword + aAvatar);
+			
+			JSONObject data = new JSONObject(response);
+			
+			String err = data.optString("error");
+			
+			if(!err.equals("")) {
+				return err;
+			}
+			
+			result = data.optString("status");
+			
+			if(!result.equals("")) {
+				return null;
+			}
+			
+		} catch(Exception e) {
+			return "There was an error processing your request.";
+		}
+		
+		return "There was an error processing your request.";
+		
 	}
 	
 	
