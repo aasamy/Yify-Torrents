@@ -3,6 +3,6 @@
     android:label="@string/app_name"
     android:hint="@string/search_hint"
     android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
-    android:searchSuggestAuthority="com.example.android.actionbarcompat.SuggestionProvider"
+    android:searchSuggestAuthority="com.yify.mobile.SuggestionProvider"
     android:searchSuggestSelection=" ?" >
 </searchable>
