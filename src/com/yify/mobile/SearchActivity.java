@@ -3,14 +3,18 @@ package com.yify.mobile;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -34,6 +38,59 @@ public class SearchActivity extends ActionBarActivity {
 	private String query;
 	private TextView resultsText;
 	private ConnectivityDetector detector;
+	protected boolean loadMore;
+	private ArrayList<ListObject> items;
+	private int set = 1;
+	ProductAdapter<ListObject> adapter;
+	private ListView listView;
+	private View footerView;
+	private Runnable loadMoreItems = new Runnable() {
+
+		@Override
+		public void run() {
+			
+			loadMore = true;
+			
+			/* get 20 more items based on the old query. */
+			ApiManager manager = new ApiManager();
+			items = manager.getList(query, null, null, 0, 20, set, null, null);
+			
+			runOnUiThread(setNewItems);
+			
+		}
+		
+	};
+	
+	protected Runnable setNewItems = new Runnable() {
+		
+		@Override
+		public void run() {
+			
+			if((items != null) && (items.size() != 0)) {
+				
+				/* add the new items to the adapter. */
+				for(int i = 0; i < items.size(); i++) {
+					adapter.addItem(items.get(i));
+				}
+				
+				adapter.notifyDataSetChanged();
+				
+				loadMore = false;
+				
+				set++;
+				
+				if(items.size() < 20) {
+					listView.removeFooterView(footerView);
+					loadMore = true;
+				}
+				
+			} else {
+				/* stop searching for items and hide footerView */
+			}
+			
+		}
+		
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,25 +155,35 @@ public class SearchActivity extends ActionBarActivity {
 	
 	private class SearchMovies extends AsyncTask<String, Integer, ArrayList<ListObject>> {
 
-		private ListView listView = (ListView) findViewById(R.id.search_listView);
+		
 		
 		@Override
 		protected ArrayList<ListObject> doInBackground(String... params) {
-			
+			listView = (ListView) findViewById(R.id.search_listView);
 			if(!detector.isConnectionAvailable()) {
 				return null;
 			}
 			
 			ApiManager manager = new ApiManager();
-			return manager.getList(params[0], null, null, 0, 20, 1, null, null);
+			return manager.getList(params[0], null, null, 0, 20, SearchActivity.this.set, null, null);
 			
 		}
 		
 		@Override
 		public void onPostExecute(ArrayList<ListObject> response) {
+			
+			footerView = ((LayoutInflater) SearchActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer, null, false);
+			
+			if(response.size() == 20) {
+				listView.addFooterView(footerView);
+			}
+			
 			listView.setFastScrollEnabled(true);
-			final ProductAdapter<ListObject> adapter = new ProductAdapter<ListObject>(SearchActivity.this, response, true);
+			adapter = new ProductAdapter<ListObject>(SearchActivity.this, response, true);
 			listView.setAdapter(adapter);
+			
+			SearchActivity.this.set = 2; /*<-- finished loading initial first set, move to next*/
+			
 			listView.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -129,8 +196,34 @@ public class SearchActivity extends ActionBarActivity {
 				}
 				
 			});
+			
+			listView.setOnScrollListener(new OnScrollListener() {
+
+				@Override
+				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+						int totalItemCount) {
+					
+					int lastInScreen = firstVisibleItem + visibleItemCount;
+					
+					if((lastInScreen == totalItemCount) && (!loadMore)) {
+						Thread thread = new Thread(null, loadMoreItems);
+						thread.start();
+					}
+					
+				}
+
+				@Override
+				public void onScrollStateChanged(AbsListView view, int scrollState) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
+			
 		}
 		
 	}
+	
+	
 	
 }
