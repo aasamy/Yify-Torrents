@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/show_twitter"
+        android:title="@string/show_twitter"
+        android:showAsAction="always"/>
+    <item android:id="@+id/refresh_twitter"
+        android:title="@string/refresh_twitter"
+        android:showAsAction="always" />
+
+</menu>

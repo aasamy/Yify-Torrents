@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/results_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/actionbar_title_color"
+        android:padding="5dp"
+        android:text=""
+        android:textColor="@color/text_white"
+        android:shadowDx="0"
+        android:shadowDy="4"
+        android:shadowColor="#0000ff" />
+
+	<ListView
+	    android:id="@+id/search_listView"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:paddingTop="5dp" >
+
+	</ListView>
+
+</LinearLayout>

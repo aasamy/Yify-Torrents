@@ -1,0 +1,81 @@
+<!--
+  Copyright 2011 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0fdefe
+gfdsf
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="3dp" >
+    
+    <ViewFlipper
+        android:id="@+id/main_view_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <!-- Main default view, the loading view as
+        it is not determined if the user has a sufficient
+        internet connection to retrieve the data. -->
+        
+        <LinearLayout 
+            android:id="@+id/main_loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal|center_vertical" >
+
+                <ProgressBar
+                    android:id="@+id/main_loading_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+                
+                <TextView 
+                    android:id="@+id/err_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/main_loading_bar"
+                    android:text=""
+                    android:layout_centerInParent="true"/>
+                
+            </RelativeLayout>
+            
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:id="@+id/upcoming_linear_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            
+            <TextView
+                android:id="@+id/upcoming_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upcoming Movies" />
+            
+            <ListView
+                android:id="@+id/upcoming_list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="5dp" />
+            
+        </LinearLayout>
+        
+    </ViewFlipper>
+
+</FrameLayout>
