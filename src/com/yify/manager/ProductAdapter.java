@@ -35,12 +35,24 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return list.get(position);
+    	
+    	if(position < list.size()) {
+    		return list.get(position);
+    	}
+    	
+        return null;
+    }
+    
+    public void addItem(T item) {
+    	this.list.add(item);
     }
     
     @Override
     public boolean isEnabled(int position) {
     	if(this.isEnabled) {
+    		if(position == this.getCount()) {
+    			return false;
+    		}
     		return super.isEnabled(position);
     	}
     	return false;
