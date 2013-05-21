@@ -15,6 +15,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,12 +43,6 @@ public class MainActivity extends ActionBarActivity {
 		
 		flipper = (ViewFlipper) findViewById(R.id.main_view_state);
 		
-		if(savedInstanceState != null) {
-			int savedIndex = savedInstanceState.getInt("SAVED_INDEX");
-			flipper.setDisplayedChild(savedIndex);
-		} else {
-			flipper.setDisplayedChild(0);
-		}
 		
 	}
 	
