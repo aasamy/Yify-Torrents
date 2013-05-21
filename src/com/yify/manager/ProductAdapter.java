@@ -14,15 +14,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ProductAdapter extends BaseAdapter {
+public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
     
     private Activity activity;
-    private ArrayList<UpcomingObject> list;
+    private ArrayList<T> list;
     private static LayoutInflater inflater=null;
     public ImageLoader imageLoader; 
     private boolean isEnabled = false;
     
-    public ProductAdapter(Activity a, ArrayList<UpcomingObject> l, boolean isEnabled) {
+    public ProductAdapter(Activity a, ArrayList<T> l, boolean isEnabled) {
         activity = a;
         list = l;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,7 +76,9 @@ public class ProductAdapter extends BaseAdapter {
         }
         holder.text.setText(description);
         holder.image.setTag(list.get(position).getMovieCover());
-        holder.subTitle.setText("Uploaded by: " + list.get(position).getUploader());
+        T item = list.get(position);
+        String subtitle = (item instanceof ListObject) ? "Genre : " + ((ListObject) item).getGenre() + ", Downloaded " + ((ListObject) item).getDownloaded() + " times" : "Uploaded by: " + item.getUploader();
+        holder.subTitle.setText(subtitle);
         imageLoader.DisplayImage(list.get(position).getMovieCover(), activity, holder.image, R.drawable.default_product);
         return vi;
     }
