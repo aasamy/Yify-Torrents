@@ -26,6 +26,7 @@
         <item name="android:background">#4c4c4c</item>
         <item name="android:titleTextStyle">@style/ActionBarTitle</item>
         <item name="android:icon">@drawable/logo</item>
+        <item name="android:displayOptions">showHome|useLogo</item>
     </style>
     
     <style name="myDropDownListView" parent="android:style/Widget.Holo.ListView.DropDown">
@@ -33,7 +34,7 @@
     </style>
 
     <style name="ActionBarTitle">
-        <item name="android:textColor">@color/actionbar_title_color</item>
+        <item name="android:textColor">@color/text_white</item>
     </style>
 
 </resources>
