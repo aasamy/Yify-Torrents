@@ -5,9 +5,11 @@ import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.SearchRecentSuggestions;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,11 +34,15 @@ import com.yify.mobile.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchActivity extends ActionBarActivity {
-
+	
+	private String quality = "ALL";
+	private String genre = "ALL";
+	private int rating = 0;
+	private String order = "desc";
+	private String sort = "date";
 	private Menu mainMenu = null;
 	private ActionBar actionBar;
 	private String query;
-	private TextView resultsText;
 	private ConnectivityDetector detector;
 	protected boolean loadMore;
 	private ArrayList<ListObject> items;
@@ -53,7 +59,7 @@ public class SearchActivity extends ActionBarActivity {
 			
 			/* get 20 more items based on the old query. */
 			ApiManager manager = new ApiManager();
-			items = manager.getList(query, null, null, 0, 20, set, null, null);
+			items = manager.getList(query, quality, genre, rating, 20, set, sort, order);
 			
 			runOnUiThread(setNewItems);
 			
@@ -65,6 +71,8 @@ public class SearchActivity extends ActionBarActivity {
 		
 		@Override
 		public void run() {
+			
+			if(detector.isConnectionAvailable()) {
 			
 			if((items != null) && (items.size() != 0)) {
 				
@@ -87,6 +95,10 @@ public class SearchActivity extends ActionBarActivity {
 			} else {
 				/* stop searching for items and hide footerView */
 			}
+			} else {
+				listView.removeFooterView(footerView);
+				loadMore = true;
+			}
 			
 		}
 		
@@ -97,7 +109,8 @@ public class SearchActivity extends ActionBarActivity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.search);
 	    this.detector = new ConnectivityDetector(this);
-	    
+	    setTitle("Search Results");
+	    getActionBar().setDisplayShowTitleEnabled(true);
 	    //handle the intent
 	    Intent intent = getIntent();
 	    this.handleIntent(intent);
@@ -105,9 +118,16 @@ public class SearchActivity extends ActionBarActivity {
 	    
 	}
 	
+	
+	
 	private void handleIntent(Intent intent) {
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			
+			if(!this.detector.isConnectionAvailable()) {
+				Toast.makeText(getApplicationContext(), "Please check your network connection", Toast.LENGTH_SHORT).show();
+				finish();
+			}
 			
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			
@@ -148,6 +168,13 @@ public class SearchActivity extends ActionBarActivity {
 				home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(home);
 				break;
+			case R.id.menu_filter:
+				Intent filter = new Intent(this, FilterActivity.class);
+				filter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				Filter data = new Filter(query, quality, genre, rating, sort, order);
+				filter.putExtra("filter", data);
+				startActivity(filter);
+				break;
 		}
 		
 		return super.onOptionsItemSelected(item);
@@ -165,12 +192,16 @@ public class SearchActivity extends ActionBarActivity {
 			}
 			
 			ApiManager manager = new ApiManager();
-			return manager.getList(params[0], null, null, 0, 20, SearchActivity.this.set, null, null);
+			return manager.getList(params[0], quality, genre, rating, 20, set, sort, order);
 			
 		}
 		
 		@Override
 		public void onPostExecute(ArrayList<ListObject> response) {
+			
+			if(response == null) {
+				SearchActivity.this.finish();
+			}
 			
 			footerView = ((LayoutInflater) SearchActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer, null, false);
 			
@@ -189,6 +220,10 @@ public class SearchActivity extends ActionBarActivity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
+					
+					if(position == adapter.getCount()) {
+						return;
+					}
 					
 					ListObject o = (ListObject) adapter.getItem(position);
 					Toast.makeText(getApplicationContext(), o.getFilesize(), Toast.LENGTH_SHORT).show();
@@ -219,7 +254,6 @@ public class SearchActivity extends ActionBarActivity {
 				}
 				
 			});
-			
 		}
 		
 	}
