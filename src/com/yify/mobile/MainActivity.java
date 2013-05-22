@@ -3,12 +3,15 @@ package com.yify.mobile;
 import android.os.AsyncTask;
 import android.os.Build;
 import java.util.ArrayList;
+import java.util.HashMap;
 import com.yify.manager.ApiManager;
 import com.yify.manager.DatabaseManager;
 import com.yify.manager.ProductAdapter;
 import com.yify.object.AuthObject;
 import com.yify.object.CommentObject;
+import com.yify.object.ListObject;
 import com.yify.object.UpcomingObject;
+import com.yify.view.ViewFlinger;
 import android.widget.ListView;
 import android.os.Bundle;
 import android.annotation.TargetApi;
@@ -22,8 +25,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SearchView.OnSuggestionListener;
@@ -36,10 +41,10 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 	
 	private Menu mainMenu = null;
-	private ViewFlipper flipper;
-	private ListView listView;
+	private ViewFlipper upcomingflipper;
 	private ActionBar actionBar;
 	private ConnectivityDetector detector;
+	private ViewFlinger upcomingFlinger;
 	private SearchView searchView; 
 
 	@Override
@@ -47,7 +52,8 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		actionBar = getActionBar();
-		flipper = (ViewFlipper) findViewById(R.id.main_view_state);
+		upcomingflipper = (ViewFlipper) findViewById(R.id.upcoming_state);
+		upcomingFlinger = (ViewFlinger) findViewById(R.id.upcoming_flinger);
 		detector = new ConnectivityDetector(this);
 		
 	}
@@ -81,10 +87,7 @@ public class MainActivity extends ActionBarActivity {
 		
 		//execute background task to grab upcoming movies.
 		getActionBarHelper().setRefreshActionItemState(true);
-		flipper = (ViewFlipper) findViewById(R.id.main_view_state);
-		flipper.setDisplayedChild(0);
-		
-		listView = (ListView) findViewById(R.id.upcoming_list);
+		upcomingflipper.setDisplayedChild(0);
 		
 		/* get the upcoming films. */
 		new getUpcoming().execute("");
@@ -109,11 +112,11 @@ public class MainActivity extends ActionBarActivity {
 		
 		switch(item.getItemId()) {
 			case R.id.menu_refresh:
-				TextView view = (TextView) MainActivity.this.findViewById(R.id.err_message);
-				ProgressBar loading = (ProgressBar) MainActivity.this.findViewById(R.id.main_loading_bar);
+				TextView view = (TextView) MainActivity.this.findViewById(R.id.upcoming_err);
+				ProgressBar loading = (ProgressBar) MainActivity.this.findViewById(R.id.loading_upcoming);
 				view.setVisibility(View.GONE);
 				loading.setVisibility(View.VISIBLE);
-				flipper.setDisplayedChild(0);
+				upcomingflipper.setDisplayedChild(0);
 				if(!detector.isConnectionAvailable()) {
 					Toast.makeText(this, "No Network Connection....", Toast.LENGTH_SHORT).show();
 					
@@ -152,11 +155,11 @@ public class MainActivity extends ActionBarActivity {
 		}
 		
 		@Override
-		public void onPostExecute(ArrayList<UpcomingObject> response) {
+		public void onPostExecute(final ArrayList<UpcomingObject> response) {
 			
 			final LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-			TextView view = (TextView) MainActivity.this.findViewById(R.id.err_message);
-			ProgressBar loading = (ProgressBar) MainActivity.this.findViewById(R.id.main_loading_bar);
+			TextView view = (TextView) MainActivity.this.findViewById(R.id.upcoming_err);
+			ProgressBar loading = (ProgressBar) MainActivity.this.findViewById(R.id.loading_upcoming);
 			
 			if(!detector.isConnectionAvailable()) {
 				view.setVisibility(View.VISIBLE);
@@ -174,24 +177,56 @@ public class MainActivity extends ActionBarActivity {
 				return;
 			}
 			
+			MainActivity.this.upcomingFlinger.removeAllViews();
 			
-			MainActivity.this.listView.setFastScrollEnabled(true);
-			final ProductAdapter<UpcomingObject> adapter = new ProductAdapter<UpcomingObject>(MainActivity.this, response, false);
-			MainActivity.this.listView.setAdapter(adapter);
-			MainActivity.this.listView.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					
-					UpcomingObject o = (UpcomingObject) adapter.getItem(position);
-					Toast.makeText(getApplicationContext(), o.getImdbCode(), Toast.LENGTH_SHORT).show();
-					
-				}
+			/* add all of the upcoming films to the flinger. */
+			for(int i = 0; i < response.size(); i++) {
 				
-			});
-			MainActivity.this.flipper.setDisplayedChild(1);
+				@SuppressWarnings("unchecked")
+				View newView = inflater.inflate(R.layout.item, null);
+				
+				TextView text1 = (TextView) newView.findViewById(R.id.text);
+				TextView text2 = (TextView) newView.findViewById(R.id.text2);
+				ImageView img = (ImageView) newView.findViewById(R.id.image);
+				
+				text1.setText(response.get(i).getMovieTitle());
+				text2.setText("Uploaded by: " + response.get(i).getUploader());
+				com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(response.get(i).getMovieCover(), img);
+				
+				MainActivity.this.upcomingFlinger.addView(newView);
+			}
+			
+			MainActivity.this.upcomingflipper.setDisplayedChild(1);
 			getActionBarHelper().setRefreshActionItemState(false);
+		}
+		
+	}
+	
+	private class getLatestAndPopular extends AsyncTask<String, Integer, HashMap<String, ArrayList<ListObject>>>  {
+
+		@Override
+		protected HashMap<String, ArrayList<ListObject>> doInBackground(String... arg0) {
+			if(!MainActivity.this.detector.isConnectionAvailable()) {
+				return null;
+			}
+			ApiManager manager = new ApiManager();
+			HashMap<String, ArrayList<ListObject>> data = new HashMap<String, ArrayList<ListObject>>();
+			
+			data.put("popular", manager.getList(null, null, null, 0, 10, 1, "downloaded", "desc"));
+			data.put("latest", manager.getList(null, null, null, 0, 10, 1, "date", "desc"));
+			
+			return data;
+			
+		}
+		
+		@Override
+		public void onPostExecute(HashMap<String, ArrayList<ListObject>> response) {
+			
+			/* check connection, and check variables are set. */
+			
+			/* set each of the viewflingers with the data, and then set the flipper view to active from loading
+			 * then stop the refresh icon, and done. */
+			
 		}
 		
 	}
