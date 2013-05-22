@@ -204,7 +204,7 @@ public class SearchActivity extends ActionBarActivity {
 						int totalItemCount) {
 					
 					int lastInScreen = firstVisibleItem + visibleItemCount;
-					
+					/* if the last entry is in view attempt to load more items */
 					if((lastInScreen == totalItemCount) && (!loadMore)) {
 						Thread thread = new Thread(null, loadMoreItems);
 						thread.start();
