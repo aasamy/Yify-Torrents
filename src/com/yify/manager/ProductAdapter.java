@@ -19,14 +19,12 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
     private Activity activity;
     private ArrayList<T> list;
     private static LayoutInflater inflater=null;
-    public ImageLoader imageLoader; 
     private boolean isEnabled = false;
     
     public ProductAdapter(Activity a, ArrayList<T> l, boolean isEnabled) {
         activity = a;
         list = l;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        imageLoader=new ImageLoader(activity.getApplicationContext());
         this.isEnabled = isEnabled;
     }
 
@@ -91,7 +89,8 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         T item = list.get(position);
         String subtitle = (item instanceof ListObject) ? "Genre : " + ((ListObject) item).getGenre() + ", Downloaded " + ((ListObject) item).getDownloaded() + " times" : "Uploaded by: " + item.getUploader();
         holder.subTitle.setText(subtitle);
-        imageLoader.DisplayImage(list.get(position).getMovieCover(), activity, holder.image, R.drawable.default_product);
+        //imageLoader.DisplayImage(list.get(position).getMovieCover(), activity, holder.image, R.drawable.default_product);
+        com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(list.get(position).getMovieCover(),holder.image);
         return vi;
     }
 }
