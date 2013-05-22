@@ -1,81 +1,63 @@
-<!--
-  Copyright 2011 The Android Open Source Project
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0fdefe
-gfdsf
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:paddingLeft="3dp" >
-    
-    <ViewFlipper
-        android:id="@+id/main_view_state"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        
-        <!-- Main default view, the loading view as
-        it is not determined if the user has a sufficient
-        internet connection to retrieve the data. -->
-        
-        <LinearLayout 
-            android:id="@+id/main_loading_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-            
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/upcoming_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/upcoming_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upcoming Movies" />
+
+        <ViewFlipper
+            android:id="@+id/upcoming_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <!-- Upcoming Loading State -->
+
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal|center_vertical" >
+                android:id="@+id/upcoming_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
                 <ProgressBar
-                    android:id="@+id/main_loading_bar"
+                    android:id="@+id/loading_upcoming"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/upcoming_err"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-                
-                <TextView 
-                    android:id="@+id/err_message"
-                    android:layout_width="wrap_content"
+                    android:text="" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/upcoming_viewflinger_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <com.yify.view.ViewFlinger
+                    android:id="@+id/upcoming_flinger"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/main_loading_bar"
-                    android:text=""
-                    android:layout_centerInParent="true"/>
+                    android:layout_width="wrap_content" >
+
+                    <!-- insert new views here -->
+                    
+                </com.yify.view.ViewFlinger>
                 
             </RelativeLayout>
-            
-        </LinearLayout>
-        
-        <LinearLayout 
-            android:id="@+id/upcoming_linear_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-            
-            <TextView
-                android:id="@+id/upcoming_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upcoming Movies" />
-            
-            <ListView
-                android:id="@+id/upcoming_list"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:paddingTop="5dp" />
-            
-        </LinearLayout>
-        
-    </ViewFlipper>
 
-</FrameLayout>
+        </ViewFlipper>
+        
+    </RelativeLayout>
+
+</RelativeLayout>
