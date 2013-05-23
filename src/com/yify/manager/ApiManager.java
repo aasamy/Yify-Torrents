@@ -22,6 +22,7 @@ import com.yify.object.ListObject;
 import com.yify.object.UpcomingObject;
 import com.yify.object.UserObject;
 
+import android.os.DropBoxManager.Entry;
 import android.util.Log;
 /**
  * This is the class that controls the API requests to the YIFY API.
@@ -177,6 +178,7 @@ public class ApiManager {
 	    			lo.setTorrentURL(entry.optString("TorrentUrl"));
 	    			lo.setTorrentHash(entry.optString("TorrentHash"));
 	    			lo.setTorrentMagnetURL(entry.optString("TorrentMagnetUrl"));
+	    			lo.setResultCount(count);
 	    			
 	    			data.add(lo);
 	    		
@@ -750,6 +752,105 @@ public class ApiManager {
 		}
 		
 		return "There was an error processing your request.";
+		
+	}
+	/**
+	 * sends a resetcode to the email provided if the email is associated with an account 
+	 * on Yify-torrents.
+	 * @param email the email to sedn the code to.
+	 * @return String error message on failure, null on success.
+	 */
+	public String getPasswordResetCode(String email) {
+		
+		String result = "";
+		URL url = null;
+		
+		try {
+			url = new URL(this.baseURL + "sendresetpass.json");
+		} catch(MalformedURLException e) {
+			return "There was a problem processing your request";
+		}
+		
+		if(url != null) {
+			
+			String response = this.callApi(url, "POST", "email=" + email);
+			
+			JSONObject object = null;
+			
+			try {
+				object = new JSONObject(response);
+			} catch (JSONException e) {
+				return "There was an error processing your request";
+			}
+			
+			if(object != null) {
+				
+				String err = object.optString("error");
+				
+				if(!err.equals("")) {
+					return err;
+				}
+				
+				result = object.optString("status");
+				
+				if(!result.equals("")) {
+					return null;
+				}
+			}
+			
+		}
+		
+		return result;
+		
+	}
+	/**
+	 * uses the code from getResetPasswordCode() accompanied with a new
+	 * password will attempt to change the password on the users account.
+	 * @param code the code sent to the users email after requesting the code.
+	 * @param newPassword the new password to set to the user account.
+	 * @return String error message on failure, null on success.
+	 */
+	public String resetPasswordConfirm(String code, String newPassword) {
+		
+		String result = "";
+		URL url = null;
+		
+		try {
+			url = new URL(this.baseURL + "resetpassconfirm.json");
+		} catch(MalformedURLException e) {
+			return "There was a problem processing your request";
+		}
+		
+		if(url != null) {
+			
+			String response = this.callApi(url, "POST", "code=" + code + "&newpassword=" + newPassword);
+			
+			JSONObject object = null;
+			
+			try {
+				object = new JSONObject(response);
+			} catch (JSONException e) {
+				return "There was an error processing your request";
+			}
+			
+			if(object != null) {
+				
+				String err = object.optString("error");
+				
+				if(!err.equals("")) {
+					return err;
+				}
+				
+				result = object.optString("status");
+				
+				if(!result.equals("")) {
+					return null;
+				}
+			}
+			
+		}
+		
+		return result;
 		
 	}
 	
