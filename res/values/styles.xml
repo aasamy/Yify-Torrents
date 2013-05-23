@@ -14,12 +14,18 @@
   limitations under the License.
   -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    
+<color name="white_opaque">#FFFFFFFF</color>
+    
     <style name="AppTheme" parent="android:style/Theme.Light">
         <item name="android:windowTitleSize">@dimen/actionbar_compat_height</item>
         <item name="android:windowTitleBackgroundStyle">@style/ActionBarCompat</item>
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
+        <item name="android:background">@color/white_opaque</item>
+        <item name="android:colorBackground">@color/white_opaque</item>
+        <item name="android:windowBackground">@color/white_opaque</item>
 		
         <!-- for programmatic instantiation -->
         <item name="actionbarCompatTitleStyle">@style/ActionBarCompatTitle</item>

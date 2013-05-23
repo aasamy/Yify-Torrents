@@ -49,7 +49,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class color {
         public static final int actionbar_title_color=0x7f070000;
+        public static final int blue=0x7f070002;
         public static final int text_white=0x7f070001;
+        public static final int white_opaque=0x7f070003;
     }
     public static final class dimen {
         public static final int actionbar_compat_button_home_width=0x7f080002;
@@ -85,8 +87,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int navigation_refresh=0x7f020019;
         public static final int partfinder=0x7f02001a;
         public static final int searchcategory=0x7f02001b;
-        public static final int twitter_feed_background=0x7f02001c;
-        public static final int yify=0x7f02001d;
+        public static final int textlines=0x7f02001c;
+        public static final int twitter_feed_background=0x7f02001d;
+        public static final int viewselector=0x7f02001e;
+        public static final int yify=0x7f02001f;
     }
     public static final class id {
         public static final int actionbar_compat=0x7f090000;

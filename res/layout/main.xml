@@ -8,14 +8,20 @@
         android:id="@+id/upcoming_container"
         android:layout_width="fill_parent"
         android:layout_height="120dp" 
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="20dp"
+        android:paddingRight="25dp"
+        android:paddingLeft="10dp">
 
         <TextView
             android:id="@+id/upcoming_text"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Upcoming Movies"
-            android:paddingBottom="15dp" />
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/textlines" />
 
         <ViewFlipper
             android:id="@+id/upcoming_state"
@@ -28,7 +34,7 @@
                 android:id="@+id/upcoming_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="15dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_upcoming"
@@ -73,14 +79,21 @@
         android:id="@+id/latest_container"
         android:layout_width="fill_parent"
         android:layout_height="120dp"
-        android:layout_below="@id/upcoming_container" >
+        android:layout_below="@id/upcoming_container"
+        android:layout_marginTop="15dp"
+        android:paddingRight="25dp"
+        android:paddingLeft="10dp" >
 
         <TextView
             android:id="@+id/latest_text"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Latest Movies"
-            android:paddingBottom="15dp" />
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/textlines"/>
 
         <ViewFlipper
             android:id="@+id/latest_state"
@@ -93,7 +106,7 @@
                 android:id="@+id/latest_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="15dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_latest"
@@ -113,7 +126,7 @@
                 android:id="@+id/latest_viewflinger_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_gravity="center" >
@@ -137,14 +150,21 @@
         android:id="@+id/popular_container"
         android:layout_width="fill_parent"
         android:layout_height="120dp"
-        android:layout_below="@id/latest_container" >
+        android:layout_below="@id/latest_container"
+        android:layout_marginTop="15dp"
+        android:paddingRight="25dp"
+        android:paddingLeft="10dp" >
 
         <TextView
             android:id="@+id/popular_text"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Most Popular Movies"
-            android:paddingBottom="15dp" />
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/textlines" />
 
         <ViewFlipper
             android:id="@+id/popular_state"
@@ -177,7 +197,7 @@
                 android:id="@+id/popular_viewflinger_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_gravity="center" >

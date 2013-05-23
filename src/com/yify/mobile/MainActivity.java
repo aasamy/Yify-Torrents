@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -291,10 +292,21 @@ public class MainActivity extends ActionBarActivity {
 				TextView t2 = (TextView) newView.findViewById(R.id.text2);
 				ImageView img = (ImageView) newView.findViewById(R.id.image);
 				
-				T item = response.get(i);
+				final T item = response.get(i);
 				String mt = (item instanceof ListObject) ? "Genre: " + ((ListObject) item).getGenre() + ", Downloaded " + ((ListObject) item).getDownloaded() + " times" : "Uploaded by: " + item.getUploader();
-				
+				OnClickListener click = (item instanceof ListObject) ? new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						Toast.makeText(getApplicationContext(), "Tapped: " + ((ListObject) item).getMovieID(), Toast.LENGTH_SHORT).show();
+						
+					}
+					
+				} : null;
 				t1.setText(item.getMovieTitle()); t2.setText(mt);
+				if(click != null ) {
+					newView.setOnClickListener(click);
+				}
 				ImageLoader.getInstance().displayImage(item.getMovieCover(), img);
 				
 				this.fln.addView(newView);
