@@ -150,6 +150,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 			
 			ApiManager manager = new ApiManager();
+			
 			return manager.getUpcoming();
 			
 		}
