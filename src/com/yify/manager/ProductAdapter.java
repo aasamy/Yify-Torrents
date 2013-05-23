@@ -4,15 +4,21 @@ import java.util.ArrayList;
 
 import com.yify.mobile.R;
 import com.yify.object.*;
+import com.yify.view.ViewFlinger;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
     
@@ -64,17 +70,21 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         public TextView text;
         public ImageView image;
         public TextView subTitle;
+        public ViewFlinger flinger;
+        public Button button;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         ViewHolder holder;
         if(convertView==null){
-            vi = inflater.inflate(R.layout.item, null);
+            vi = inflater.inflate(R.layout.item_second, null);
             holder=new ViewHolder();
             holder.text=(TextView)vi.findViewById(R.id.text);
             holder.image=(ImageView)vi.findViewById(R.id.image);
             holder.subTitle=(TextView)vi.findViewById(R.id.text2);
+            holder.flinger=(ViewFlinger)vi.findViewById(R.id.item_flinger);
+            holder.button=(Button)vi.findViewById(R.id.downloadButton);
             vi.setTag(holder);
         }
         else
@@ -90,7 +100,19 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         String subtitle = (item instanceof ListObject) ? "Genre : " + ((ListObject) item).getGenre() + ", Downloaded " + ((ListObject) item).getDownloaded() + " times" : "Uploaded by: " + item.getUploader();
         holder.subTitle.setText(subtitle);
         //imageLoader.DisplayImage(list.get(position).getMovieCover(), activity, holder.image, R.drawable.default_product);
+        
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(list.get(position).getMovieCover(),holder.image);
+        holder.button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				String url = ((ListObject)list.get(position)).getTorrentURL();
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				activity.startActivity(browserIntent);
+			}
+        	
+        });
         return vi;
     }
 }
