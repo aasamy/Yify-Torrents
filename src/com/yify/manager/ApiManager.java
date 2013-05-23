@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.yify.object.AuthUserObject;
 import com.yify.object.CommentObject;
 import com.yify.object.ItemObject;
 import com.yify.object.ListObject;
@@ -270,6 +271,74 @@ public class ApiManager {
 		}catch(Exception e){return null;}
 		
 		return lo;
+	}
+	
+	/**
+	 * returns the AuthUserObject of the currently logged in user based on the log in hash.
+	 * @param hash the hash gained from the login function. @see ApiManager.login();
+	 * @return AuthUserObject the user on success, null on error.
+	 */
+	public AuthUserObject getCurrentUser(String hash) {
+		
+		/* get the currently logged in users details by the hash from the login. */
+		
+		AuthUserObject object = null;
+		URL url = null;
+		
+		try {
+			url = new URL(this.baseURL + "profile.json?hash=" + hash);
+		} catch (MalformedURLException e) {
+			return null;
+		}
+		
+		if(url != null) {
+			
+			String response = this.callApi(url, "GET", null);
+			
+			JSONObject entry = null;
+			
+			try {
+				entry = new JSONObject(response);
+			} catch (JSONException e) {
+				return null;
+			}
+			
+			if(entry != null) {
+				
+				String err = entry.optString("error");
+				
+				if(!err.equals("")) {
+					return null;
+				}
+				
+				object = new AuthUserObject();
+				
+				object.setUserID(entry.optInt("UserID"));
+				object.setUsername(entry.optString("UserName"));
+				object.setJoinDate(entry.optString("JoinDated"));
+				object.setLastSeenDate(entry.optString("LastSeenDate"));
+				object.setIpAddress(entry.optString("IpAddress"));
+				object.setNumVotesLeft(entry.optInt("NumOfVotesLeft"));
+				object.setNumRequestsLeft(entry.optInt("NumOfRequestsLeft"));
+				
+				boolean active = (entry.optInt("ProfileActive") == 1) ? true : false;
+				
+				object.setProfileActive(active);
+				object.setTorrentsDownloaded(entry.optInt("TorrentsDownloadedCount"));
+				object.setMoviesRequested(entry.optInt("MoviesRequestedCount"));
+				object.setCommentCount(entry.optInt("CommentCount"));
+				object.setChatTimeSeconds(entry.optInt("ChatTimeSeconds"));
+				object.setAvatar(entry.optString("Avatar"));
+				object.setUserRole(entry.optString("UserName"));
+				object.setAbout(entry.optString("About"));
+				
+			}
+			
+		}
+		
+		
+		return object;
+		
 	}
 	
 	/**

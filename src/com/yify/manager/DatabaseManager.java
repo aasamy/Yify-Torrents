@@ -1,6 +1,7 @@
 package com.yify.manager;
 
 import com.yify.object.AuthObject;
+import com.yify.object.AuthUserObject;
 import com.yify.object.UserObject;
 
 import android.content.ContentValues;
@@ -79,6 +80,18 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		
 	}
 	
+	public void logout() {
+		
+		String[] data = this.checkIsAuth();
+		
+		if(data != null) {
+			
+			this.deleteAuth(Integer.parseInt(data[0]));
+			
+		}
+		
+	}
+	
 	public String[] checkIsAuth() {
 		
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -111,7 +124,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 			
 			ApiManager manager = new ApiManager();
 			
-			UserObject user = manager.getUserFromID(Integer.parseInt(id[2]));
+			AuthUserObject user = manager.getCurrentUser(id[1]);
 			
 			if(user != null) {
 				
