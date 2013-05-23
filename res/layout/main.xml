@@ -2,12 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#000000" >
 
     <RelativeLayout
         android:id="@+id/upcoming_container"
         android:layout_width="fill_parent"
-        android:layout_height="120dp" 
+        android:layout_height="130dp" 
         android:layout_marginTop="20dp"
         android:paddingRight="25dp"
         android:paddingLeft="10dp">
@@ -34,7 +35,7 @@
                 android:id="@+id/upcoming_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp" >
+                android:layout_marginTop="25dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_upcoming"
@@ -78,7 +79,7 @@
     <RelativeLayout
         android:id="@+id/latest_container"
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
+        android:layout_height="130dp"
         android:layout_below="@id/upcoming_container"
         android:layout_marginTop="15dp"
         android:paddingRight="25dp"
@@ -106,7 +107,7 @@
                 android:id="@+id/latest_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp" >
+                android:layout_marginTop="10dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_latest"
@@ -128,7 +129,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 android:layout_gravity="center" >
 
                 <com.yify.view.ViewFlinger
@@ -149,7 +149,7 @@
     <RelativeLayout
         android:id="@+id/popular_container"
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
+        android:layout_height="150dp"
         android:layout_below="@id/latest_container"
         android:layout_marginTop="15dp"
         android:paddingRight="25dp"
@@ -177,7 +177,7 @@
                 android:id="@+id/popular_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="15dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_popular"
@@ -199,7 +199,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 android:layout_gravity="center" >
 
                 <com.yify.view.ViewFlinger
