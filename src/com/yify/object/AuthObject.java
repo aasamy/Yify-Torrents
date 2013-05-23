@@ -3,7 +3,7 @@ package com.yify.object;
 public class AuthObject {
 
 	private String hash;
-	private UserObject user;
+	private AuthUserObject user;
 	
 	public String getHash() {
 		return hash;
@@ -11,10 +11,10 @@ public class AuthObject {
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
-	public UserObject getUser() {
+	public AuthUserObject getUser() {
 		return user;
 	}
-	public void setUser(UserObject user) {
+	public void setUser(AuthUserObject user) {
 		this.user = user;
 	}
 	
