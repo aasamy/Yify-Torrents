@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="120dp" >
+
+    <com.yify.view.ViewFlinger android:id="@+id/item_flinger"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" >"
+
+        <RelativeLayout android:id="@+id/item_container"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent" >"
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="50dip"
+                android:layout_height="75dip"
+                android:contentDescription="ProductImage"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_product" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/image"
+                android:layout_marginLeft="10dip"
+                android:layout_toRightOf="@+id/image"
+                android:text="text1"
+                android:textSize="20sp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/text"
+                android:layout_alignRight="@+id/text"
+                android:layout_below="@+id/text"
+                android:paddingTop="2dp"
+                android:text="TextView"
+                android:textColor="#808080" >
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <Button
+                android:id="@+id/downloadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="Download Torrent"
+                android:layout_marginTop="25dp" />
+            
+        </RelativeLayout>
+        
+    </com.yify.view.ViewFlinger>
+
+</RelativeLayout>
