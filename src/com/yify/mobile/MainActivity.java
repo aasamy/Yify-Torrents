@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import java.util.ArrayList;
 import java.util.HashMap;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.DatabaseManager;
 import com.yify.manager.ProductAdapter;
@@ -42,18 +43,18 @@ public class MainActivity extends ActionBarActivity {
 	
 	private Menu mainMenu = null;
 	private ViewFlipper upcomingflipper;
-	private ActionBar actionBar;
 	private ConnectivityDetector detector;
-	private ViewFlinger upcomingFlinger;
+	private ViewFlipper popularFlipper;
+	private ViewFlipper latestFlipper;
 	private SearchView searchView; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		actionBar = getActionBar();
 		upcomingflipper = (ViewFlipper) findViewById(R.id.upcoming_state);
-		upcomingFlinger = (ViewFlinger) findViewById(R.id.upcoming_flinger);
+		latestFlipper = (ViewFlipper) findViewById(R.id.latest_state);
+		popularFlipper = (ViewFlipper) findViewById(R.id.popular_state);
 		detector = new ConnectivityDetector(this);
 		
 	}
@@ -88,9 +89,14 @@ public class MainActivity extends ActionBarActivity {
 		//execute background task to grab upcoming movies.
 		getActionBarHelper().setRefreshActionItemState(true);
 		upcomingflipper.setDisplayedChild(0);
-		
-		/* get the upcoming films. */
-		new getUpcoming().execute("");
+		latestFlipper.setDisplayedChild(0);
+		popularFlipper.setDisplayedChild(0);
+		/* get the upcoming films */
+		new MainAsync<String, Integer, UpcomingObject>().execute(new String[] {"UP"});
+		/* get the latest films. */
+		new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "LAT"});
+		/* get popular films */
+		new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "POP"});
 		
 		return end;
 	}
@@ -112,20 +118,33 @@ public class MainActivity extends ActionBarActivity {
 		
 		switch(item.getItemId()) {
 			case R.id.menu_refresh:
-				TextView view = (TextView) MainActivity.this.findViewById(R.id.upcoming_err);
-				ProgressBar loading = (ProgressBar) MainActivity.this.findViewById(R.id.loading_upcoming);
-				view.setVisibility(View.GONE);
-				loading.setVisibility(View.VISIBLE);
+				
+				TextView[] t = {(TextView) findViewById(R.id.upcoming_err), (TextView) findViewById(R.id.popular_err), (TextView) findViewById(R.id.latest_err)};
+				ProgressBar[] pb = {(ProgressBar) findViewById(R.id.loading_upcoming), (ProgressBar) findViewById(R.id.loading_popular), (ProgressBar) findViewById(R.id.loading_latest)};
+				
 				upcomingflipper.setDisplayedChild(0);
+				latestFlipper.setDisplayedChild(0);
+				popularFlipper.setDisplayedChild(0);
 				if(!detector.isConnectionAvailable()) {
 					Toast.makeText(this, "No Network Connection....", Toast.LENGTH_SHORT).show();
 					
 				} else  {
-					Toast.makeText(this, "Refreshing Upcoming Movie Feed...", Toast.LENGTH_SHORT).show();
+					for(TextView t1 : t) {
+						t1.setVisibility(View.GONE);
+					}
+					for(ProgressBar p : pb) {
+						p.setVisibility(View.VISIBLE);
+					}
+					Toast.makeText(this, "Refreshing Movie Feeds...", Toast.LENGTH_SHORT).show();
 				}
 				getActionBarHelper().setRefreshActionItemState(true);
+				/* get the upcoming films */
+				new MainAsync<String, Integer, UpcomingObject>().execute(new String[] {"UP"});
+				/* get the latest films. */
+				new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "LAT"});
+				/* get popular films */
+				new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "POP"});
 				
-				new getUpcoming().execute("");
 				break;
 			case R.id.menu_search:
 				Toast.makeText(this, "Search Pressed", Toast.LENGTH_SHORT).show();
@@ -138,95 +157,156 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private class getUpcoming extends AsyncTask<String, Integer, ArrayList<UpcomingObject>> {
+	private class MainAsync<Params, Result, T extends UpcomingObject> extends AsyncTask<Params, Result, ArrayList<T>> {
 		
-		private ConnectivityDetector detector = new ConnectivityDetector(
-				MainActivity.this);
+		/* a layout inflater to use. */
+		final LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 		
-		@Override
-		protected ArrayList<UpcomingObject> doInBackground(String... params) {
-			if(!detector.isConnectionAvailable()) {
-				return null;
-			}
-			
-			ApiManager manager = new ApiManager();
-			
-			return manager.getUpcoming();
-			
-		}
+		/* set the views to update. */
+		int listToUpdate = -1;
 		
-		@Override
-		public void onPostExecute(final ArrayList<UpcomingObject> response) {
-			
-			final LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-			TextView view = (TextView) MainActivity.this.findViewById(R.id.upcoming_err);
-			ProgressBar loading = (ProgressBar) MainActivity.this.findViewById(R.id.loading_upcoming);
-			
-			if(!detector.isConnectionAvailable()) {
-				view.setVisibility(View.VISIBLE);
-				view.setText("You Currently Have No Network Connection");
-				getActionBarHelper().setRefreshActionItemState(false);
-				loading.setVisibility(View.GONE);
-				return;
-			}
-			
-			if((response == null) || (response.isEmpty())) {
-				view.setVisibility(View.VISIBLE);
-				view.setText("There is no upcoming movies to display.");
-				getActionBarHelper().setRefreshActionItemState(false);
-				loading.setVisibility(View.GONE);
-				return;
-			}
-			
-			MainActivity.this.upcomingFlinger.removeAllViews();
-			
-			/* add all of the upcoming films to the flinger. */
-			for(int i = 0; i < response.size(); i++) {
-				
-				@SuppressWarnings("unchecked")
-				View newView = inflater.inflate(R.layout.item, null);
-				
-				TextView text1 = (TextView) newView.findViewById(R.id.text);
-				TextView text2 = (TextView) newView.findViewById(R.id.text2);
-				ImageView img = (ImageView) newView.findViewById(R.id.image);
-				
-				text1.setText(response.get(i).getMovieTitle());
-				text2.setText("Uploaded by: " + response.get(i).getUploader());
-				com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(response.get(i).getMovieCover(), img);
-				
-				MainActivity.this.upcomingFlinger.addView(newView);
-			}
-			
-			MainActivity.this.upcomingflipper.setDisplayedChild(1);
-			getActionBarHelper().setRefreshActionItemState(false);
-		}
+		/* the view variables. */
+		ViewFlinger fln;
+		ViewFlipper flp;
+		TextView t;
+		ProgressBar  pb;
 		
-	}
-	
-	private class getLatestAndPopular extends AsyncTask<String, Integer, HashMap<String, ArrayList<ListObject>>>  {
+		/* a connectivity detector to use. */
+		ConnectivityDetector detector = new ConnectivityDetector(MainActivity.this);
 
+		@SuppressWarnings("unchecked")
 		@Override
-		protected HashMap<String, ArrayList<ListObject>> doInBackground(String... arg0) {
-			if(!MainActivity.this.detector.isConnectionAvailable()) {
+		protected ArrayList<T> doInBackground(Params... params) {
+			
+			if(params[0].equals("LIST")) {
+				this.listToUpdate = (params[1].equals("POP")) ? 0 : 1;
+			} else {
+				this.listToUpdate = 2;
+			}
+			
+			int tResource; int pbResource; int flnResource; int flpResource;
+			
+			switch(this.listToUpdate) {
+				case 0:
+					tResource = R.id.popular_err;
+					pbResource = R.id.loading_popular;
+					flnResource = R.id.popular_flinger;
+					flpResource = R.id.popular_state;
+					break;
+				case 1:
+					tResource = R.id.latest_err;
+					pbResource = R.id.loading_latest;
+					flnResource = R.id.latest_flinger;
+					flpResource = R.id.latest_state;
+					break;
+				case 2:
+					tResource = R.id.upcoming_err;
+					pbResource = R.id.loading_upcoming;
+					flnResource = R.id.upcoming_flinger;
+					flpResource = R.id.upcoming_state;
+					break;
+				default:
+					return null; /* could not find what process this was for. */
+			}
+			
+			/* inflate the resources. */
+			fln = (ViewFlinger) MainActivity.this.findViewById(flnResource);
+			flp = (ViewFlipper) MainActivity.this.findViewById(flpResource);
+			t = (TextView) MainActivity.this.findViewById(tResource);
+			pb = (ProgressBar) MainActivity.this.findViewById(pbResource);
+			
+			/* set to default */
+			//pb.setVisibility(View.VISIBLE);
+			//t.setVisibility(View.GONE);
+			
+			if(!this.detector.isConnectionAvailable()) {
 				return null;
 			}
-			ApiManager manager = new ApiManager();
-			HashMap<String, ArrayList<ListObject>> data = new HashMap<String, ArrayList<ListObject>>();
 			
-			data.put("popular", manager.getList(null, null, null, 0, 10, 1, "downloaded", "desc"));
-			data.put("latest", manager.getList(null, null, null, 0, 10, 1, "date", "desc"));
+			ApiManager manager = new ApiManager();
+			
+			Params function = params[0];
+			
+			ArrayList<T> data = null;
+			
+			if(function.equals("LIST")) {
+				
+				Params subaction = params[1];
+				
+				if(subaction.equals("POP")) {
+					
+					 data = (ArrayList<T>) manager.getList(null, null, null, 0, 10, 1, "downloaded", "desc");
+					
+				} else {
+					
+					 data = (ArrayList<T>) manager.getList(null, null, null, 0, 10, 1, "date", "desc");
+					
+				}
+				
+			} else {
+				
+				data = (ArrayList<T>) manager.getUpcoming();
+				
+			}
 			
 			return data;
-			
 		}
 		
 		@Override
-		public void onPostExecute(HashMap<String, ArrayList<ListObject>> response) {
+		protected void onPostExecute(ArrayList<T> response) {
 			
-			/* check connection, and check variables are set. */
+			boolean valid = true;
 			
-			/* set each of the viewflingers with the data, and then set the flipper view to active from loading
-			 * then stop the refresh icon, and done. */
+			/* check internet connectivity */
+			if(!this.detector.isConnectionAvailable()) {
+				this.t.setText("You are currently not connected to a network.");
+				valid = false;
+			}
+			
+			if(valid) {
+				if((response == null) || response.isEmpty()) {
+					this.t.setText("There are no movies to display.");
+					valid = false;
+				}
+			}
+			
+			if(!valid) {
+				this.pb.setVisibility(View.GONE);
+				this.t.setVisibility(View.VISIBLE);
+				if(this.listToUpdate == 0) { /* i know this is the last process to run. */
+					getActionBarHelper().setRefreshActionItemState(false);
+				}
+				return;
+			}
+			
+			/* destroy all old views, so it doesnt keep adding the same thing. */
+			this.fln.removeAllViews();
+			
+			/* inflate the new views based on the response and change the state. */
+			for(int i = 0; i < response.size(); i++) {
+				
+				View newView = this.inflater.inflate(R.layout.item, null);
+				
+				TextView t1 = (TextView) newView.findViewById(R.id.text);
+				TextView t2 = (TextView) newView.findViewById(R.id.text2);
+				ImageView img = (ImageView) newView.findViewById(R.id.image);
+				
+				T item = response.get(i);
+				String mt = (item instanceof ListObject) ? "Genre: " + ((ListObject) item).getGenre() + ", Downloaded " + ((ListObject) item).getDownloaded() + " times" : "Uploaded by: " + item.getUploader();
+				
+				t1.setText(item.getMovieTitle()); t2.setText(mt);
+				ImageLoader.getInstance().displayImage(item.getMovieCover(), img);
+				
+				this.fln.addView(newView);
+				
+			}
+			
+			/* change the state, and stop the refresh icon. */
+			this.flp.setDisplayedChild(1);
+			if(this.listToUpdate == 0) {
+				getActionBarHelper().setRefreshActionItemState(false);
+			}
+			
 			
 		}
 		
