@@ -14,8 +14,14 @@ public class ListObject extends UpcomingObject {
 	private String torrentURL;
 	private String torrentHash;
 	private String torrentMagnetURL;
+	private int resultCount; /* store in here for easy access */
 	
-	
+	public int getResultCount() {
+		return resultCount;
+	}
+	public void setResultCount(int resultCount) {
+		this.resultCount = resultCount;
+	}
 	public int getMovieID() {
 		return movieID;
 	}
