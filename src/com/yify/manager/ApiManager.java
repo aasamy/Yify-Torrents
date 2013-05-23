@@ -113,6 +113,7 @@ public class ApiManager {
 	 * @param sort what to sort the results by, can be either date, seeds, peers, size, alphabet, rating, downloaded.
 	 * @param order whether to return the results asc or desc.
 	 * @return ArrayList<ListObject> the array of movie data.
+	 * @version 1.1 - updated grab method based on the new result structure  in the list.json method.
 	 */
 	public ArrayList<ListObject> getList(String keywords, String quality, String genre,
 			int rating, int limit, int set, String sort, String order) {
@@ -138,48 +139,59 @@ public class ApiManager {
 		
 		String response = this.callApi(url, "GET", null);
 		
-		if(response.contains("\"error\" : ")) {
-			return data;
+		JSONObject json = new JSONObject(response);
+		
+		String err = json.optString("error");
+		
+		if(!err.equals("")) {
+			return new ArrayList<ListObject>();
 		}
 		
-		JSONArray array = new JSONArray(response);
+	    JSONArray movies = json.optJSONArray("MovieList");
+	    
+	    int count = json.optInt("MovieCount");
+	    
+	    if(movies != null) {
+	    	
+	    	for(int i = 0; i < movies.length(); i++) {
+	    		
+	    		JSONObject entry = movies.getJSONObject(i);
+	    		
+	    		if(entry != null) {
+	    		
+	    			ListObject lo = new ListObject();
+	    			lo.setMovieID(entry.optInt("MovieID"));
+	    			lo.setMovieTitle(entry.optString("MovieTitle"));
+	    			lo.setMovieURL(entry.optString("MovieUrl"));
+	    			lo.setDateAdded(entry.optString("DateUploaded"));
+	    			lo.setQuality(entry.optString("Quality"));
+	    			lo.setMovieCover(entry.optString("CoverImage"));
+	    			lo.setImdbCode(entry.optString("ImdbCode"));
+	    			lo.setImdbLink(entry.optString("ImdbLink"));
+	    			lo.setFilesize(entry.optString("Size"));
+	    			lo.setMovieRating(entry.optString("MovieRating"));
+	    			lo.setGenre(entry.optString("Genre"));
+	    			lo.setTorrentSeeds(entry.optString("TorrentSeeds"));
+	    			lo.setDownloaded(entry.optInt("Downloaded"));
+	    			lo.setTorrentPeers(entry.optInt("TorrentPeers"));
+	    			lo.setTorrentURL(entry.optString("TorrentUrl"));
+	    			lo.setTorrentHash(entry.optString("TorrentHash"));
+	    			lo.setTorrentMagnetURL(entry.optString("TorrentMagnetUrl"));
+	    			
+	    			data.add(lo);
+	    		
+	    		}
+	    		
+	    		
+	    	}
+	    	
+	    }
 		
-		if((array != null) && (array.length() != 0)) {
+		} catch (Exception e) {
 			
-			for(int i = 0; i < array.length(); i++) {
-				
-				JSONObject entry = array.optJSONObject(i);
-				
-				if(entry != null) {
-				
-					ListObject lo = new ListObject();
-					lo.setMovieID(entry.optInt("MovieID"));
-					lo.setMovieURL(entry.optString("MovieUrl"));
-					lo.setMovieTitle(entry.optString("MovieTitle"));
-					lo.setDateAdded(entry.optString("DateUploaded"));
-					lo.setQuality(entry.optString("Quality"));
-					lo.setMovieCover(entry.optString("CoverImage"));
-					lo.setImdbCode(entry.optString("ImdbCode"));
-					lo.setImdbLink(entry.optString("ImdbLink"));
-					lo.setFilesize(entry.optString("Size"));
-					lo.setMovieRating(entry.optString("MovieRating"));
-					lo.setGenre(entry.optString("Genre"));
-					lo.setTorrentSeeds(entry.optString("TorrentSeeds"));
-					lo.setDownloaded(entry.optInt("Downloaded"));
-					lo.setTorrentPeers(entry.optInt("TorrentPeers"));
-					lo.setTorrentURL(entry.optString("TorrentURL"));
-					lo.setTorrentHash(entry.optString("TorrentHash"));
-					lo.setTorrentMagnetURL(entry.optString("TorrentMagnetURL"));
-					
-					data.add(lo);
-					
-				}
-				
-			}
+			return new ArrayList<ListObject>();
 			
 		}
-		
-		} catch(Exception e){return new ArrayList<ListObject>(); /*<-- return empty arraylist*/}
 		
 		return data;
 		
