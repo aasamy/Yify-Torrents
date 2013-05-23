@@ -1,5 +1,7 @@
 package com.yify.object;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class UpcomingObject {
 
 	private String movieTitle;
@@ -12,7 +14,9 @@ public class UpcomingObject {
 		return movieTitle;
 	}
 	public void setMovieTitle(String movieTitle) {
-		this.movieTitle = movieTitle;
+		
+		this.movieTitle = StringEscapeUtils.unescapeHtml4(movieTitle);
+		
 	}
 	public String getMovieCover() {
 		return movieCover;
