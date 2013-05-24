@@ -78,13 +78,11 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         View vi=convertView;
         ViewHolder holder;
         if(convertView==null){
-            vi = inflater.inflate(R.layout.item_second, null);
+            vi = inflater.inflate(R.layout.item, null);
             holder=new ViewHolder();
             holder.text=(TextView)vi.findViewById(R.id.text);
             holder.image=(ImageView)vi.findViewById(R.id.image);
             holder.subTitle=(TextView)vi.findViewById(R.id.text2);
-            holder.flinger=(ViewFlinger)vi.findViewById(R.id.item_flinger);
-            holder.button=(Button)vi.findViewById(R.id.downloadButton);
             vi.setTag(holder);
         }
         else
@@ -102,17 +100,6 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         //imageLoader.DisplayImage(list.get(position).getMovieCover(), activity, holder.image, R.drawable.default_product);
         
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(list.get(position).getMovieCover(),holder.image);
-        holder.button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				
-				String url = ((ListObject)list.get(position)).getTorrentURL();
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-				activity.startActivity(browserIntent);
-			}
-        	
-        });
         return vi;
     }
 }

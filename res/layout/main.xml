@@ -47,7 +47,9 @@
                     android:id="@+id/upcoming_err"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:layout_centerInParent="true"
+                    android:paddingLeft="10dp" />
 
             </RelativeLayout>
 
@@ -107,19 +109,23 @@
                 android:id="@+id/latest_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="18dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_latest"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="15dp" />
 
                 <TextView
                     android:id="@+id/latest_err"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:paddingLeft="10dp" />
 
             </RelativeLayout>
 
@@ -177,7 +183,7 @@
                 android:id="@+id/popular_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp" >
+                android:layout_marginTop="18dp" >
 
                 <ProgressBar
                     android:id="@+id/loading_popular"
@@ -189,7 +195,10 @@
                     android:id="@+id/popular_err"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="" 
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:paddingLeft="10dp"/>
 
             </RelativeLayout>
 
