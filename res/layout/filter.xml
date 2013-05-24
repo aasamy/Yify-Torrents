@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000" >
+    
+    <RelativeLayout
+        android:id="@+id/upcoming_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="25dp" >
+
+        <TextView
+            android:id="@+id/filter_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/textlines"
+            android:paddingBottom="5dp"
+            android:paddingRight="30dp"
+            android:text="Filter by" />
+        
+        <ListView
+            android:id="@+id/filter_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/filter_title"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp" >
+            
+        </ListView>
+        
+        <TextView
+            android:id="@+id/sort_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/textlines"
+            android:paddingBottom="5dp"
+            android:paddingRight="30dp"
+            android:text="Sort by"
+            android:layout_below="@id/filter_listview" />
+        
+        <ListView
+            android:id="@+id/sort_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sort_title"
+            android:layout_marginLeft="5dp" >
+            
+        </ListView>
+        
+        <Button android:id="@+id/okaybutton"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Okay" />
+        
+     </RelativeLayout>
+
+</LinearLayout>

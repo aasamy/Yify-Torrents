@@ -77,6 +77,30 @@ public class Filter implements Parcelable {
 		return this.sort;
 	}
 	
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+	public void setQuality(String quality) {
+		this.quality = quality;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public void setOrder(String order) {
+		this.order = order;
+	}
+	
 	public static final Parcelable.Creator<Filter> CREATOR = new Parcelable.Creator<Filter>() {
 
 		@Override

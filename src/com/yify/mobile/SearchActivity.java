@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.yify.object.*;
 
@@ -50,6 +51,8 @@ public class SearchActivity extends ActionBarActivity {
 	ProductAdapter<ListObject> adapter;
 	private ListView listView;
 	private View footerView;
+	private ViewFlipper state;
+	private TextView err;
 	private Runnable loadMoreItems = new Runnable() {
 
 		@Override
@@ -111,6 +114,9 @@ public class SearchActivity extends ActionBarActivity {
 	    this.detector = new ConnectivityDetector(this);
 	    setTitle("Search Results");
 	    getActionBar().setDisplayShowTitleEnabled(true);
+	    state = (ViewFlipper) findViewById(R.id.search_state);
+	    err = (TextView) findViewById(R.id.search_no_results);
+	    state.setDisplayedChild(0); /* show loading state */
 	    //handle the intent
 	    Intent intent = getIntent();
 	    this.handleIntent(intent);
@@ -123,12 +129,7 @@ public class SearchActivity extends ActionBarActivity {
 	private void handleIntent(Intent intent) {
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			
-			if(!this.detector.isConnectionAvailable()) {
-				Toast.makeText(getApplicationContext(), "Please check your network connection", Toast.LENGTH_SHORT).show();
-				finish();
-			}
-			
+
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			
 			//search yify torrents for the query.
@@ -200,7 +201,16 @@ public class SearchActivity extends ActionBarActivity {
 		public void onPostExecute(ArrayList<ListObject> response) {
 			
 			if(response == null) {
-				SearchActivity.this.finish();
+				err.setText("You currently have no network connection.");
+				state.setDisplayedChild(2);
+				return;
+			}
+			
+			if(response.size() == 0) {
+				/* show no results found. */
+				err.setText("No results where found.");
+				state.setDisplayedChild(2);
+				return;
 			}
 			
 			footerView = ((LayoutInflater) SearchActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer, null, false);
@@ -254,6 +264,8 @@ public class SearchActivity extends ActionBarActivity {
 				}
 				
 			});
+			
+			state.setDisplayedChild(1);
 		}
 		
 	}

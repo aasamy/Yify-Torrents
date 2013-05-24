@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.DatabaseManager;
@@ -102,17 +103,17 @@ public class MainActivity extends ActionBarActivity {
 		return end;
 	}
 	
-	@Override
-	public void startActivity(Intent intent) {
-		if(!detector.isConnectionAvailable()) {
-			Toast.makeText(this, "Network not available, Please make sure you are connected to a network.", Toast.LENGTH_SHORT).show();
-			if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-				searchView.setIconified(true);
-			}
-			return;
-		}
-		super.startActivity(intent);
-	}
+//	@Override
+//	public void startActivity(Intent intent) {
+//		if(!detector.isConnectionAvailable()) {
+//			Toast.makeText(this, "Network not available, Please make sure you are connected to a network.", Toast.LENGTH_SHORT).show();
+//			if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+//				searchView.setIconified(true);
+//			}
+//			//return;
+//		}
+//		super.startActivity(intent);
+//	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,6 +154,13 @@ public class MainActivity extends ActionBarActivity {
 					return true;
 				}
 				return false;
+			case R.id.menu_share:
+            	//open share intent to share URL of App in playstore.
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
+                startActivity(Intent.createChooser(shareIntent, "Share..."));
+                break;
 		}
 		
 		return super.onOptionsItemSelected(item);

@@ -78,7 +78,7 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         View vi=convertView;
         ViewHolder holder;
         if(convertView==null){
-            vi = inflater.inflate(R.layout.item, null);
+            vi = inflater.inflate(R.layout.item_second, null);
             holder=new ViewHolder();
             holder.text=(TextView)vi.findViewById(R.id.text);
             holder.image=(ImageView)vi.findViewById(R.id.image);

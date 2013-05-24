@@ -5,12 +5,54 @@
     android:background="#000000"
     android:orientation="vertical" >
 
-	<ListView
-	    android:id="@+id/search_listView"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:paddingTop="5dp" >
+    <ViewFlipper
+        android:id="@+id/search_state"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
-	</ListView>
+        <!-- Loading results. -->
+        
+        <RelativeLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <ProgressBar
+                android:id="@+id/search_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+        
+        <!-- results display -->
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <ListView
+                android:id="@+id/search_listView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="5dp" >
+                
+            </ListView>
+            
+        </RelativeLayout>
+        
+        <!-- No results found text -->
+        
+        <RelativeLayout
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent" >
+            
+            <TextView android:id="@+id/search_no_results"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:text=""/>
+            
+        </RelativeLayout>
+        
+    </ViewFlipper>
 
 </LinearLayout>
