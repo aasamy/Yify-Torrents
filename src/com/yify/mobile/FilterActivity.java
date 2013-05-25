@@ -3,6 +3,7 @@ package com.yify.mobile;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.yify.object.CustomDialog;
 import com.yify.object.Filter;
 import com.yify.manager.FilterAdapter;
 import android.annotation.TargetApi;
@@ -10,6 +11,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,15 +24,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FilterActivity extends FragmentActivity {
+public class FilterActivity extends FragmentActivity implements CustomDialog.CustomDialogListener {
 	
 	private Menu mainMenu = null;
 	private ActionBar actionBar;
@@ -39,26 +43,24 @@ public class FilterActivity extends FragmentActivity {
 	private FilterAdapter<String> fa;
 	private FilterAdapter<String> sa;
 	private AlertDialog.Builder builder;
-	LayoutInflater inflater;
-	NumberPicker picker;
-	Dialog dialog;
-	View v;
+	private TextView ratingTv;
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter); /* change to filter view after intent testing finished. */
 		Intent intent = getIntent();
+		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		filter = (Filter)intent.getParcelableExtra("filter");
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		inflater = (LayoutInflater) FilterActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		setTitle("Filter Results - " + filter.getQuery());
-		v = inflater.inflate(R.layout.rating_picker, null);
-		picker = (NumberPicker) v.findViewById(R.id.rating_pick);
-		picker.setMaxValue(9); picker.setMinValue(0);
 		getActionBar().setDisplayShowTitleEnabled(true);
 		Button button = (Button) findViewById(R.id.okaybutton);
+		final EditText text = (EditText) findViewById(R.id.editquery);
+		text.setText(filter.getQuery());
+		text.clearFocus();
 		/* set up the two listviews. */
 		
 		ArrayList<HashMap<String, String>> fi = new ArrayList<HashMap<String, String>>();
@@ -168,8 +170,6 @@ public class FilterActivity extends FragmentActivity {
 				
 				String main = item.get("main"); String value = (String) t1.getText();
 				
-				final AlertDialog alert = builder.create();
-				
 				switch(position) {
 				case 0:
 					
@@ -196,9 +196,9 @@ public class FilterActivity extends FragmentActivity {
 							
 							t1.setText(genres[which]);
 							filter.setGenre(genres[which]);
-							alert.dismiss();
+							dialog.dismiss();
 						}
-					});
+					}).show();
 					
 					break;
 				case 2:
@@ -224,44 +224,49 @@ public class FilterActivity extends FragmentActivity {
 							
 							t1.setText(quality[which]);
 							filter.setGenre(quality[which]);
-							alert.dismiss();
+							dialog.dismiss();
 							
 						}
-					});
+					}).show();
 					
 					break;
 				case 1:
 					
-					v = inflater.inflate(R.layout.rating_picker, null);
-					picker = (NumberPicker) v.findViewById(R.id.rating_pick);
-					picker.setMinValue(0); picker.setMaxValue(9);
-					picker.setValue(Integer.parseInt(value));
+					final String[] ratings = new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 					
-					builder.setTitle("Set Rating").setView(v).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					int selectedItem = 0;
+					
+					for(int i = 0; i < ratings.length; i++) {
 						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
+						if(value.equalsIgnoreCase(ratings[i])) {
 							
-							t1.setText("" + picker.getValue());
-							filter.setRating(picker.getValue());
-							dialog.dismiss();
+							selectedItem = i;
 							
 						}
-					})
-					.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							
-							dialog.cancel();
-							alert.dismiss();
-						}
-					});
+					}
+					
+//					builder.setTitle("Set Rating").setSingleChoiceItems(ratings, selectedItem, new DialogInterface.OnClickListener() {
+//						
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							
+//							t1.setText(ratings[which]);
+//							filter.setRating(Integer.parseInt(ratings[which]));
+//							dialog.dismiss();
+//						}
+//					}).show();
+					
+					DialogFragment dialogFragment = new CustomDialog();
+					Bundle val = new Bundle();
+					val.putInt("current", Integer.parseInt(value));
+					ratingTv = t1;
+					dialogFragment.setArguments(val);
+					dialogFragment.show(getFragmentManager(), "numberpicker");
+					
 					break;
 					
 				}
-				
-				alert.show();
 				
 				
 			}
@@ -273,7 +278,9 @@ public class FilterActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				
-				Log.d("Filter Contents", "Quality=" + filter.getQuality() + ", Genre=" + filter.getGenre() + "Rating=" + filter.getRating() + ", Sort=" + filter.getSort() + ", Order=" + filter.getOrder());
+				filter.setQuery(text.getText().toString());
+				
+				Log.d("Filter Contents", "Quality=" + filter.getQuality() + ", Genre=" + filter.getGenre() + "Rating=" + filter.getRating() + ", Sort=" + filter.getSort() + ", Order=" + filter.getOrder() + ", Query=" + filter.getQuery());
 				
 			}
 			
@@ -303,6 +310,24 @@ public class FilterActivity extends FragmentActivity {
 		
 		return super.onOptionsItemSelected(item);
 		
+	}
+
+	@Override
+	public void onPositiveAction(DialogFragment dialog, View v) {
+		
+		NumberPicker picker = (NumberPicker) v.findViewById(R.id.rating_pick);
+		
+		this.ratingTv.setText(""+picker.getValue());
+		filter.setRating(picker.getValue());
+		
+		dialog.dismiss();
+		
+	}
+
+	@Override
+	public void onNegativeAction(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		dialog.dismiss();
 	}
 	
 }
