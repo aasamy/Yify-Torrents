@@ -43,6 +43,11 @@
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
+        <activity
+            android:name=".MovieActivity" >
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+        </activity>
     </application>
 	
     
