@@ -87,6 +87,7 @@ public class MainActivity extends ActionBarActivity {
 		boolean end = super.onCreateOptionsMenu(menu);
 		mainMenu.findItem(R.id.menu_home).setVisible(false); /* <-- already on home. */
 		mainMenu.findItem(R.id.menu_filter).setVisible(false);
+		mainMenu.findItem(R.id.menu_accept).setVisible(false);
 		
 		//execute background task to grab upcoming movies.
 		getActionBarHelper().setRefreshActionItemState(true);
@@ -306,8 +307,10 @@ public class MainActivity extends ActionBarActivity {
 
 					@Override
 					public void onClick(View arg0) {
-						Toast.makeText(getApplicationContext(), "Tapped: " + ((ListObject) item).getMovieID(), Toast.LENGTH_SHORT).show();
-						
+						Intent intent = new Intent(MainActivity.this, MovieActivity.class);
+						int id = ((ListObject) item).getMovieID();
+						intent.putExtra("id", id);
+						startActivity(intent);
 					}
 					
 				} : null;

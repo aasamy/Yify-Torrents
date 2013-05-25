@@ -44,6 +44,7 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 	private FilterAdapter<String> sa;
 	private AlertDialog.Builder builder;
 	private TextView ratingTv;
+	private EditText text;
 
 	
 	@Override
@@ -51,18 +52,25 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter); /* change to filter view after intent testing finished. */
 		Intent intent = getIntent();
+		
+		/* set the keyboard not to come up auto. */
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		filter = (Filter)intent.getParcelableExtra("filter");
+		
+		/* grab intent filter object. */
+		filter = (Filter)intent.getParcelableExtra("filter"); 
+		
+		/* sort out the action bar settings */
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		setTitle("Filter Results - " + filter.getQuery());
 		getActionBar().setDisplayShowTitleEnabled(true);
-		Button button = (Button) findViewById(R.id.okaybutton);
-		final EditText text = (EditText) findViewById(R.id.editquery);
+		
+		/* set up the edit text to contain the used query */
+		text = (EditText) findViewById(R.id.editquery);
 		text.setText(filter.getQuery());
 		text.clearFocus();
-		/* set up the two listviews. */
 		
+		/* set up the two listviews. */
 		ArrayList<HashMap<String, String>> fi = new ArrayList<HashMap<String, String>>();
 		ArrayList<HashMap<String, String>> fe = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> entry = new HashMap<String, String>();
@@ -90,6 +98,8 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 		
 		ListView s = (ListView) findViewById(R.id.sort_listview);
 		s.setAdapter(sa);
+		
+		/* set up the dialogs and clicklisteners. */
 		
 		builder = new AlertDialog.Builder(this);
 		
@@ -223,7 +233,7 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 						public void onClick(DialogInterface dialog, int which) {
 							
 							t1.setText(quality[which]);
-							filter.setGenre(quality[which]);
+							filter.setQuality(quality[which]);
 							dialog.dismiss();
 							
 						}
@@ -231,31 +241,6 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 					
 					break;
 				case 1:
-					
-					final String[] ratings = new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-					
-					int selectedItem = 0;
-					
-					for(int i = 0; i < ratings.length; i++) {
-						
-						if(value.equalsIgnoreCase(ratings[i])) {
-							
-							selectedItem = i;
-							
-						}
-						
-					}
-					
-//					builder.setTitle("Set Rating").setSingleChoiceItems(ratings, selectedItem, new DialogInterface.OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							
-//							t1.setText(ratings[which]);
-//							filter.setRating(Integer.parseInt(ratings[which]));
-//							dialog.dismiss();
-//						}
-//					}).show();
 					
 					DialogFragment dialogFragment = new CustomDialog();
 					Bundle val = new Bundle();
@@ -272,28 +257,22 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 			}
 			
 		});
-		
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				
-				filter.setQuery(text.getText().toString());
-				
-				Log.d("Filter Contents", "Quality=" + filter.getQuality() + ", Genre=" + filter.getGenre() + "Rating=" + filter.getRating() + ", Sort=" + filter.getSort() + ", Order=" + filter.getOrder() + ", Query=" + filter.getQuery());
-				
-			}
-			
-		});
-		
-		Log.d("Filter Contents", "Quality=" + filter.getQuality() + ", Genre=" + filter.getGenre() + "Rating=" + filter.getRating() + ", Sort=" + filter.getSort() + ", Order=" + filter.getOrder());
-		
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean end = super.onCreateOptionsMenu(menu);
 		
+		getMenuInflater().inflate(R.menu.main, menu);
+		
+		/* hide not required menu items. */
+		menu.findItem(R.id.menu_filter).setVisible(false);
+		menu.findItem(R.id.menu_login).setVisible(false);
+		menu.findItem(R.id.menu_share).setVisible(false);
+		menu.findItem(R.id.menu_refresh).setVisible(false);
+		menu.findItem(R.id.menu_search).setVisible(false);
+		menu.findItem(R.id.menu_settings).setVisible(false);
+		menu.findItem(R.id.menu_home).setVisible(false);
 		mainMenu = menu;
 		
 		return end;
@@ -305,6 +284,16 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 		switch(item.getItemId()) {
 			case android.R.id.home:
 				finish();
+				break;
+			case R.id.menu_accept :
+				
+				filter.setQuery(text.getText().toString());
+				
+				Intent intent = new Intent(this, SearchActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.putExtra("filter", filter);
+				intent.setAction(CUSTOM_FILTER_INTENT);
+				startActivity(intent);
 				break;
 		}
 		

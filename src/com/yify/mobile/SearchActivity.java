@@ -143,6 +143,18 @@ public class SearchActivity extends ActionBarActivity {
 			//search yify.
 			new SearchMovies().execute(query);
 			
+		} else if(FilterActivity.CUSTOM_FILTER_INTENT.equals(intent.getAction())) {
+			
+			Filter filter = intent.getParcelableExtra("filter");
+			
+			this.genre = filter.getGenre();
+			this.quality = filter.getQuality();
+			this.sort = filter.getSort();
+			this.order = filter.getOrder();
+			this.rating = filter.getRating();
+			this.query = filter.getQuery();
+			
+			new SearchMovies().execute(filter.getQuery());
 		}
 		
 	}
@@ -156,6 +168,7 @@ public class SearchActivity extends ActionBarActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		mainMenu.findItem(R.id.menu_search).setVisible(false);
 		mainMenu.findItem(R.id.menu_refresh).setVisible(false);
+		mainMenu.findItem(R.id.menu_accept).setVisible(false);
 		boolean bool = super.onCreateOptionsMenu(menu);
 		return bool;
 	}
