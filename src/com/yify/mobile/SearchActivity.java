@@ -130,7 +130,7 @@ public class SearchActivity extends ActionBarActivity {
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
-			String query = intent.getStringExtra(SearchManager.QUERY);
+			String query = intent.getStringExtra(SearchManager.QUERY).trim();
 			
 			//search yify torrents for the query.
 			
@@ -152,7 +152,7 @@ public class SearchActivity extends ActionBarActivity {
 			this.sort = filter.getSort();
 			this.order = filter.getOrder();
 			this.rating = filter.getRating();
-			this.query = filter.getQuery();
+			this.query = filter.getQuery().trim();
 			
 			new SearchMovies().execute(filter.getQuery());
 		}
