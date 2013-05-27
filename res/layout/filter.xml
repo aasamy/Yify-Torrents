@@ -33,7 +33,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="5dp"
             android:hint=""
-            android:inputType="text" />
+            android:inputType="textAutoCorrect|textAutoComplete|textNoSuggestions" />
 
         <TextView
             android:layout_below="@id/editquery"
