@@ -29,6 +29,11 @@
         <item name="android:titleTextStyle">@style/ActionBarTitle</item>
         <item name="android:icon">@drawable/logo</item>
         <item name="android:displayOptions">showHome|useLogo</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
+    </style>
+    
+    <style name="ActionBarTabStyle" parent="android:style/Widget.Holo.ActionBar.TabBar">
+        <item name="android:background">#4c4c4c</item>
     </style>
     
     <style name="myDropDownListView" parent="android:style/Widget.Holo.ListView.DropDown">
