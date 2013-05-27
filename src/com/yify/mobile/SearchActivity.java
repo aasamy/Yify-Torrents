@@ -249,7 +249,11 @@ public class SearchActivity extends ActionBarActivity {
 					}
 					
 					ListObject o = (ListObject) adapter.getItem(position);
-					Toast.makeText(getApplicationContext(), o.getFilesize(), Toast.LENGTH_SHORT).show();
+					
+					Intent intent = new Intent(SearchActivity.this, MovieActivity.class);
+					int i = ((ListObject) o).getMovieID();
+					intent.putExtra("id", i);
+					startActivity(intent);
 					
 				}
 				
