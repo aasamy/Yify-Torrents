@@ -146,7 +146,7 @@ public class MovieActivity extends FragmentActivity implements ActionBar.TabList
 			
 			ItemObject object = main.getParcelable("item");
 			
-			t.setText("The Movie Title is: " + object.getMovieTitle());
+			t.setText("The Movie Title is: " + object.getMovieTitle() + "And the URL for the first meduim screenshot is: " + object.getScreenshots().get("med1"));
 			
 			return v;
 			

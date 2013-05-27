@@ -258,12 +258,12 @@ public class ApiManager {
 				
 				HashMap<String, String> screenshots = new HashMap<String, String>();
 				
-				screenshots.put("med1", entry.optString("MediumScreebshot1"));
-				screenshots.put("med2", entry.optString("MediumScreebshot2"));
-				screenshots.put("med3", entry.optString("MediumScreebshot3"));
-				screenshots.put("lrg1", entry.optString("LargeScreebshot1"));
-				screenshots.put("lrg2", entry.optString("LargeScreebshot2"));
-				screenshots.put("lrg3", entry.optString("LargeScreebshot2"));
+				screenshots.put("med1", entry.optString("MediumScreenshot1"));
+				screenshots.put("med2", entry.optString("MediumScreenshot2"));
+				screenshots.put("med3", entry.optString("MediumScreenshot3"));
+				screenshots.put("lrg1", entry.optString("LargeScreenshot1"));
+				screenshots.put("lrg2", entry.optString("LargeScreenshot2"));
+				screenshots.put("lrg3", entry.optString("LargeScreenshot2"));
 				
 				lo.setScreenshots(screenshots);
 			}

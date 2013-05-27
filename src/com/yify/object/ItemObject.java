@@ -107,14 +107,17 @@ public class ItemObject extends ListObject implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		
-		String[] keys = (String[]) this.screenshots.keySet().toArray();
-		String[] data = new String[keys.length];
-		for(int i = 0; i < keys.length; i++) {
-			data[i] = this.screenshots.get(keys[i]);
-		}
 		
-		out.writeStringArray(keys);
-		out.writeStringArray(data);
+		String med1 = this.screenshots.get("med1");
+		String med2 = this.screenshots.get("med2");
+		String med3 = this.screenshots.get("med3");
+		String lrg1 = this.screenshots.get("lrg1");
+		String lrg2 = this.screenshots.get("lrg2");
+		String lrg3 = this.screenshots.get("lrg3");
+		
+		out.writeString(med1); out.writeString(med2); out.writeString(med3);
+		out.writeString(lrg1); out.writeString(lrg2); out.writeString(lrg3);
+		
 		out.writeInt(this.getMovieID());
 		out.writeString(this.getMovieTitle());
 		out.writeString(this.getMovieURL());
@@ -156,14 +159,10 @@ public class ItemObject extends ListObject implements Parcelable {
 		
 		HashMap<String, String> screen = new HashMap<String, String>();
 		
-		String[] keys = new String[]{}; String[] data = new String[]{};
-		in.readStringArray(keys); in.readStringArray(data);
-		
-		for(int i = 0; i < keys.length; i++) {
-			screen.put(keys[i], data[i]);
-		}
-		
+		screen.put("med1", in.readString()); screen.put("med2", in.readString()); screen.put("med3", in.readString());
+		screen.put("lrg1", in.readString()); screen.put("lrg2", in.readString()); screen.put("lrg3", in.readString());
 		this.screenshots = screen;
+		
 		this.setMovieID(in.readInt());
 		this.setMovieTitle(in.readString());
 		this.setMovieURL(in.readString());
