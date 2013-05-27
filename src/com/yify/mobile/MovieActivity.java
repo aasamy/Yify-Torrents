@@ -1,6 +1,8 @@
 package com.yify.mobile;
 
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +23,7 @@ import java.util.*;
 import com.yify.manager.ApiManager;
 import com.yify.object.*;
 
-public class MovieActivity extends FragmentActivity {
+public class MovieActivity extends FragmentActivity implements ActionBar.TabListener {
 	
 	private MovieInfoPageAdapter adapter;
 	private ActionBar actionBar;
@@ -37,17 +39,28 @@ public class MovieActivity extends FragmentActivity {
 		
 		setContentView(R.layout.pager_layout);
 		actionBar = getActionBar();
-		adapter = new MovieInfoPageAdapter(this.getSupportFragmentManager());
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		
 		Intent intent = getIntent();
 		movieid = intent.getIntExtra("id", -1);
-		
+		err = (TextView) findViewById(R.id.movie_err);
 		detector = new ConnectivityDetector(this);
 		pager = (ViewPager) findViewById(R.id.pager);
 		flipper = (ViewFlipper) findViewById(R.id.movie_state);
 		flipper.setDisplayedChild(0); /* show the loading state */
 		
+		/* add the tabs to the actionbar, but dont define the navigation mode to tabs until data is loaded. */
+		actionBar.addTab(actionBar.newTab().setText("Video Info").setTabListener(MovieActivity.this));
+		actionBar.addTab(actionBar.newTab().setText("Movie Info").setTabListener(MovieActivity.this), true);
+		
+		/* add the pagechange listener. */
+		pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			 @Override
+	            public void onPageSelected(int position) {
+	                actionBar.setSelectedNavigationItem(position);
+	            }
+		});
 		if(movieid != -1) {
 			new GetMovieInfo().execute(movieid);
 		} else {
@@ -70,9 +83,13 @@ public class MovieActivity extends FragmentActivity {
 	 }
 	
 	public static class MovieInfoPageAdapter extends FragmentStatePagerAdapter {
-
-		public MovieInfoPageAdapter(FragmentManager fm) {
+		
+		private ItemObject item;
+		
+		public MovieInfoPageAdapter(FragmentManager fm, ItemObject item) {
 			super(fm);
+			
+			this.item = item;
 			
 		}
 
@@ -83,12 +100,15 @@ public class MovieActivity extends FragmentActivity {
 			switch(arg0) {
 			case 1:
 				frag = new MainInfo();
-				/* do more calculations here. */
 				break;
 			case 0 :
 				frag = new VideoInfo();
 				break;
 			}
+			/* do more calculations here. */
+			Bundle main = new Bundle();
+			main.putParcelable("item", this.item);
+			frag.setArguments(main);
 			return frag;
 		}
 
@@ -119,6 +139,14 @@ public class MovieActivity extends FragmentActivity {
                 Bundle savedInstanceState) {
 			
 			View v = inflater.inflate(R.layout.main_fragment, container, false);
+			
+			TextView t = (TextView) v.findViewById(R.id.main_frag_text);
+			
+			Bundle main = this.getArguments();
+			
+			ItemObject object = main.getParcelable("item");
+			
+			t.setText("The Movie Title is: " + object.getMovieTitle());
 			
 			return v;
 			
@@ -182,19 +210,34 @@ public class MovieActivity extends FragmentActivity {
 			}
 			
 			Log.d("Found Item : " + response.getMovieID(), "Movie Title: " + response.getMovieTitle());
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			adapter = new MovieInfoPageAdapter(MovieActivity.this.getSupportFragmentManager(), response);
 			pager.setAdapter(adapter);
-			
-			/* set up all of the tabs.
-			 * first main tab. */
-			//View main = pager.getChildAt(1);
-			
-			//TextView t = (TextView) main.findViewById(R.id.main_frag_text);
-			//t.setText("Movie Title: " + response.getMovieTitle());
-			
+			actionBar.setDisplayShowTitleEnabled(true);
+			actionBar.setTitle(response.getMovieTitle());
 			pager.setCurrentItem(1);
+			
 			flipper.setDisplayedChild(1);
 			
 		}
+	}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		pager.setCurrentItem(tab.getPosition());
+		
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
