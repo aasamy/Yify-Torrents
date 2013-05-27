@@ -2,7 +2,10 @@ package com.yify.object;
 
 import java.util.HashMap;
 
-public class ItemObject extends ListObject {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ItemObject extends ListObject implements Parcelable {
 
 	private String uploaderNotes;
 	private String resolution;
@@ -96,6 +99,120 @@ public class ItemObject extends ListObject {
 	public void setSubtitles(String subtitles) {
 		this.subtitles = subtitles;
 	}
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		
+		String[] keys = (String[]) this.screenshots.keySet().toArray();
+		String[] data = new String[keys.length];
+		for(int i = 0; i < keys.length; i++) {
+			data[i] = this.screenshots.get(keys[i]);
+		}
+		
+		out.writeStringArray(keys);
+		out.writeStringArray(data);
+		out.writeInt(this.getMovieID());
+		out.writeString(this.getMovieTitle());
+		out.writeString(this.getMovieURL());
+		out.writeString(this.getDateAdded());
+		out.writeString(this.getQuality());
+		out.writeString(this.getMovieCover());
+		out.writeString(this.getImdbCode());
+		out.writeString(this.getImdbLink());
+		out.writeString(this.getFilesize());
+		out.writeString(this.getMovieRating());
+		out.writeString(this.getGenre());
+		out.writeString(this.getTorrentSeeds());
+		out.writeInt(this.getDownloaded());
+		out.writeInt(this.getTorrentPeers());
+		out.writeString(this.getTorrentURL());
+		out.writeString(this.getTorrentHash());
+		out.writeString(this.getTorrentMagnetURL());
+		out.writeString(this.getUploader());
+		out.writeString(this.getUploaderNotes());
+		out.writeString(this.getResolution());
+		out.writeString(this.getRuntime());
+		out.writeString(this.getFrameRate());
+		out.writeString(this.getLanguage());
+		out.writeString(this.getSubtitles());
+		out.writeString(this.getYoutubeID());
+		out.writeString(this.getYoutubeURL());
+		out.writeString(this.getAgeRating());
+		out.writeString(this.getSubGenre());
+		out.writeString(this.getShortDescription());
+		out.writeString(this.getLongDescription());
+		
+	}
+	
+	public ItemObject() {
+		
+	}
+	
+	public ItemObject(Parcel in) {
+		
+		HashMap<String, String> screen = new HashMap<String, String>();
+		
+		String[] keys = new String[]{}; String[] data = new String[]{};
+		in.readStringArray(keys); in.readStringArray(data);
+		
+		for(int i = 0; i < keys.length; i++) {
+			screen.put(keys[i], data[i]);
+		}
+		
+		this.screenshots = screen;
+		this.setMovieID(in.readInt());
+		this.setMovieTitle(in.readString());
+		this.setMovieURL(in.readString());
+		this.setDateAdded(in.readString());
+		this.setQuality(in.readString());
+		this.setMovieCover(in.readString());
+		this.setImdbCode(in.readString());
+		this.setImdbLink(in.readString());
+		this.setFilesize(in.readString());
+		this.setMovieRating(in.readString());
+		this.setGenre(in.readString());
+		this.setTorrentSeeds(in.readString());
+		this.setDownloaded(in.readInt());
+		this.setTorrentPeers(in.readInt());
+		this.setTorrentURL(in.readString());
+		this.setTorrentHash(in.readString());
+		this.setTorrentMagnetURL(in.readString());
+		this.setUploader(in.readString());
+		this.setUploaderNotes(in.readString());
+		this.setResolution(in.readString());
+		this.setRuntime(in.readString());
+		this.setFrameRate(in.readString());
+		this.setLanguage(in.readString());
+		this.setSubtitles(in.readString());
+		this.setYoutubeID(in.readString());
+		this.setYoutubeURL(in.readString());
+		this.setAgeRating(in.readString());
+		this.setSubGenre(in.readString());
+		this.setShortDescription(in.readString());
+		this.setLongDescription(in.readString());
+		
+	}
+	
+	public static final Parcelable.Creator<ItemObject> CREATOR = new Parcelable.Creator<ItemObject>() {
+
+		@Override
+		public ItemObject createFromParcel(Parcel source) {
+			
+			return new ItemObject(source);
+			
+		}
+
+		@Override
+		public ItemObject[] newArray(int size) {
+
+			return new ItemObject[size];
+			
+		}
+	};
 	
 	
 }
