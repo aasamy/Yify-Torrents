@@ -11,7 +11,7 @@ public class ItemObject extends ListObject implements Parcelable {
 	private String resolution;
 	private String frameRate;
 	private String language;
-	private HashMap<String, String> screenshots;
+	private String[] screenshots;
 	private String runtime;
 	private String subtitles;
 	private String youtubeID;
@@ -20,6 +20,7 @@ public class ItemObject extends ListObject implements Parcelable {
 	private String subGenre;
 	private String shortDescription;
 	private String longDescription;
+	private String largeCover;
 	
 	public String getUploaderNotes() {
 		return uploaderNotes;
@@ -45,10 +46,10 @@ public class ItemObject extends ListObject implements Parcelable {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-	public HashMap<String, String> getScreenshots() {
+	public String[] getScreenshots() {
 		return screenshots;
 	}
-	public void setScreenshots(HashMap<String, String> screenshots) {
+	public void setScreenshots(String ...screenshots) {
 		this.screenshots = screenshots;
 	}
 	public String getRuntime() {
@@ -107,16 +108,13 @@ public class ItemObject extends ListObject implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		
+		out.writeInt(this.screenshots.length);
 		
-		String med1 = this.screenshots.get("med1");
-		String med2 = this.screenshots.get("med2");
-		String med3 = this.screenshots.get("med3");
-		String lrg1 = this.screenshots.get("lrg1");
-		String lrg2 = this.screenshots.get("lrg2");
-		String lrg3 = this.screenshots.get("lrg3");
-		
-		out.writeString(med1); out.writeString(med2); out.writeString(med3);
-		out.writeString(lrg1); out.writeString(lrg2); out.writeString(lrg3);
+		for(int i = 0; i < this.screenshots.length; i++) {
+			
+			out.writeString(this.screenshots[i]);
+			
+		}
 		
 		out.writeInt(this.getMovieID());
 		out.writeString(this.getMovieTitle());
@@ -148,6 +146,7 @@ public class ItemObject extends ListObject implements Parcelable {
 		out.writeString(this.getSubGenre());
 		out.writeString(this.getShortDescription());
 		out.writeString(this.getLongDescription());
+		out.writeString(this.getLargeCover());
 		
 	}
 	
@@ -157,11 +156,15 @@ public class ItemObject extends ListObject implements Parcelable {
 	
 	public ItemObject(Parcel in) {
 		
-		HashMap<String, String> screen = new HashMap<String, String>();
+		int screenshotLength = in.readInt();
 		
-		screen.put("med1", in.readString()); screen.put("med2", in.readString()); screen.put("med3", in.readString());
-		screen.put("lrg1", in.readString()); screen.put("lrg2", in.readString()); screen.put("lrg3", in.readString());
-		this.screenshots = screen;
+		String[] screenshots = new String[screenshotLength];
+		
+		for(int i = 0; i < screenshotLength; i++) {
+			screenshots[i] = in.readString();
+		}
+		
+		this.screenshots = screenshots;
 		
 		this.setMovieID(in.readInt());
 		this.setMovieTitle(in.readString());
@@ -193,9 +196,17 @@ public class ItemObject extends ListObject implements Parcelable {
 		this.setSubGenre(in.readString());
 		this.setShortDescription(in.readString());
 		this.setLongDescription(in.readString());
+		this.setLargeCover(in.readString());
 		
 	}
 	
+	public String getLargeCover() {
+		return largeCover;
+	}
+	public void setLargeCover(String largeCover) {
+		this.largeCover = largeCover;
+	}
+
 	public static final Parcelable.Creator<ItemObject> CREATOR = new Parcelable.Creator<ItemObject>() {
 
 		@Override

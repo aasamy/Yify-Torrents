@@ -48,6 +48,11 @@
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
+        <activity
+            android:name=".FullScreenActivity" android:configChanges="orientation|screenSize|keyboardHidden">
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+        </activity>
     </application>
 	
     

@@ -46,8 +46,6 @@ public class MobileApplication extends Application {
 		.denyCacheImageMultipleSizesInMemory()
 		.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
 		.memoryCacheSize(2 * 1024 * 1024)
-		.memoryCacheExtraOptions(400,  800)
-		.discCacheExtraOptions(480, 800, CompressFormat.JPEG, 75)
 		.build();
 		
 		ImageLoader.getInstance().init(config);

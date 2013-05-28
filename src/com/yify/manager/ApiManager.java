@@ -226,11 +226,12 @@ public class ApiManager {
 				
 				lo = new ItemObject();
 				lo.setMovieID(entry.optInt("MovieID"));
+				lo.setLargeCover(entry.optString("LargeCover"));
 				lo.setMovieURL(entry.optString("MovieUrl"));
 				lo.setMovieTitle(entry.optString("MovieTitle"));
 				lo.setDateAdded(entry.optString("DateUploaded"));
 				lo.setQuality(entry.optString("Quality"));
-				lo.setMovieCover(entry.optString("CoverImage"));
+				lo.setMovieCover(entry.optString("MediumCover"));
 				lo.setImdbCode(entry.optString("ImdbCode"));
 				lo.setImdbLink(entry.optString("ImdbLink"));
 				lo.setFilesize(entry.optString("Size"));
@@ -256,16 +257,12 @@ public class ApiManager {
 				lo.setShortDescription(entry.optString("ShortDescription"));
 				lo.setLongDescription(entry.optString("LongDescription"));
 				
-				HashMap<String, String> screenshots = new HashMap<String, String>();
+				String[] screenshotsStrings = new String[] {entry.optString("MediumScreenshot1"), 
+						entry.optString("MediumScreenshot2"), entry.optString("MediumScreenshot3"), 
+						entry.optString("LargeScreenshot1"), entry.optString("LargeScreenshot2"), 
+						entry.optString("LargeScreenshot2")};
 				
-				screenshots.put("med1", entry.optString("MediumScreenshot1"));
-				screenshots.put("med2", entry.optString("MediumScreenshot2"));
-				screenshots.put("med3", entry.optString("MediumScreenshot3"));
-				screenshots.put("lrg1", entry.optString("LargeScreenshot1"));
-				screenshots.put("lrg2", entry.optString("LargeScreenshot2"));
-				screenshots.put("lrg3", entry.optString("LargeScreenshot2"));
-				
-				lo.setScreenshots(screenshots);
+				lo.setScreenshots(screenshotsStrings);
 			}
 			
 		}catch(Exception e){return null;}
