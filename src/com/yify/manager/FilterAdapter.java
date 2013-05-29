@@ -14,11 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 public class FilterAdapter<T extends Object> extends BaseAdapter {
 	
@@ -26,6 +30,7 @@ public class FilterAdapter<T extends Object> extends BaseAdapter {
 	private ArrayList<HashMap<String, T>> list;
 	private static LayoutInflater inflator = null;
 	private boolean isEnabled = false;
+	
 	
 	public FilterAdapter(Activity a, ArrayList<HashMap<String, T>> i, boolean e) {
 		activity = a; list = i; isEnabled = e;
@@ -53,12 +58,39 @@ public class FilterAdapter<T extends Object> extends BaseAdapter {
 		return position;
 	}
 	
+	public void addItem(HashMap<String, T> entry, int position) {
+		
+			list.remove(position);
+			list.add(position, entry);
+	}
+	
 	public static class ViewHolder {
 		
 		public TextView main;
 		public TextView sub;
 		public TextView value;
+		public ViewFlipper flipper;
+		public ImageView icon;
+		public ProgressBar bar;
 		
+	}
+	
+	@Override
+	public boolean isEnabled(int position) {
+		
+		if(position < list.size()) {
+			
+			HashMap<String, T> entry = this.list.get(position);
+			
+			if(entry.get("pressable").equals("no")) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		}
+		
+		return true;
 	}
 
 	@Override
@@ -75,6 +107,9 @@ public class FilterAdapter<T extends Object> extends BaseAdapter {
 			holder.main = (TextView) v.findViewById(R.id.setting_main);
 			holder.sub = (TextView) v.findViewById(R.id.settings_sub);
 			holder.value = (TextView) v.findViewById(R.id.value_text);
+			holder.flipper = (ViewFlipper) v.findViewById(R.id.comment_state);
+			holder.icon = (ImageView) v.findViewById(R.id.next_icon);
+			holder.bar = (ProgressBar) v.findViewById(R.id.comments_loading);
 			v.setTag(holder);
 			
 		} else {
@@ -88,6 +123,24 @@ public class FilterAdapter<T extends Object> extends BaseAdapter {
 		holder.main.setText((String) entry.get("main"));
 		holder.sub.setText((String) entry.get("sub"));
 		holder.value.setText("" + entry.get("value"));
+		
+		if(entry.get("icon").equals("yes")) {
+			holder.icon.setImageResource(R.drawable.navigation_next_item);
+		}
+		
+		if(entry.get("loading").equals("yes")) {
+			holder.bar.setVisibility(View.VISIBLE);
+			holder.flipper.setDisplayedChild(1);
+		} else {
+			holder.bar.setVisibility(View.GONE);
+			holder.flipper.setDisplayedChild(0);
+		}
+		
+		if(entry.get("sub").equals("")) {
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) LayoutParams.MATCH_PARENT, (int) LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.CENTER_VERTICAL);
+			holder.main.setLayoutParams(params);
+		}
 		
 		return v;
 		
