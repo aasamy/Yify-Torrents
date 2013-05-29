@@ -46,9 +46,11 @@
             android:layout_marginRight="33dp" />
             
             <ProgressBar android:id="@+id/comments_loading" 
-                android:layout_height="10dp" 
-                android:layout_width="10dp"
-                android:visibility="gone" />"
+                android:layout_height="12dp" 
+                android:layout_width="12dp"
+                android:visibility="gone"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="17.5dp" />
             
             </ViewFlipper>
 

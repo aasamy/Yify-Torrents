@@ -129,7 +129,7 @@ public class MovieActivity extends ActionBarActivity {
 			ArrayList<HashMap<String, String>> fi = new ArrayList<HashMap<String, String>>();
 			
 			HashMap<String, String> entry = new HashMap<String, String>();
-			entry.put("main", "General Information"); entry.put("sub", response.getShortDescription().substring(0, 90) + "...");
+			entry.put("main", "General Information"); entry.put("sub", response.getShortDescription().substring(0, 70) + "...");
 			entry.put("value", ""); entry.put("icon", "yes"); entry.put("pressable", "yes"); entry.put("loading", "no");
 			fi.add(entry);
 			
