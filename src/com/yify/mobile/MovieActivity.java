@@ -121,35 +121,10 @@ public class MovieActivity extends ActionBarActivity {
 			
 			imageScroll.addView(c);
 			
-			final String[] screenshots = response.getScreenshots();
+			MovieActivity.this.sortOutScreenshots(response.getScreenshots());
 			
-			final String[] large = new String[] {screenshots[3], screenshots[4], screenshots[5]};
 			
-			for(i = 0; i < 3; i++) {
-				
-				View v = inflater.inflate(R.layout.image_layout, null);
-				
-				ImageView image = (ImageView) v.findViewById(R.id.imagebutton_movie);
-				
-				ImageLoader.getInstance().displayImage(screenshots[i], image);
-				
-				image.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						
-						Intent intent = new Intent(MovieActivity.this, FullScreenActivity.class);
-						intent.putExtra("type", MovieActivity.SCREENSHOT);
-						intent.putExtra("item", large[i]);
-						startActivity(intent);
-						
-					}
-					
-				});
-				
-				imageScroll.addView(v);
-				
-			}
+			
 			
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setTitle(response.getMovieTitle());
@@ -171,6 +146,72 @@ public class MovieActivity extends ActionBarActivity {
 		
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private void sortOutScreenshots(final String[] screenshots) {
+		
+		/* med 1 */
+		View m1 = inflater.inflate(R.layout.image_layout, null);
+		ImageView im1 = (ImageView) m1.findViewById(R.id.imagebutton_movie);
+		ImageLoader.getInstance().displayImage(screenshots[0], im1);
+		im1.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				
+				Intent intent = new Intent(MovieActivity.this, FullScreenActivity.class);
+				intent.putExtra("type", MovieActivity.SCREENSHOT);
+				intent.putExtra("item", screenshots[0]);
+				startActivity(intent);
+				
+			}
+			
+		});
+		
+		imageScroll.addView(m1);
+		
+		/* med2 */
+		View m2 = inflater.inflate(R.layout.image_layout, null);
+		ImageView im2 = (ImageView) m2.findViewById(R.id.imagebutton_movie);
+		ImageLoader.getInstance().displayImage(screenshots[1], im2);
+		im2.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				
+				Intent intent = new Intent(MovieActivity.this, FullScreenActivity.class);
+				intent.putExtra("type", MovieActivity.SCREENSHOT);
+				intent.putExtra("item", screenshots[1]);
+				startActivity(intent);
+				
+			}
+			
+		});
+		
+		imageScroll.addView(m2);
+		
+		/* med3 */
+		View m3 = inflater.inflate(R.layout.image_layout, null);
+		ImageView im3 = (ImageView) m3.findViewById(R.id.imagebutton_movie);
+		ImageLoader.getInstance().displayImage(screenshots[2], im3);
+		im3.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				
+				Intent intent = new Intent(MovieActivity.this, FullScreenActivity.class);
+				intent.putExtra("type", MovieActivity.SCREENSHOT);
+				intent.putExtra("item", screenshots[2]);
+				startActivity(intent);
+				
+			}
+			
+		});
+		
+		imageScroll.addView(m3);
+		
+	}
+	
+	
 	
 	
 }
