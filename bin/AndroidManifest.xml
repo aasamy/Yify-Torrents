@@ -47,6 +47,11 @@
             android:name=".MovieActivity" >
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
+            <intent-filter>
+                <category android:name="android.intent.category.BROWSABLE" />
+  				<data android:mimeType="application/x-bittorrent" />
+  				<data android:scheme="http" android:mimeType="application/x-bittorrent" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".FullScreenActivity" android:configChanges="orientation|screenSize|keyboardHidden">
