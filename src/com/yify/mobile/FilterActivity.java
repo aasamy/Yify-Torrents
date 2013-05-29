@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -74,13 +76,13 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 		ArrayList<HashMap<String, String>> fi = new ArrayList<HashMap<String, String>>();
 		ArrayList<HashMap<String, String>> fe = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> entry = new HashMap<String, String>();
-		entry.put("main", "Genre"); entry.put("sub", "Filter results by genre."); entry.put("value", filter.getGenre());
+		entry.put("main", "Genre"); entry.put("sub", "Filter results by genre."); entry.put("value", filter.getGenre()); entry.put("icon", "no"); entry.put("pressable", "yes"); entry.put("loading", "no");
 		fi.add(entry);
 		entry = new HashMap<String, String>();
-		entry.put("main", "Rating"); entry.put("sub", "Filter results based on IMDB Rating."); entry.put("value", ""+filter.getRating());
+		entry.put("main", "Rating"); entry.put("sub", "Filter results based on IMDB Rating."); entry.put("value", ""+filter.getRating()); entry.put("icon", "no"); entry.put("pressable", "yes"); entry.put("loading", "no");
 		fi.add(entry);
 		entry = new HashMap<String, String>();
-		entry.put("main", "Quality"); entry.put("sub", "Filter by video quality."); entry.put("value", filter.getQuality());
+		entry.put("main", "Quality"); entry.put("sub", "Filter by video quality."); entry.put("value", filter.getQuality()); entry.put("icon", "no"); entry.put("pressable", "yes"); entry.put("loading", "no");
 		fi.add(entry);
 		fa = new FilterAdapter<String>(this, fi, true);
 		
@@ -88,10 +90,10 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 		f.setAdapter(fa);
 		
 		entry = new HashMap<String, String>();
-		entry.put("main", "Order"); entry.put("sub", "Order ASC or DESC"); entry.put("value", filter.getOrder());
+		entry.put("main", "Order"); entry.put("sub", "Order ASC or DESC"); entry.put("value", filter.getOrder()); entry.put("icon", "no"); entry.put("pressable", "yes"); entry.put("loading", "no");
 		fe.add(entry);
 		entry = new HashMap<String, String>();
-		entry.put("main", "Sort by"); entry.put("sub", "Sort by date, downloaded etc..."); entry.put("value", filter.getSort());
+		entry.put("main", "Sort by"); entry.put("sub", "Sort by date, downloaded etc..."); entry.put("value", filter.getSort()); entry.put("icon", "no"); entry.put("pressable", "yes"); entry.put("loading", "no");
 		fe.add(entry);
 		
 		sa = new FilterAdapter<String>(this, fe, true);
@@ -167,6 +169,25 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 			}
 			
 		});
+		
+		/* disable scrolling on both listviews */
+		
+		OnTouchListener listener = new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				
+				if(event.getAction() == MotionEvent.ACTION_MOVE) {
+					return true;
+				}
+				
+				return false;
+			}
+			
+		};
+		
+		s.setOnTouchListener(listener);
+		f.setOnTouchListener(listener);
 		
 		f.setOnItemClickListener(new OnItemClickListener() {
 
