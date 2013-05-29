@@ -25,6 +25,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -32,6 +33,7 @@ import java.util.*;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
+import com.yify.manager.FilterAdapter;
 import com.yify.object.*;
 
 public class MovieActivity extends ActionBarActivity {
@@ -41,12 +43,12 @@ public class MovieActivity extends ActionBarActivity {
 	
 	private LinearLayout imageScroll;
 	private ActionBar actionBar;
-	private Menu menu;
 	private ViewFlipper state;
 	private TextView err;
 	private ConnectivityDetector detector;
 	private LayoutInflater inflater;
-	private int i;
+	private ListView list;
+	private FilterAdapter<String> adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class MovieActivity extends ActionBarActivity {
 		err = (TextView) findViewById(R.id.movie_err);
 		detector = new ConnectivityDetector(this);
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		list = (ListView) findViewById(R.id.movie_info_listview);
 		
 		state.setDisplayedChild(0);
 		
@@ -123,8 +126,33 @@ public class MovieActivity extends ActionBarActivity {
 			
 			MovieActivity.this.sortOutScreenshots(response.getScreenshots());
 			
+			ArrayList<HashMap<String, String>> fi = new ArrayList<HashMap<String, String>>();
 			
+			HashMap<String, String> entry = new HashMap<String, String>();
+			entry.put("main", "General Information"); entry.put("sub", response.getShortDescription().substring(0, 90) + "...");
+			entry.put("value", ""); entry.put("icon", "yes"); entry.put("pressable", "yes"); entry.put("loading", "no");
+			fi.add(entry);
 			
+			entry = new HashMap<String, String>();
+			entry.put("main", "Torrent Information"); entry.put("sub", "Seeds/Peers: " + response.getTorrentSeeds() + "/" + response.getTorrentPeers());
+			entry.put("value", ""); entry.put("icon", "yes"); entry.put("pressable", "yes"); entry.put("loading", "no");
+			fi.add(entry);
+			
+			entry = new HashMap<String, String>();
+			entry.put("main", "Comments"); entry.put("sub", ""); entry.put("value", ""); entry.put("icon", "no"); entry.put("pressable", "no");
+			entry.put("loading", "yes");
+			fi.add(entry);
+			
+			entry = new HashMap<String, String>();
+			entry.put("main", "Trailer"); entry.put("sub", ""); entry.put("value", ""); entry.put("icon", "yes"); entry.put("pressable", "yes");
+			entry.put("loading", "no");
+			fi.add(entry);
+			
+			adapter = new FilterAdapter<String>(MovieActivity.this, fi, true);
+			list.setAdapter(adapter);
+			
+			/* get the movie comment count. */
+			new GetCommentCount().execute(response.getMovieID());
 			
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setTitle(response.getMovieTitle());
@@ -208,6 +236,43 @@ public class MovieActivity extends ActionBarActivity {
 		});
 		
 		imageScroll.addView(m3);
+		
+	}
+	
+	private class GetCommentCount extends AsyncTask<Integer, Integer, ArrayList<CommentObject>> {
+
+		@Override
+		protected ArrayList<CommentObject> doInBackground(Integer... params) {
+			
+			/* dont need to check the internet, as already checked it with movie grab. */
+			
+			ApiManager manager = new ApiManager();
+			return manager.getMovieComments(params[0]);
+			
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<CommentObject> response) {
+			
+			@SuppressWarnings("unchecked")
+			HashMap<String, String> entry = (HashMap<String, String>) adapter.getItem(2);	/* the comments entry */
+			
+			if((response == null) || (response.size() == 0)) {
+				entry.put("loading", "no");
+				entry.put("icon", "no");
+				entry.put("value", "0");
+				entry.put("pressable", "no");
+			} else {
+				entry.put("loading", "no");
+				entry.put("icon", "yes");
+				entry.put("value", "" + response.size());
+				entry.put("pressable", "yes");
+			}
+			
+			
+			adapter.notifyDataSetChanged();
+			
+		}
 		
 	}
 	
