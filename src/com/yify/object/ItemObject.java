@@ -2,6 +2,8 @@ package com.yify.object;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -92,7 +94,7 @@ public class ItemObject extends ListObject implements Parcelable {
 		return longDescription;
 	}
 	public void setLongDescription(String longDescription) {
-		this.longDescription = longDescription;
+		this.longDescription = StringEscapeUtils.unescapeHtml4(longDescription);
 	}
 	public String getSubtitles() {
 		return subtitles;
