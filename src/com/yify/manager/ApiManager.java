@@ -240,9 +240,9 @@ public class ApiManager {
 				lo.setTorrentSeeds(entry.optString("TorrentSeeds"));
 				lo.setDownloaded(entry.optInt("Downloaded"));
 				lo.setTorrentPeers(entry.optInt("TorrentPeers"));
-				lo.setTorrentURL(entry.optString("TorrentURL"));
+				lo.setTorrentURL(entry.optString("TorrentUrl"));
 				lo.setTorrentHash(entry.optString("TorrentHash"));
-				lo.setTorrentMagnetURL(entry.optString("TorrentMagnetURL"));
+				lo.setTorrentMagnetURL(entry.optString("TorrentMagnetUrl"));
 				lo.setUploader(entry.optString("Uploader"));
 				lo.setUploaderNotes(entry.optString("UploaderNotes"));
 				lo.setResolution(entry.optString("Resolution"));
