@@ -183,6 +183,16 @@ public class MovieActivity extends ActionBarActivity {
 						intent.putExtra("item", response);
 						startActivity(intent);
 						break;
+					case 1:
+						Intent i = new Intent(MovieActivity.this, TorrentActivity.class);
+						i.putExtra("item", response);
+						startActivity(i);
+						break;
+					case 3:
+						Intent m = new Intent(MovieActivity.this, VideoPlayerActivity.class);
+						m.putExtra("item", response);
+						startActivity(m);
+						break;
 					default:
 						break;
 					}
