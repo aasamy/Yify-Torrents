@@ -16,10 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -63,6 +67,22 @@ public class MovieActivity extends ActionBarActivity {
 		detector = new ConnectivityDetector(this);
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		list = (ListView) findViewById(R.id.movie_info_listview);
+		
+		OnTouchListener listener = new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				
+				if(event.getAction() == MotionEvent.ACTION_MOVE) {
+					return true;
+				}
+				
+				return false;
+			}
+			
+		};
+		
+		list.setOnTouchListener(listener);
 		
 		state.setDisplayedChild(0);
 		
@@ -150,6 +170,26 @@ public class MovieActivity extends ActionBarActivity {
 			
 			adapter = new FilterAdapter<String>(MovieActivity.this, fi, true);
 			list.setAdapter(adapter);
+			
+			list.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					
+					switch(position) {
+					case 0:
+						Intent intent = new Intent(MovieActivity.this, GeneralActivity.class);
+						intent.putExtra("item", response);
+						startActivity(intent);
+						break;
+					default:
+						break;
+					}
+					
+				}
+				
+			});
 			
 			/* get the movie comment count. */
 			new GetCommentCount().execute(response.getMovieID());
