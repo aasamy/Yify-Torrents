@@ -43,7 +43,7 @@
             android:id="@+id/value_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="33dp" />
+             />
             
             <ProgressBar android:id="@+id/comments_loading" 
                 android:layout_height="12dp" 
