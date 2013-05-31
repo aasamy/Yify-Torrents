@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -126,6 +127,9 @@ public class FilterAdapter<T extends Object> extends BaseAdapter {
 		
 		if(entry.get("icon").equals("yes")) {
 			holder.icon.setImageResource(R.drawable.navigation_next_item);
+			FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) holder.value.getLayoutParams();
+			params.setMargins(0, 0, 80, 0);
+			holder.value.setLayoutParams(params);
 		}
 		
 		if(entry.get("loading").equals("yes")) {
