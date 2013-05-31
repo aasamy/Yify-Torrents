@@ -1,40 +1,29 @@
 package com.yify.mobile;
 
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Gallery;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import java.util.*;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.FilterAdapter;
@@ -44,6 +33,11 @@ public class MovieActivity extends ActionBarActivity {
 	
 	public static final int COVER = 1;
 	public static final int SCREENSHOT = 2;
+	
+	private static final int REQ_START_STANDALONE_PLAYER = 1;
+	private static final int REQ_RESOLVE_SERVICE_MISSING = 2;
+	
+	private final String developerKey = "AIzaSyCO25LlTSVOpP8R5ZA80iFyu3C2bI7m-rM";
 	
 	private LinearLayout imageScroll;
 	private ActionBar actionBar;
@@ -189,9 +183,23 @@ public class MovieActivity extends ActionBarActivity {
 						startActivity(i);
 						break;
 					case 3:
-						Intent m = new Intent(MovieActivity.this, VideoPlayerActivity.class);
-						m.putExtra("item", response);
-						startActivity(m);
+						Intent m = YouTubeStandalonePlayer.createVideoIntent(MovieActivity.this, MovieActivity.this.developerKey, response.getYoutubeID());
+						
+						if(m != null) {
+							
+							if(canResolveIntent(m)) {
+								
+								startActivityForResult(m, MovieActivity.REQ_START_STANDALONE_PLAYER);
+								
+							} else {
+								
+								YouTubeInitializationResult.SERVICE_MISSING
+									.getErrorDialog(MovieActivity.this, MovieActivity.REQ_RESOLVE_SERVICE_MISSING).show();
+								
+							}
+							
+						}
+						
 						break;
 					default:
 						break;
@@ -211,6 +219,27 @@ public class MovieActivity extends ActionBarActivity {
 			
 			
 		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == REQ_START_STANDALONE_PLAYER && resultCode != RESULT_OK) {
+			YouTubeInitializationResult errorReason = 
+					YouTubeStandalonePlayer.getReturnedInitializationResult(data);
+			
+			if(errorReason.isUserRecoverableError()) {
+				errorReason.getErrorDialog(this, 0).show();
+			} else {
+				Toast.makeText(this, "An error occured processing your request: " + errorReason.toString(), Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+	}
+	
+	private boolean canResolveIntent(Intent intent) {
+		List<ResolveInfo> resolveInfo = this.getPackageManager().queryIntentActivities(intent, 0);
+		return resolveInfo != null && !resolveInfo.isEmpty();
 	}
 	
 	@Override
