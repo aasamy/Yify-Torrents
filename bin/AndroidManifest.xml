@@ -69,7 +69,12 @@
                 android:value=".SearchActivity" />
         </activity>
         <activity
-            android:name=".VideoPlayerActivity" >
+            android:name=".CommentActivity" >
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+        </activity>
+        <activity
+            android:name=".CommentReplyActivity" >
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
