@@ -107,7 +107,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int actionbar_compat_title=0x7f090001;
         public static final int comment_state=0x7f090015;
         public static final int comments_loading=0x7f090017;
-        public static final int date=0x7f090009;
+        public static final int date=0x7f090008;
         public static final int desc=0x7f090031;
         public static final int desc_title=0x7f090030;
         public static final int downloadButton=0x7f09003a;
@@ -159,7 +159,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int name=0x7f090007;
         public static final int name_date=0x7f090006;
         public static final int next_icon=0x7f090018;
-        public static final int overflow=0x7f090008;
+        public static final int overflow=0x7f090009;
         public static final int pager=0x7f090005;
         public static final int popular_container=0x7f09004b;
         public static final int popular_err=0x7f090050;
