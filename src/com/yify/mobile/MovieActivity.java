@@ -201,6 +201,11 @@ public class MovieActivity extends ActionBarActivity {
 						}
 						
 						break;
+					case 2:
+						Intent c = new Intent(MovieActivity.this, CommentActivity.class);
+						c.putExtra("id", response.getMovieID());
+						startActivity(c);
+						break;
 					default:
 						break;
 					}
@@ -318,25 +323,25 @@ public class MovieActivity extends ActionBarActivity {
 		
 	}
 	
-	private class GetCommentCount extends AsyncTask<Integer, Integer, ArrayList<CommentObject>> {
+	private class GetCommentCount extends AsyncTask<Integer, Integer, Integer> {
 
 		@Override
-		protected ArrayList<CommentObject> doInBackground(Integer... params) {
+		protected Integer doInBackground(Integer... params) {
 			
 			/* dont need to check the internet, as already checked it with movie grab. */
 			
 			ApiManager manager = new ApiManager();
-			return manager.getMovieComments(params[0]);
+			return manager.getCommentCount(params[0]);
 			
 		}
 		
 		@Override
-		protected void onPostExecute(ArrayList<CommentObject> response) {
+		protected void onPostExecute(Integer response) {
 			
 			@SuppressWarnings("unchecked")
 			HashMap<String, String> entry = (HashMap<String, String>) adapter.getItem(2);	/* the comments entry */
 			
-			if((response == null) || (response.size() == 0)) {
+			if((response == null) || (response == 0)) {
 				entry.put("loading", "no");
 				entry.put("icon", "no");
 				entry.put("value", "0");
@@ -344,7 +349,7 @@ public class MovieActivity extends ActionBarActivity {
 			} else {
 				entry.put("loading", "no");
 				entry.put("icon", "yes");
-				entry.put("value", "" + response.size());
+				entry.put("value", "" + response);
 				entry.put("pressable", "yes");
 			}
 			

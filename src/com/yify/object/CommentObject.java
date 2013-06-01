@@ -1,5 +1,7 @@
 package com.yify.object;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class CommentObject {
 
 	private int commentID;
@@ -21,7 +23,7 @@ public class CommentObject {
 		return text;
 	}
 	public void setText(String text) {
-		this.text = text;
+		this.text = StringEscapeUtils.unescapeHtml4(text).replace("<br />", "");
 	}
 	public int getUserID() {
 		return userID;

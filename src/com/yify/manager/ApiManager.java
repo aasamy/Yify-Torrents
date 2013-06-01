@@ -647,7 +647,7 @@ public class ApiManager {
 	 * @param movieID the unique of the movie.
 	 * @return ArrayList<CommentObject> the array of comments, or an empty array if there is no comments.
 	 */
-	public ArrayList<CommentObject> getMovieComments(int movieID) {
+	public ArrayList<CommentObject> getMovieComments(int movieID, boolean fullCount) {
 		
 		ArrayList<CommentObject> data = new ArrayList<CommentObject>();
 		URL url = null;
@@ -689,6 +689,10 @@ public class ApiManager {
 							
 							if(object != null) {
 								
+								String commentID = object.optString("ParentCommentID");
+								
+								if(commentID.equalsIgnoreCase("null") || fullCount) {	
+								
 								CommentObject co = new CommentObject();
 								
 								co.setCommentID(object.optInt("CommentID"));
@@ -698,8 +702,8 @@ public class ApiManager {
 								co.setUsername(object.optString("UserName"));
 								co.setUserGroup(object.optString("UserGroup"));
 								co.setDateAdded(object.optString("DateAdded"));
-								
 								data.add(co);
+								}
 							}
 						}
 						
@@ -716,6 +720,37 @@ public class ApiManager {
 		}
 		return data;
 	}
+	
+	public ArrayList<CommentObject> getCommentReplies(int movieID, int commentID) {
+		
+		ArrayList<CommentObject> ret = new ArrayList<CommentObject>();
+		
+		ArrayList<CommentObject> com = this.getMovieComments(movieID, true);
+		
+		if(com.isEmpty()) {
+			return ret;
+		}
+		
+		for(CommentObject comment : com) {
+			if(!comment.getParentCommentID().equals("null")) {
+				if(comment.getParentCommentID().equals(""+commentID)) {
+					ret.add(comment);
+				}
+			}
+		}
+		
+		return ret;
+		
+	}
+	
+	public int getCommentReplyCount(int movieID, int commentID) {
+		return this.getCommentReplies(movieID, commentID).size();
+	}
+	
+	public int getCommentCount(int movieID) {
+		return this.getMovieComments(movieID, true).size();
+	}
+	
 	/**
 	 * post a message to a movie using a login hash.
 	 * @param message the message to post.

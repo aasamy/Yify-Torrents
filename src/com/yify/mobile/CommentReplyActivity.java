@@ -1,39 +1,23 @@
 package com.yify.mobile;
 
+import java.util.ArrayList;
+
 import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
-import java.util.*;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.CommentAdapter;
-import com.yify.manager.FilterAdapter;
-import com.yify.object.*;
+import com.yify.object.CommentObject;
 
-public class CommentActivity extends ActionBarActivity implements OnMenuItemClickListener {
-	
+public class CommentReplyActivity extends ActionBarActivity {
 	
 	private Menu menu;
 	private ActionBar bar;
@@ -41,6 +25,8 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 	private TextView err;
 	private int movieID;
 	private ListView list;
+	private int commentID;
+	private String user;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +37,7 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 		
 		bar.setDisplayHomeAsUpEnabled(true);
 		bar.setDisplayShowTitleEnabled(true);
-		bar.setTitle("Comments");
+		
 		
 		flipper = (ViewFlipper) findViewById(R.id.search_state);
 		err = (TextView) findViewById(R.id.search_no_results);
@@ -62,6 +48,9 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 		
 		Intent intent = getIntent();
 		movieID = intent.getIntExtra("id", -1);
+		commentID = intent.getIntExtra("cID", -1);
+		
+		bar.setTitle("Comment Replies");
 		
 		flipper.setDisplayedChild(0);
 		
@@ -69,10 +58,11 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 			err.setText("An error occured processing your request");
 			flipper.setDisplayedChild(2);
 		} else {
-			new GetComments().execute(movieID);
+			new GetComments().execute(new Integer[]{movieID, commentID});
 		}
 		
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
@@ -89,7 +79,7 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 	
 	private class GetComments extends AsyncTask<Integer, Integer, ArrayList<CommentObject>> {
 
-		private ConnectivityDetector detector = new ConnectivityDetector(CommentActivity.this);
+		private ConnectivityDetector detector = new ConnectivityDetector(CommentReplyActivity.this);
 		
 		@Override
 		protected ArrayList<CommentObject> doInBackground(Integer... arg0) {
@@ -100,7 +90,9 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 			
 			ApiManager manager = new ApiManager();
 			
-			return manager.getMovieComments(arg0[0], false);
+			Log.d("Intent Data", "movieid : " + arg0[0] + ", commentid : " + arg0[1]);
+			
+			return manager.getCommentReplies(arg0[0], arg0[1]);
 		}
 		
 		@Override
@@ -114,13 +106,14 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 			
 			if(response.isEmpty()) {
 				
-				err.setText("There are no comments for this movie.");
+				err.setText("There are no replies to this comment.");
 				flipper.setDisplayedChild(2);
 				return;
 				
 			}
 			
-			CommentAdapter adapter = new CommentAdapter(CommentActivity.this, response);
+			CommentAdapter adapter = new CommentAdapter(CommentReplyActivity.this, response);
+			adapter.dontShowIcon();
 			list.setAdapter(adapter);
 			
 			flipper.setDisplayedChild(1);
@@ -128,28 +121,6 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 		}
 		
 	}
-
-	@Override
-	public boolean onMenuItemClick(MenuItem item) {
-		
-		switch(item.getItemId()) {
-		case R.id.refresh_twitter:
-			/* show replies. */
-			Intent intent = new Intent(CommentActivity.this, CommentReplyActivity.class);
-			intent.putExtra("id", movieID); intent.putExtra("cID", item.getGroupId());
-			startActivity(intent);
-			
-			break;
-		case R.id.show_twitter:
-			/* reply to this comment.
-			 * check is logged in, if not start log in activity, else start commentpost activity. */
-			Toast.makeText(this, ""+item.getGroupId() + ", " + movieID, Toast.LENGTH_LONG).show();
-			break;
-		}
-		
-		return false;
-	}
-	
 	
 
 }
