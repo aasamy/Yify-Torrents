@@ -12,6 +12,7 @@ import com.yify.manager.ProductAdapter;
 import com.yify.object.AuthObject;
 import com.yify.object.CommentObject;
 import com.yify.object.ListObject;
+import com.yify.object.LoginDialog;
 import com.yify.object.UpcomingObject;
 import com.yify.view.ViewFlinger;
 import android.widget.ListView;
@@ -19,8 +20,13 @@ import android.os.Bundle;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -29,8 +35,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -41,7 +49,7 @@ import android.widget.ViewFlipper;
 import android.view.MenuItem;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements LoginDialog.LoginDialogListener {
 	
 	private Menu mainMenu = null;
 	private ViewFlipper upcomingflipper;
@@ -49,6 +57,11 @@ public class MainActivity extends ActionBarActivity {
 	private ViewFlipper popularFlipper;
 	private ViewFlipper latestFlipper;
 	private SearchView searchView; 
+	private DatabaseManager manager;
+	private AuthObject user;
+	private View loginDialogView;
+	private DialogFragment frag;
+	private boolean loggedIn = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
 		latestFlipper = (ViewFlipper) findViewById(R.id.latest_state);
 		popularFlipper = (ViewFlipper) findViewById(R.id.popular_state);
 		detector = new ConnectivityDetector(this);
-		
+		manager = new DatabaseManager(this);
 	}
 	
 	@Override
@@ -89,6 +102,13 @@ public class MainActivity extends ActionBarActivity {
 		mainMenu.findItem(R.id.menu_filter).setVisible(false);
 		mainMenu.findItem(R.id.menu_accept).setVisible(false);
 		
+		/* see if there is a user logged on. */
+		String username = manager.getLoggedInUserName();
+		this.loggedIn = (username != null) ? true : false;
+		if(loggedIn) {
+			mainMenu.findItem(R.id.menu_login).setTitle(username);
+		}
+
 		//execute background task to grab upcoming movies.
 		getActionBarHelper().setRefreshActionItemState(true);
 		upcomingflipper.setDisplayedChild(0);
@@ -102,6 +122,31 @@ public class MainActivity extends ActionBarActivity {
 		new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "POP"});
 		
 		return end;
+	}
+	
+	public class GetLoginDetails extends AsyncTask<String, Integer, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+			
+			if(!detector.isConnectionAvailable()) {
+				return false;
+			}
+			
+			user = manager.getLoggedInUser();
+			
+			return (user != null);
+			
+		}
+		
+		protected void onPostExecute(Boolean response) {
+			
+			if(response) {
+					mainMenu.findItem(R.id.menu_login).setTitle(user.getUser().getUsername());
+			}
+			
+		}
+		
 	}
 	
 //	@Override
@@ -162,6 +207,12 @@ public class MainActivity extends ActionBarActivity {
                 shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
                 startActivity(Intent.createChooser(shareIntent, "Share..."));
                 break;
+			case R.id.menu_login:
+				if(!this.loggedIn) {
+					DialogFragment login = new LoginDialog();
+					login.show(getFragmentManager(), "login");
+				}
+				break;
 		}
 		
 		return super.onOptionsItemSelected(item);
@@ -330,6 +381,85 @@ public class MainActivity extends ActionBarActivity {
 				getActionBarHelper().setRefreshActionItemState(false);
 			}
 			
+			
+		}
+		
+	}
+
+	@Override
+	public void onSignInPressed(DialogFragment fragment, View v, String userinput, String passinput) {
+		
+		this.loginDialogView = v;
+		this.frag = fragment;
+		
+		ViewFlipper flipper = (ViewFlipper) v.findViewById(R.id.loginstate);
+		flipper.setDisplayedChild(1);
+		
+		new Login().execute(new String[]{userinput, passinput});
+		
+		
+	}
+	
+	private class Login extends AsyncTask<String, Integer, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			
+			if(!detector.isConnectionAvailable()) {
+				return null;
+			}
+			
+			ApiManager man = new ApiManager();
+			String[] response = man.login(params[0], params[1]);
+			
+			if(response.length > 1) {
+				
+				manager.addAuth(response[0], Integer.parseInt(response[1]), response[2]);
+				
+				String username = manager.getLoggedInUserName();
+				
+				loggedIn = (username == null) ? false : true;
+				
+				return username;
+				
+			}
+			
+			return "";
+			
+		}
+		
+		@Override
+		protected void onPostExecute(String response) {
+			
+			String message = "";
+			
+			
+			if(response == null || response.equals("")) {
+				message = "Your username or password was incorrect, please try again.";
+			}
+			
+			ViewFlipper flipper = (ViewFlipper) MainActivity.this.loginDialogView.findViewById(R.id.loginstate);
+			EditText pass = (EditText) loginDialogView.findViewById(R.id.password);
+			
+			if(loggedIn) {
+				mainMenu.findItem(R.id.menu_login).setTitle(response);
+				Toast.makeText(MainActivity.this, "You have successfully signed in " + response, Toast.LENGTH_SHORT).show();
+				frag.dismiss();
+			} else {
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				pass.setText("");
+				flipper.setDisplayedChild(0);
+				builder.setMessage(message)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						
+					}
+				}).show();
+			}
 			
 		}
 		

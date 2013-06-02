@@ -2,6 +2,7 @@ package com.yify.manager;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -400,7 +401,7 @@ public class ApiManager {
 					conn.setRequestProperty("Content-Length", "" + Integer.toString(params.getBytes().length));
 					conn.setUseCaches(false);
 					conn.connect();
-					
+					Log.d("params", params);
 					DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
 					wr.writeBytes(params);
 					wr.flush();
@@ -435,7 +436,7 @@ public class ApiManager {
 				
 			}
 			
-		} catch (Exception e) {Log.d("ERROR", e.getMessage());return "";}
+		} catch (IOException e) {return e.getMessage();}
 		
 		return result;
 	}
@@ -571,6 +572,8 @@ public class ApiManager {
 		if(url != null) {
 			
 			String response = this.callApi(url, "POST", "username=" + username + "&password=" + password);
+			
+			Log.d("response", response);
 			
 			JSONObject json = null;
 			

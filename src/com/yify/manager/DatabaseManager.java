@@ -96,7 +96,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		
-		String query = "SELECT "+ KEY_ID +", " + KEY_HASH + ", "+ KEY_USERID +" FROM " + TABLE_AUTH;
+		String query = "SELECT "+ KEY_ID +", " + KEY_HASH + ", "+ KEY_USERID + ", " + KEY_USER +" FROM " + TABLE_AUTH;
 		
 		Cursor cursor = db.rawQuery(query, null);
 		
@@ -110,7 +110,18 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		
 		cursor.moveToFirst();
 		
-		return new String[] {cursor.getString(0), cursor.getString(1), cursor.getString(2)};
+		return new String[] {cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)};
+		
+	}
+	
+	public String getLoggedInUserName() {
+		String[] data = this.checkIsAuth();
+		
+		if(data != null) {
+			return data[3];
+		}
+		
+		return null;
 		
 	}
 	
