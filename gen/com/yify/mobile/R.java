@@ -50,6 +50,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     public static final class color {
         public static final int actionbar_title_color=0x7f070000;
         public static final int blue=0x7f070002;
+        public static final int text_color=0x7f070004;
         public static final int text_white=0x7f070001;
         public static final int white_opaque=0x7f070003;
     }
