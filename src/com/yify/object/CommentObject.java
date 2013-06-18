@@ -11,6 +11,7 @@ public class CommentObject {
 	private String username;
 	private String userGroup;
 	private String dateAdded;
+	private int replyCount;
 	
 	
 	public int getCommentID() {
@@ -54,6 +55,16 @@ public class CommentObject {
 	}
 	public void setDateAdded(String dateAdded) {
 		this.dateAdded = dateAdded;
+	}
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	
+	public boolean isParentComment() {
+		return this.parentCommentID.equalsIgnoreCase("null");
 	}
 	
 }
