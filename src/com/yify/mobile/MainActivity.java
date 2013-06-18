@@ -105,10 +105,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		/* see if there is a user logged on. */
 		String username = manager.getLoggedInUserName();
 		this.loggedIn = (username != null) ? true : false;
-		if(loggedIn) {
-			mainMenu.findItem(R.id.menu_login).setTitle(username);
-		}
-
 		//execute background task to grab upcoming movies.
 		getActionBarHelper().setRefreshActionItemState(true);
 		upcomingflipper.setDisplayedChild(0);
@@ -122,31 +118,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "POP"});
 		
 		return end;
-	}
-	
-	public class GetLoginDetails extends AsyncTask<String, Integer, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			
-			if(!detector.isConnectionAvailable()) {
-				return false;
-			}
-			
-			user = manager.getLoggedInUser();
-			
-			return (user != null);
-			
-		}
-		
-		protected void onPostExecute(Boolean response) {
-			
-			if(response) {
-					mainMenu.findItem(R.id.menu_login).setTitle(user.getUser().getUsername());
-			}
-			
-		}
-		
 	}
 	
 //	@Override
@@ -442,7 +413,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 			EditText pass = (EditText) loginDialogView.findViewById(R.id.password);
 			
 			if(loggedIn) {
-				mainMenu.findItem(R.id.menu_login).setTitle(response);
 				Toast.makeText(MainActivity.this, "You have successfully signed in " + response, Toast.LENGTH_SHORT).show();
 				frag.dismiss();
 			} else {
