@@ -38,6 +38,7 @@
     
     <style name="myDropDownListView" parent="android:style/Widget.Holo.ListView.DropDown">
         <item name="android:background">#4c4c4c</item>
+        <item name="android:textColor">@color/text_color</item>
     </style>
 
     <style name="ActionBarTitle">
