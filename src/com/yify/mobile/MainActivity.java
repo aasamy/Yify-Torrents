@@ -12,6 +12,7 @@ import com.yify.manager.ProductAdapter;
 import com.yify.object.AuthObject;
 import com.yify.object.CommentObject;
 import com.yify.object.ListObject;
+import com.yify.object.Login;
 import com.yify.object.LoginDialog;
 import com.yify.object.UpcomingObject;
 import com.yify.view.ViewFlinger;
@@ -58,9 +59,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 	private ViewFlipper latestFlipper;
 	private SearchView searchView; 
 	private DatabaseManager manager;
-	private AuthObject user;
-	private View loginDialogView;
-	private DialogFragment frag;
 	private boolean loggedIn = false;
 
 	@Override
@@ -360,79 +358,14 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 	@Override
 	public void onSignInPressed(DialogFragment fragment, View v, String userinput, String passinput) {
 		
-		this.loginDialogView = v;
-		this.frag = fragment;
-		
 		ViewFlipper flipper = (ViewFlipper) v.findViewById(R.id.loginstate);
 		flipper.setDisplayedChild(1);
 		
-		new Login().execute(new String[]{userinput, passinput});
+		new Login(this.loggedIn, this.manager, this.detector, v, fragment, this).execute(new String[]{userinput, passinput});
 		
 		
 	}
 	
-	private class Login extends AsyncTask<String, Integer, String> {
-
-		@Override
-		protected String doInBackground(String... params) {
-			
-			if(!detector.isConnectionAvailable()) {
-				return null;
-			}
-			
-			ApiManager man = new ApiManager();
-			String[] response = man.login(params[0], params[1]);
-			
-			if(response.length > 1) {
-				
-				manager.addAuth(response[0], Integer.parseInt(response[1]), response[2]);
-				
-				String username = manager.getLoggedInUserName();
-				
-				loggedIn = (username == null) ? false : true;
-				
-				return username;
-				
-			}
-			
-			return "";
-			
-		}
-		
-		@Override
-		protected void onPostExecute(String response) {
-			
-			String message = "";
-			
-			
-			if(response == null || response.equals("")) {
-				message = "Your username or password was incorrect, please try again.";
-			}
-			
-			ViewFlipper flipper = (ViewFlipper) MainActivity.this.loginDialogView.findViewById(R.id.loginstate);
-			EditText pass = (EditText) loginDialogView.findViewById(R.id.password);
-			
-			if(loggedIn) {
-				Toast.makeText(MainActivity.this, "You have successfully signed in " + response, Toast.LENGTH_SHORT).show();
-				frag.dismiss();
-			} else {
-				
-				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				pass.setText("");
-				flipper.setDisplayedChild(0);
-				builder.setMessage(message)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						
-					}
-				}).show();
-			}
-			
-		}
-		
-	}
+	
 
 }

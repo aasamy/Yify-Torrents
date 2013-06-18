@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -117,11 +118,14 @@ public class CommentAdapter extends BaseAdapter {
 				
 				PopupMenu menu = new PopupMenu(activity, arg0);
 				menu.setOnMenuItemClickListener((CommentActivity)activity);
-				menu.getMenu().add(comment.getCommentID(), R.id.refresh_twitter, Menu.NONE, "Show Replies");
+				menu.getMenu().add(comment.getCommentID(), R.id.refresh_twitter, Menu.NONE, "Show Replies (" + comment.getReplyCount() + ")");
 				menu.getMenu().add(comment.getCommentID(), R.id.show_twitter, Menu.NONE, "Reply to this comment");
 				
 				/* get the reply count from some where and disable first entry
 				 * if the count is zero, also show the result count in the menu. */
+				if(comment.getReplyCount() == 0) {
+					menu.getMenu().findItem(R.id.refresh_twitter).setVisible(false);
+				}
 				
 				menu.show();
 			}

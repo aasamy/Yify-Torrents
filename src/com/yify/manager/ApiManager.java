@@ -686,6 +686,8 @@ public class ApiManager {
 					
 					if((array != null) && (array.length()!= 0)) {
 						
+						HashMap<Integer, Integer> commentCount = new HashMap<Integer, Integer>();
+						
 						for(int i = 0; i < array.length(); i++) {
 							
 							JSONObject object = array.optJSONObject(i);
@@ -705,8 +707,29 @@ public class ApiManager {
 								co.setUsername(object.optString("UserName"));
 								co.setUserGroup(object.optString("UserGroup"));
 								co.setDateAdded(object.optString("DateAdded"));
-								data.add(co);
+								
+								/* now to interate through the list again to find replies, 
+								 * such a waste of resources. */
+								int count = 0;
+								for(int k = 0; k < array.length(); k++) {
+									JSONObject o = array.optJSONObject(k);
+									if(o != null) {
+										String ID = o.optString("ParentCommentID");
+										if(!ID.equalsIgnoreCase("null")) {
+											int id = Integer.parseInt(ID);
+											if(id == co.getCommentID()) {
+												count++;
+											}
+										}
+									}
 								}
+								
+								co.setReplyCount(count);
+								
+								data.add(co);
+								
+								}
+								
 							}
 						}
 						

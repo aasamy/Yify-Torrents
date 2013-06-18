@@ -4,8 +4,10 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,10 +31,12 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.CommentAdapter;
+import com.yify.manager.DatabaseManager;
 import com.yify.manager.FilterAdapter;
 import com.yify.object.*;
 
-public class CommentActivity extends ActionBarActivity implements OnMenuItemClickListener {
+public class CommentActivity extends ActionBarActivity implements OnMenuItemClickListener, LoginDialog.LoginDialogListener, 
+	ReplyDialog.ReplyListener{
 	
 	
 	private Menu menu;
@@ -41,6 +45,8 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 	private TextView err;
 	private int movieID;
 	private ListView list;
+	private DatabaseManager manager;
+	private boolean isLoggedIn = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,9 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 		super.onCreate(savedInstanceState);
 		bar = getActionBar();
 		setContentView(R.layout.search);
+		manager = new DatabaseManager(this);
+		
+		this.isLoggedIn = (manager.getLoggedInUserName() != null) ? true : false; 
 		
 		bar.setDisplayHomeAsUpEnabled(true);
 		bar.setDisplayShowTitleEnabled(true);
@@ -143,11 +152,49 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 		case R.id.show_twitter:
 			/* reply to this comment.
 			 * check is logged in, if not start log in activity, else start commentpost activity. */
-			Toast.makeText(this, ""+item.getGroupId() + ", " + movieID, Toast.LENGTH_LONG).show();
+			
+			if(!this.isLoggedIn) {
+				/* start log in activity. */
+				DialogFragment login = new LoginDialog();
+				login.show(getFragmentManager(), "login");
+			} else {
+				/* user logged in. */
+				
+			}
+			
 			break;
 		}
 		
 		return false;
+	}
+	@Override
+	public void onSignInPressed(DialogFragment fragment, View v,
+			String userinput, String passinput) {
+		
+		ViewFlipper flipper = (ViewFlipper) v.findViewById(R.id.loginstate);
+		flipper.setDisplayedChild(1);
+		
+		ConnectivityDetector detect = new ConnectivityDetector(this);
+		
+		new Login(this.isLoggedIn, this.manager, detect, v, fragment, this).execute(new String[]{userinput, passinput});
+		
+	}
+	@Override
+	public void onReplyPressed(DialogFragment fragment, View view) {
+		
+		ViewFlipper flipper = (ViewFlipper) view.findViewById(R.id.loginstate);
+		flipper.setDisplayedChild(0);
+		
+		ConnectivityDetector detect = new ConnectivityDetector(this);
+		
+		/* try and reply to the comment */
+		
+	}
+	@Override
+	public void onCancelPressed(DialogFragment fragment) {
+		
+		fragment.dismiss();
+		
 	}
 	
 	
