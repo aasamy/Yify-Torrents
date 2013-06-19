@@ -114,6 +114,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		
 	}
 	
+	public String getHash() {
+		String[] data = this.checkIsAuth();
+		
+		if(data != null) {
+			return data[1];
+		}
+		
+		return null;
+	}
+	
 	public String getLoggedInUserName() {
 		String[] data = this.checkIsAuth();
 		
