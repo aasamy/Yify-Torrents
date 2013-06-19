@@ -1,12 +1,18 @@
 package com.yify.mobile;
 
 import android.app.ActionBar;
+import android.app.DialogFragment;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -26,10 +33,11 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
+import com.yify.manager.DatabaseManager;
 import com.yify.manager.FilterAdapter;
 import com.yify.object.*;
 
-public class MovieActivity extends ActionBarActivity {
+public class MovieActivity extends ActionBarActivity implements LoginDialog.LoginDialogListener {
 	
 	public static final int COVER = 1;
 	public static final int SCREENSHOT = 2;
@@ -47,6 +55,11 @@ public class MovieActivity extends ActionBarActivity {
 	private LayoutInflater inflater;
 	private ListView list;
 	private FilterAdapter<String> adapter;
+	private Menu menu;
+	private ItemObject item;
+	private SearchView searchView;
+	private DatabaseManager man;
+	private boolean isLoggedIn = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +74,7 @@ public class MovieActivity extends ActionBarActivity {
 		detector = new ConnectivityDetector(this);
 		inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		list = (ListView) findViewById(R.id.movie_info_listview);
-		
+		man = new DatabaseManager(this);
 		OnTouchListener listener = new OnTouchListener() {
 
 			@Override
@@ -91,6 +104,12 @@ public class MovieActivity extends ActionBarActivity {
 		}
 		
 	}
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(searchView != null)
+		searchView.setIconified(true);
+	}
 	
 	private class GetMovie extends AsyncTask<Integer, Integer, ItemObject> {
 
@@ -115,6 +134,8 @@ public class MovieActivity extends ActionBarActivity {
 			}
 			
 			View c = inflater.inflate(R.layout.image_cover, null);
+			
+			item = response;
 			
 			ImageView iv = (ImageView) c.findViewById(R.id.imagebutton_movie);
 			
@@ -254,9 +275,67 @@ public class MovieActivity extends ActionBarActivity {
 		case android.R.id.home : 
 			finish();
 			break;
+		case R.id.menu_home : 
+			Intent i = new Intent(this, MainActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			break;
+		case R.id.menu_login : 
+			this.isLoggedIn = (this.man.getHash() == null) ? false : true;
+			if(!this.isLoggedIn) {
+				DialogFragment login = new LoginDialog();
+				login.show(getFragmentManager(), "login");
+			} else {
+				/* show my account */
+				Intent my = new Intent(this, MyAccountActivity.class);
+				startActivity(my);
+			}
+			break;
+		case R.id.menu_share:
+        	//open share intent to share URL of App in playstore.
+			Intent d = new Intent(Intent.ACTION_VIEW);
+		    d.addCategory(Intent.CATEGORY_DEFAULT);
+		    d.setType("application/x-bittorrent");
+		    d.setData(Uri.parse(this.item.getTorrentMagnetURL()));
+		    
+		    if(this.checkAppAvailable(d)) {
+		    	startActivity(Intent.createChooser(d, "Download Movie..."));
+		    } else {
+		    	Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.utorrent.client"));
+		    	startActivity(it);
+		    }
+            break;
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private boolean checkAppAvailable(Intent intent) {
+		List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		if (list.size() >0 ){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean end = super.onCreateOptionsMenu(menu);
+		
+		getMenuInflater().inflate(R.menu.main, menu);
+		//set up the default search service.
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		
+		/* get the default values, like home, settings, my account, share. */
+		this.menu = menu;
+		this.menu.findItem(R.id.menu_accept).setVisible(false);
+		this.menu.findItem(R.id.menu_filter).setVisible(false);
+		this.menu.findItem(R.id.menu_refresh).setVisible(false);
+		this.menu.findItem(R.id.menu_share).setTitle("Download");
+		
+		return end;
 	}
 	
 	private void sortOutScreenshots(final String[] screenshots) {
@@ -357,6 +436,18 @@ public class MovieActivity extends ActionBarActivity {
 			adapter.notifyDataSetChanged();
 			
 		}
+		
+	}
+
+	@Override
+	public void onSignInPressed(DialogFragment fragment, View v,
+			String userinput, String passinput) {
+		
+		ViewFlipper flipper = (ViewFlipper) v.findViewById(R.id.loginstate);
+		flipper.setDisplayedChild(1);
+		
+		new Login(this.isLoggedIn, this.man, new ConnectivityDetector(this), v, fragment, this).execute(new String[] {userinput, passinput});
+		this.isLoggedIn = (this.man.getHash() == null) ? false : true;
 		
 	}
 	
