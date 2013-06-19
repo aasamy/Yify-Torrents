@@ -2,6 +2,7 @@ package com.yify.mobile;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -30,11 +32,12 @@ import com.yify.object.*;
 import java.util.*;
 
 import com.yify.manager.ApiManager;
+import com.yify.manager.DatabaseManager;
 import com.yify.manager.ProductAdapter;
 import com.yify.mobile.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends ActionBarActivity implements LoginDialog.LoginDialogListener {
 	
 	private String quality = "ALL";
 	private String genre = "ALL";
@@ -53,6 +56,9 @@ public class SearchActivity extends ActionBarActivity {
 	private View footerView;
 	private ViewFlipper state;
 	private TextView err;
+	private SearchView searchView;
+	private boolean isLoggedIn;
+	private DatabaseManager man;
 	private Runnable loadMoreItems = new Runnable() {
 
 		@Override
@@ -117,6 +123,7 @@ public class SearchActivity extends ActionBarActivity {
 	    state = (ViewFlipper) findViewById(R.id.search_state);
 	    err = (TextView) findViewById(R.id.search_no_results);
 	    state.setDisplayedChild(0); /* show loading state */
+	    man = new DatabaseManager(this);
 	    //handle the intent
 	    Intent intent = getIntent();
 	    this.handleIntent(intent);
@@ -166,11 +173,30 @@ public class SearchActivity extends ActionBarActivity {
 		mainMenu = menu;
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		mainMenu.findItem(R.id.menu_search).setVisible(false);
 		mainMenu.findItem(R.id.menu_refresh).setVisible(false);
 		mainMenu.findItem(R.id.menu_accept).setVisible(false);
 		boolean bool = super.onCreateOptionsMenu(menu);
+		
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		
 		return bool;
+	}
+	
+	@Override
+	public void startActivity(Intent intent) {
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			finish(); /* handle creating multiple instances of the default search activity in the stack. */
+		}
+		super.startActivity(intent);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(searchView != null)
+			searchView.setIconified(true);
 	}
 	
 	@Override
@@ -178,9 +204,7 @@ public class SearchActivity extends ActionBarActivity {
 		
 		switch(item.getItemId()) {
 			case android.R.id.home:
-				Intent home = new Intent(this, MainActivity.class);
-				home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(home);
+				finish();
 				break;
 			case R.id.menu_filter:
 				Intent filter = new Intent(this, FilterActivity.class);
@@ -189,6 +213,30 @@ public class SearchActivity extends ActionBarActivity {
 				filter.putExtra("filter", data);
 				startActivity(filter);
 				break;
+			case R.id.menu_home :
+				Intent home = new Intent(this, MainActivity.class);
+				home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(home);
+				break;
+			case R.id.menu_login :
+				this.isLoggedIn = (this.man.getHash() == null) ? false : true;
+				if(!this.isLoggedIn) {
+					DialogFragment login = new LoginDialog();
+					login.show(getFragmentManager(), "login");
+				} else {
+					/* show my account. */
+					Intent account = new Intent(this, MyAccountActivity.class);
+					startActivity(account);
+				}
+				break;
+			case R.id.menu_share:
+            	//open share intent to share URL of App in playstore.
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
+                startActivity(Intent.createChooser(shareIntent, "Share..."));
+                break;
+				
 		}
 		
 		return super.onOptionsItemSelected(item);
@@ -284,6 +332,18 @@ public class SearchActivity extends ActionBarActivity {
 			
 			state.setDisplayedChild(1);
 		}
+		
+	}
+
+	@Override
+	public void onSignInPressed(DialogFragment fragment, View v,
+			String userinput, String passinput) {
+		
+		ViewFlipper flipper = (ViewFlipper) v.findViewById(R.id.loginstate);
+		flipper.setDisplayedChild(1);
+		
+		new Login(this.isLoggedIn, this.man, new ConnectivityDetector(this), v, fragment, this).execute(new String[] {userinput, passinput});
+		this.isLoggedIn = (this.man.getHash() == null) ? false : true;
 		
 	}
 	
