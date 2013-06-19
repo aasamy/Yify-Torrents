@@ -36,6 +36,10 @@ public class CommentAdapter extends BaseAdapter {
 		this.items = items;
 		this.inflater = (LayoutInflater) this.activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
+	
+	public void setItems(ArrayList<CommentObject> items) {
+		this.items = items;
+	}
 
 	@Override
 	public int getCount() {
