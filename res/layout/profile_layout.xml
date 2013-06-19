@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    android:background="#000000" >
+    
+    <ViewFlipper
+        android:id="@+id/profilestate"
+        android:layout_height="fill_parent"
+        android:layout_width="match_parent" >
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="516dp" >
+            
+            <ProgressBar android:id="@+id/profileload"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"/>
+            
+        </RelativeLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/profilepicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/defaultprofileimage" />
+
+        <TextView
+            android:id="@+id/activelabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/profilepicture"
+            android:layout_alignLeft="@+id/textView3"
+            android:text="Account is"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/active"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/activelabel"
+            android:layout_alignBottom="@+id/activelabel"
+            android:layout_alignLeft="@+id/userole"
+            android:layout_marginTop="12dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/joined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/joinedlabel"
+            android:layout_alignBottom="@+id/joinedlabel"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/user"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/profilepicture"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@+id/profilepicture"
+            android:text="TextView"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/activelabel"
+            android:layout_alignLeft="@+id/joinedlabel"
+            android:text="User-role"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/userole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/activelabel"
+            android:layout_alignLeft="@+id/joined"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/joinedlabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textView3"
+            android:layout_alignLeft="@+id/user"
+            android:text="Joined"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/general"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/textlines"
+        android:paddingBottom="5dp"
+        android:paddingRight="30dp"
+        android:text="General" />
+
+    <TextView
+        android:id="@+id/torrentsdownloaded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/commentcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="TextView" />
+    
+    <TextView
+        android:id="@+id/requests"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/textlines"
+        android:paddingBottom="5dp"
+        android:paddingRight="30dp"
+        android:text="Requests" />
+
+    <TextView
+        android:id="@+id/moviesrequested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/requestsleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/votesleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="TextView" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp" >
+
+        <Button
+            android:id="@+id/edit"
+            android:layout_width="164dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Edit" />
+
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="15dp"
+                    android:layout_toRightOf="@id/edit"
+                    android:text="Logout" />
+            </RelativeLayout>
+
+</LinearLayout>
+
+</ViewFlipper>
+
+</ScrollView>
