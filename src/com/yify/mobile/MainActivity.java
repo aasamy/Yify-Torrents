@@ -177,6 +177,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
                 startActivity(Intent.createChooser(shareIntent, "Share..."));
                 break;
 			case R.id.menu_login:
+				this.loggedIn = (manager.getLoggedInUserName() == null) ? false : true;
 				if(!this.loggedIn) {
 					DialogFragment login = new LoginDialog();
 					login.show(getFragmentManager(), "login");
@@ -362,7 +363,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		flipper.setDisplayedChild(1);
 		
 		new Login(this.loggedIn, this.manager, this.detector, v, fragment, this).execute(new String[]{userinput, passinput});
-		
+		this.loggedIn = (this.manager.getLoggedInUserName() == null) ? false : true;
 		
 	}
 	
