@@ -327,7 +327,7 @@ public class ApiManager {
 				object.setCommentCount(entry.optInt("CommentCount"));
 				object.setChatTimeSeconds(entry.optInt("ChatTimeSeconds"));
 				object.setAvatar(entry.optString("Avatar"));
-				object.setUserRole(entry.optString("UserName"));
+				object.setUserRole(entry.optString("UserRole"));
 				object.setAbout(entry.optString("About"));
 				
 			}
