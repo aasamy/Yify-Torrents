@@ -123,6 +123,8 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 				log.show(getFragmentManager(), "login");
 			} else {
 				/* show myaccount. */
+				Intent my = new Intent(CommentActivity.this, MyAccountActivity.class);
+				startActivity(my);
 			}
 			break;
 		default:
