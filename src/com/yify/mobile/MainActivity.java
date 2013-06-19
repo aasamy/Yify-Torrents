@@ -181,11 +181,21 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 				if(!this.loggedIn) {
 					DialogFragment login = new LoginDialog();
 					login.show(getFragmentManager(), "login");
+				} else {
+					Intent my = new Intent(MainActivity.this, MyAccountActivity.class);
+					startActivity(my);
 				}
 				break;
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(searchView != null)
+			searchView.setIconified(true);
 	}
 	
 	private class MainAsync<Params, Result, T extends UpcomingObject> extends AsyncTask<Params, Result, ArrayList<T>> {
