@@ -127,6 +127,10 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 				startActivity(my);
 			}
 			break;
+		case R.id.menu_settings :
+			Intent set = new Intent(this, SettingsActivity.class);
+			startActivity(set);
+			break;
 		default:
 			break;
 		}
@@ -145,6 +149,7 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 		this.menu.findItem(R.id.menu_accept).setVisible(false);
 		this.menu.findItem(R.id.menu_refresh).setIcon(R.drawable.content_new);
 		this.menu.findItem(R.id.menu_search).setVisible(false);
+		this.menu.findItem(R.id.menu_download).setVisible(false);
 		
 		return end;
 	}

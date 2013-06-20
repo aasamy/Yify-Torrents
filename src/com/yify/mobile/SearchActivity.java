@@ -6,11 +6,13 @@ import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -145,7 +147,18 @@ public class SearchActivity extends ActionBarActivity implements LoginDialog.Log
 			this.query = query;
 			
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
-			suggestions.saveRecentQuery(this.query, null);
+			/* check the shared preferences to see if saving is enabled. */
+			
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+			boolean saveSearch = sharedPref.getBoolean("pref_search_enable", false);
+			
+			if(saveSearch) {
+				suggestions.saveRecentQuery(this.query, null);
+			}
+			
+			if(searchView != null) {
+				searchView.setQuery(query, false);
+			}
 			
 			//search yify.
 			new SearchMovies().execute(query);
@@ -175,6 +188,7 @@ public class SearchActivity extends ActionBarActivity implements LoginDialog.Log
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		mainMenu.findItem(R.id.menu_refresh).setVisible(false);
 		mainMenu.findItem(R.id.menu_accept).setVisible(false);
+		mainMenu.findItem(R.id.menu_download).setVisible(false);
 		boolean bool = super.onCreateOptionsMenu(menu);
 		
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -236,6 +250,10 @@ public class SearchActivity extends ActionBarActivity implements LoginDialog.Log
                 shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
                 startActivity(Intent.createChooser(shareIntent, "Share..."));
                 break;
+			case R.id.menu_settings :
+				Intent set = new Intent(this, SettingsActivity.class);
+				startActivity(set);
+				break;
 				
 		}
 		

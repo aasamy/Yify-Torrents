@@ -294,6 +294,7 @@ public class FilterActivity extends FragmentActivity implements CustomDialog.Cus
 		menu.findItem(R.id.menu_search).setVisible(false);
 		menu.findItem(R.id.menu_settings).setVisible(false);
 		menu.findItem(R.id.menu_home).setVisible(false);
+		menu.findItem(R.id.menu_download).setVisible(false);
 		mainMenu = menu;
 		
 		return end;

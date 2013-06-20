@@ -238,6 +238,7 @@ public class MovieActivity extends ActionBarActivity implements LoginDialog.Logi
 			/* get the movie comment count. */
 			new GetCommentCount().execute(response.getMovieID());
 			
+			menu.findItem(R.id.menu_download).setVisible(true);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setTitle(response.getMovieTitle());
 			actionBar.setDisplayShowTitleEnabled(true);
@@ -292,7 +293,18 @@ public class MovieActivity extends ActionBarActivity implements LoginDialog.Logi
 			}
 			break;
 		case R.id.menu_share:
-        	//open share intent to share URL of App in playstore.
+			//open share intent to share URL of App in playstore.
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
+            startActivity(Intent.createChooser(shareIntent, "Share..."));
+        	break;
+		case R.id.menu_settings :
+			Intent set = new Intent(this, SettingsActivity.class);
+			startActivity(set);
+			break;
+		case R.id.menu_download : 
+			//open share intent to share URL of App in playstore.
 			Intent d = new Intent(Intent.ACTION_VIEW);
 		    d.addCategory(Intent.CATEGORY_DEFAULT);
 		    d.setType("application/x-bittorrent");
@@ -322,18 +334,19 @@ public class MovieActivity extends ActionBarActivity implements LoginDialog.Logi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean end = super.onCreateOptionsMenu(menu);
 		
+		/* get the default values, like home, settings, my account, share. */
+		this.menu = menu;
+		
 		getMenuInflater().inflate(R.menu.main, menu);
 		//set up the default search service.
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		
-		/* get the default values, like home, settings, my account, share. */
-		this.menu = menu;
-		this.menu.findItem(R.id.menu_accept).setVisible(false);
-		this.menu.findItem(R.id.menu_filter).setVisible(false);
-		this.menu.findItem(R.id.menu_refresh).setVisible(false);
-		this.menu.findItem(R.id.menu_share).setTitle("Download");
+		menu.findItem(R.id.menu_accept).setVisible(false);
+		menu.findItem(R.id.menu_filter).setVisible(false);
+		menu.findItem(R.id.menu_refresh).setVisible(false);
+		menu.findItem(R.id.menu_download).setVisible(false);
 		
 		return end;
 	}

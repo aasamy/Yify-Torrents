@@ -99,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		mainMenu.findItem(R.id.menu_home).setVisible(false); /* <-- already on home. */
 		mainMenu.findItem(R.id.menu_filter).setVisible(false);
 		mainMenu.findItem(R.id.menu_accept).setVisible(false);
+		menu.findItem(R.id.menu_download).setVisible(false);
 		
 		/* see if there is a user logged on. */
 		String username = manager.getLoggedInUserName();
@@ -185,6 +186,10 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 					Intent my = new Intent(MainActivity.this, MyAccountActivity.class);
 					startActivity(my);
 				}
+				break;
+			case R.id.menu_settings :
+				Intent set = new Intent(this, SettingsActivity.class);
+				startActivity(set);
 				break;
 		}
 		

@@ -85,6 +85,11 @@
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity" >
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+        </activity>
     </application>
 	
     

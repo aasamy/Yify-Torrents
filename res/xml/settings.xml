@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory
+        android:title="Search History"
+        android:key="pref_cat_search_hist">
+        <CheckBoxPreference 
+            android:summary="Store recent search queries"
+            android:key="pref_search_enable"
+            android:title="Store Search Queries"
+            android:defaultValue="true"/>
+        <Preference
+            android:summary="Clear your recent search history"
+            android:title="Clear Recent Searches"
+            android:key="pref_search_clear"
+            android:selectable="true"  />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Account"
+        android:key="pref_cat_account" >
+        <Preference
+            android:key="pref_account_clear"
+            android:title="Clear Account Data"
+            android:summary="Clear your account data from this device"
+            android:selectable="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:key="pref_cat_gen"
+        android:title="General" >
+        <CheckBoxPreference
+            android:key="pref_gen_notif"
+            android:title="Allow Notifications"
+            android:defaultValue="true"
+            android:enabled="false"
+            android:summary="Allow notifications to be sent to this device" />
+        <Preference
+            android:key="pref_gen_imgcache"
+            android:title="Clear Image Cache" 
+            android:summary="Clear the cached images on this device"
+            android:selectable="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>

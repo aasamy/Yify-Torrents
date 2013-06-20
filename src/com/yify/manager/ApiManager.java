@@ -21,6 +21,7 @@ import com.yify.object.AuthUserObject;
 import com.yify.object.CommentObject;
 import com.yify.object.ItemObject;
 import com.yify.object.ListObject;
+import com.yify.object.RequestObject;
 import com.yify.object.UpcomingObject;
 import com.yify.object.UserObject;
 
@@ -36,6 +37,15 @@ public class ApiManager {
 	 * ther baseurl to use for api requests.
 	 */
 	private String baseURL = "http://yify-torrents.com/api/";
+	
+	/**
+	 * constant for request grabbing, this gets ongoing requests.
+	 */
+	public static final int ONGOING = 1;
+	/**
+	 * constant for request grabbing, the gets requests that have been confirmed.
+	 */
+	public static final int CONFIRMED = 0;
 	/**
 	 * Constructor - may become useful in the future.
 	 */
@@ -981,5 +991,87 @@ public class ApiManager {
 		
 	}
 	
+	/**
+	 * gets the current movie requests using the API.
+	 * @param type the list to get the ongoing requests or the confirmed requests.
+	 * @param limit the amount of results to return.
+	 * @param set the set of results to return.
+	 * @return the collection of request objects.
+	 */
+	public ArrayList<RequestObject> getRequests(int type, int limit, int set) {
+		ArrayList<RequestObject> data = new ArrayList<RequestObject>();
+		
+		String t = (type == CONFIRMED) ? "confirmed" : "accepted";
+		URL url = null;
+		
+		try {
+			url = new URL(this.baseURL + "requests.json?page=" + t + "&limit=" + limit + "&set=" + set);
+			
+		} catch(MalformedURLException e) {
+			return null;
+		}
+		
+		if(url != null) {
+			
+			String response = this.callApi(url, "GET", null);
+			
+			JSONObject object = null;
+			
+			try {
+				object = new JSONObject(response);
+				
+				if(object!= null) {
+					
+					String err = object.optString("error");
+					
+					if(err!="") {
+						return null;
+					}
+					
+					int requestCount = object.optInt("MovieCount");
+					
+					JSONArray requests = object.optJSONArray("RequestList");
+					
+					if(requests != null) {
+						
+						for(int i = 0; i < requests.length(); i++) {
+							
+							JSONObject entry = requests.optJSONObject(i);
+							
+							if(entry != null) {
+								
+								RequestObject ob = new RequestObject();
+								ob.setRequestID(entry.optInt("RequestID"));
+								ob.setMovieTitle(entry.optString("MovieTitle"));
+								ob.setImdbCode(entry.optString("ImdbCode"));
+								ob.setImdbLink(entry.optString("ImdbLink"));
+								ob.setCoverImage(entry.optString("CoverImage"));
+								ob.setShortDescription(entry.optString("ShortDescription"));
+								ob.setGenre(entry.optString("Genre"));
+								ob.setMovieRating(entry.optString("MovieRating"));
+								ob.setDateAdded(entry.optString("DateAdded"));
+								ob.setVotes(entry.optInt("Votes"));
+								ob.setUserID(entry.optInt("UserID"));
+								ob.setUserName(entry.optString("Username"));
+								ob.setType(type);
+								
+								data.add(ob);
+								
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			} catch (JSONException e) {
+				return null;
+			}
+			
+		}
+		
+		return data;
+	}
 	
 }
