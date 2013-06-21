@@ -90,6 +90,11 @@
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
+        <activity
+            android:name=".RatingActivity" >
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+        </activity>
     </application>
 	
     
