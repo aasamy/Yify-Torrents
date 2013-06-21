@@ -1073,5 +1073,58 @@ public class ApiManager {
 		
 		return data;
 	}
+	/**
+	 * vote on a movie request using the logged on users 'hash'
+	 * and the id of the request.
+	 * @param hash the hash of the currently logged in user.
+	 * @param requestID the id of the movie request.
+	 * @return null on success, the string error message on error.
+	 */
+	public String voteRequest(String hash, int requestID) {
+		String response = "";
+		URL url = null;
+		
+		try {
+			url = new URL(this.baseURL + "vote.json");
+		} catch(MalformedURLException e) {
+			return "There was a problem processing your request";
+		}
+		
+		if(url != null) {
+			
+			if(url != null) {
+				
+				String r = this.callApi(url, "POST", "hash=" + hash + "&requestid=" + requestID);
+				
+				JSONObject object = null;
+				
+				try {
+					object = new JSONObject(r);
+				} catch (JSONException e) {
+					return "There was an error processing your request";
+				}
+				
+				if(object != null) {
+					
+					String err = object.optString("error");
+					
+					if(!err.equals("")) {
+						return err;
+					}
+					
+					response = object.optString("status");
+					
+					if(!response.equals("")) {
+						return null;
+					}
+				}
+				
+			}
+			
+		}
+		
+		
+		return response;
+	}
 	
 }

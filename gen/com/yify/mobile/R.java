@@ -191,8 +191,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int profilestate=0x7f090060;
         public static final int ps_text=0x7f090083;
         public static final int quality_text=0x7f090023;
-        public static final int rating_count=0x7f090076;
-        public static final int rating_cover_image=0x7f090078;
+        public static final int rating_count=0x7f090078;
+        public static final int rating_cover_image=0x7f090076;
         public static final int rating_overflow=0x7f090079;
         public static final int rating_pick=0x7f090075;
         public static final int rating_text=0x7f09002f;

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +33,8 @@ public class RatingAdapter extends BaseAdapter {
 	private Activity activity;
 	private boolean showOverflow = true;
 	
+	public RatingAdapter() {}
+	
 	public RatingAdapter(Activity activity, ArrayList<RequestObject> items) {
 		this.activity = activity;
 		this.items = items;
@@ -39,6 +43,16 @@ public class RatingAdapter extends BaseAdapter {
 	
 	public void setItems(ArrayList<RequestObject> items) {
 		this.items = items;
+	}
+	
+	public void setUp(Activity a, ArrayList<RequestObject> items) {
+		this.activity = a;
+		this.items = items;
+		this.inflater = (LayoutInflater) this.activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+	
+	public void addItem(RequestObject object) {
+		this.items.add(object);
 	}
 
 	@Override
@@ -105,9 +119,14 @@ public class RatingAdapter extends BaseAdapter {
 		
 		final RequestObject r = this.items.get(position);
 		
-		holder.title.setText(r.getMovieTitle());
+		String title = (r.getMovieTitle().length() > 100) ? r.getMovieTitle().substring(0, 100) + "..." : r.getMovieTitle();
+		
+		holder.title.setText(title);
 		holder.votes.setText(""+r.getVotes());
 		holder.votes.setTextColor(Color.GREEN);
+		if(r.getType() == RequestObject.CONFIRMED) {
+			holder.votes.setVisibility(View.GONE);
+		}
 		ImageLoader.getInstance().displayImage(r.getCoverImage(), holder.cover);
 		
 		holder.overflow.setContentDescription(""+r.getRequestID());
@@ -131,6 +150,10 @@ public class RatingAdapter extends BaseAdapter {
 				if(r.getType() == RequestObject.CONFIRMED) {
 					menu.getMenu().findItem(R.id.refresh_twitter).setVisible(false);
 				}
+				Uri uri = Uri.parse("http://www.imdb.com/title/"+r.getImdbCode()+"/");
+				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				Intent intentChooser = Intent.createChooser(intent, "More Info...");
+				menu.getMenu().findItem(R.id.show_twitter).setIntent(intentChooser);
 				
 				menu.show();
 			}

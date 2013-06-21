@@ -172,10 +172,12 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 				return false;
 			case R.id.menu_share:
             	//open share intent to share URL of App in playstore.
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
-                startActivity(Intent.createChooser(shareIntent, "Share..."));
+                //Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                //shareIntent.setType("text/plain");
+                //shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
+                //startActivity(Intent.createChooser(shareIntent, "Share..."));
+				Intent req = new Intent(this, RatingActivity.class);
+				startActivity(req);
                 break;
 			case R.id.menu_login:
 				this.loggedIn = (manager.getLoggedInUserName() == null) ? false : true;

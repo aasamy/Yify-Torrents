@@ -1,5 +1,7 @@
 package com.yify.object;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class RequestObject {
 	
 	private int requestID;
@@ -29,7 +31,7 @@ public class RequestObject {
 		return movieTitle;
 	}
 	public void setMovieTitle(String movieTitle) {
-		this.movieTitle = movieTitle;
+		this.movieTitle = StringEscapeUtils.unescapeHtml4(movieTitle);
 	}
 	public String getImdbLink() {
 		return ImdbLink;

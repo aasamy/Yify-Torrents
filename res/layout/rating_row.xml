@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TextView
-        android:id="@+id/rating_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/rating_title"
-        android:layout_alignBottom="@+id/rating_title"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/rating_title"
-        android:text="TextView"
-        android:textSize="22sp" />
+    android:layout_height="match_parent"
+    android:paddingTop="5dp" >
 
     <ImageView
         android:id="@+id/rating_cover_image"
-        android:layout_width="75dp"
-        android:layout_height="100dp"
+        android:layout_width="50dip"
+        android:layout_height="75dip"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="18dp"
-        android:layout_toLeftOf="@+id/rating_title"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/default_product" />
-
+    
     <TextView
         android:id="@+id/rating_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rating_cover_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp"
+        android:layout_alignTop="@id/rating_cover_image"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/rating_cover_image"
+        android:maxWidth="250dp"
+        android:paddingRight="10dp"
         android:text="TextView"
-        android:textSize="22sp" />
+        android:textSize="18sp" />
+    
+    <TextView
+        android:id="@+id/rating_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/rating_cover_image"
+        android:layout_below="@id/rating_title"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="18dp"
+        android:text="TextView"
+        android:textSize="18sp" />
+    
+    
 
     <ImageView
         android:id="@+id/rating_overflow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rating_count"
         android:layout_alignParentRight="true"
-        android:layout_alignRight="@+id/rating_count"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
         android:src="@drawable/ic_action_overflow" />
+
+    
 
 </RelativeLayout>
