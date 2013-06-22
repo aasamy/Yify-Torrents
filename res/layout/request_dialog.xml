@@ -2,39 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
     android:orientation="vertical"
     android:padding="10dp" >
 
     <ViewFlipper
-        android:id="@+id/replystate"
+        android:id="@+id/requeststate"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <LinearLayout
-            android:id="@+id/textfields"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
+            android:layout_height="wrap_content"
+            android:padding="10dp" >
+            
+            <Spinner
+                android:id="@+id/requestType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
             <EditText
-                android:id="@+id/editText1"
-                android:layout_width="match_parent"
+                android:id="@+id/query"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:inputType="textMultiLine" >
-            </EditText>
-
+                android:layout_below="@id/requestType"
+                android:hint="Request"
+                android:inputType="text" />
+            
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp" >
+                android:layout_marginTop="15dp"
+                android:layout_below="@id/query" >
 
                 <Button
-                    android:id="@+id/cancel"
+                    android:id="@+id/request_cancel"
                     android:layout_width="154dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -42,16 +44,16 @@
                     android:text="Cancel" />
 
                 <Button
-                    android:id="@+id/reply"
+                    android:id="@+id/request"
                     android:layout_width="137dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:enabled="false"
                     android:padding="15dp"
-                    android:text="Reply" />
+                    android:text="Request" />
             </LinearLayout>
             
-        </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,9 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
-        
         </RelativeLayout>
-        
     </ViewFlipper>
-    
+
 </LinearLayout>

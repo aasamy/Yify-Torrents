@@ -254,6 +254,10 @@ public class SearchActivity extends ActionBarActivity implements LoginDialog.Log
 				Intent set = new Intent(this, SettingsActivity.class);
 				startActivity(set);
 				break;
+			case R.id.menu_request : 
+				Intent req = new Intent(this, RatingActivity.class);
+				startActivity(req);
+				break;
 				
 		}
 		

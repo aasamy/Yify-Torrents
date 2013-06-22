@@ -25,6 +25,10 @@
     <string name="menu_expand">Expand</string>
     <string name="search_hint">Search Movies</string>
     <string name="clear">Clear Search History</string>
+    <string-array name="entries_array">
+        <item>Title</item>
+        <item>IMDB Code</item>
+    </string-array>
     <string name="about">About</string>
     <string name="menu_home">Home</string>
     <string name="menu_finder">My Account</string>

@@ -52,6 +52,44 @@ public class ApiManager {
 	public ApiManager() {
 	}
 	/**
+	 * searches the omdb api to check if the entered IMDB code is valid.
+	 * @param code the IMDB code to check.
+	 * @return true if valid, false if not or an error occured.
+	 */
+	public boolean isValidIMDBCode(String code) {
+		String url = "http://www.omdbapi.com/?i=" + code + "&t=";
+		URL u = null;
+		boolean e = false;
+		
+		try {
+			u = new URL(url);
+		} catch(MalformedURLException b) {
+			return false;
+		}
+		
+		if(url != null) {
+			String response = this.callApi(u, "GET", null);
+			
+			JSONObject o = null;
+			
+			try {
+				o = new JSONObject(response);
+			} catch(JSONException b){
+				return false;
+			}
+			
+			if(o != null) {
+				
+				String r = o.optString("Response");
+				e = r.equalsIgnoreCase("true");
+				
+			}
+		}
+		
+		return e;
+		
+	}
+	/**
 	 * grabs the upcoming films list from the API.
 	 * @return ArrayList<UpcomingObject> the array of upcoming films.
 	 * @version 1.1 fixed bug in error checking formula.
@@ -1095,6 +1133,53 @@ public class ApiManager {
 			if(url != null) {
 				
 				String r = this.callApi(url, "POST", "hash=" + hash + "&requestid=" + requestID);
+				
+				JSONObject object = null;
+				
+				try {
+					object = new JSONObject(r);
+				} catch (JSONException e) {
+					return "There was an error processing your request";
+				}
+				
+				if(object != null) {
+					
+					String err = object.optString("error");
+					
+					if(!err.equals("")) {
+						return err;
+					}
+					
+					response = object.optString("status");
+					
+					if(!response.equals("")) {
+						return null;
+					}
+				}
+				
+			}
+			
+		}
+		
+		
+		return response;
+	}
+	
+	public String makeRequest(String hash, String request) {
+		String response = "";
+		URL url = null;
+		
+		try {
+			url = new URL(this.baseURL + "makerequest.json");
+		} catch(MalformedURLException e) {
+			return "There was a problem processing your request";
+		}
+		
+		if(url != null) {
+			
+			if(url != null) {
+				
+				String r = this.callApi(url, "POST", "hash=" + hash + "&request=" + request);
 				
 				JSONObject object = null;
 				

@@ -136,7 +136,7 @@ public class MyAccountActivity extends ActionBarActivity {
 					((TextView) activity.findViewById(R.id.commentcount)).setText("Comment Count: " + data.getCommentCount());
 					((TextView) activity.findViewById(R.id.moviesrequested)).setText("Movies Requested: " + data.getMoviesRequested());
 					((TextView) activity.findViewById(R.id.requestsleft)).setText("Remaining Requests: " + data.getNumRequestsLeft());
-					((TextView) activity.findViewById(R.id.votesleft)).setText("Reamining Votes: " + data.getNumVotesLeft());
+					((TextView) activity.findViewById(R.id.votesleft)).setText("Remaining Votes: " + data.getNumVotesLeft());
 					
 					/* set the profile picture */
 					ImageView img = (ImageView) activity.findViewById(R.id.profilepicture);

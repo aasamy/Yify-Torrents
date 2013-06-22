@@ -317,6 +317,10 @@ public class MovieActivity extends ActionBarActivity implements LoginDialog.Logi
 		    	startActivity(it);
 		    }
             break;
+		case R.id.menu_request : 
+			Intent req = new Intent(this, RatingActivity.class);
+			startActivity(req);
+			break;
 		}
 		
 		return super.onOptionsItemSelected(item);

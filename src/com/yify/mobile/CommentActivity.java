@@ -131,6 +131,10 @@ public class CommentActivity extends ActionBarActivity implements OnMenuItemClic
 			Intent set = new Intent(this, SettingsActivity.class);
 			startActivity(set);
 			break;
+		case R.id.menu_request : 
+			Intent req = new Intent(this, RatingActivity.class);
+			startActivity(req);
+			break;
 		default:
 			break;
 		}

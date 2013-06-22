@@ -176,8 +176,10 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
                 //shareIntent.setType("text/plain");
                 //shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
                 //startActivity(Intent.createChooser(shareIntent, "Share..."));
-				Intent req = new Intent(this, RatingActivity.class);
-				startActivity(req);
+				Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
+                startActivity(Intent.createChooser(shareIntent, "Share..."));
                 break;
 			case R.id.menu_login:
 				this.loggedIn = (manager.getLoggedInUserName() == null) ? false : true;
@@ -192,6 +194,10 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 			case R.id.menu_settings :
 				Intent set = new Intent(this, SettingsActivity.class);
 				startActivity(set);
+				break;
+			case R.id.menu_request : 
+				Intent req1 = new Intent(this, RatingActivity.class);
+				startActivity(req1);
 				break;
 		}
 		

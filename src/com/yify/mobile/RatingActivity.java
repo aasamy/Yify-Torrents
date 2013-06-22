@@ -8,6 +8,7 @@ import com.yify.manager.RatingAdapter;
 import com.yify.object.Login;
 import com.yify.object.LoginDialog;
 import com.yify.object.ReplyDialog;
+import com.yify.object.RequestDialog;
 import com.yify.object.RequestObject;
 
 import android.app.ActionBar.Tab;
@@ -29,9 +30,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.app.*;
@@ -39,7 +42,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-public class RatingActivity extends ActionBarActivity implements OnMenuItemClickListener, LoginDialog.LoginDialogListener {
+public class RatingActivity extends ActionBarActivity implements OnMenuItemClickListener, LoginDialog.LoginDialogListener,
+	RequestDialog.RequestListener{
 	
 	ViewPager pager;
 	ActionBar bar;
@@ -136,6 +140,16 @@ public class RatingActivity extends ActionBarActivity implements OnMenuItemClick
             shareIntent.putExtra(Intent.EXTRA_TEXT, "TesterURL");
             startActivity(Intent.createChooser(shareIntent, "Share..."));
         	break;
+		case R.id.menu_accept :
+			this.isLoggedIn = (man.getHash() == null) ? false : true;
+			if(!this.isLoggedIn) {
+				DialogFragment login = new LoginDialog();
+				login.show(getFragmentManager(), "login");
+			} else {
+				DialogFragment req = new RequestDialog();
+				req.show(getFragmentManager(), "req");
+			}
+			break;
 		default :
 			break;
 		}
@@ -507,6 +521,90 @@ public class RatingActivity extends ActionBarActivity implements OnMenuItemClick
 		}
  
 		public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {}
+	}
+
+	@Override
+	public void onRequestPressed(DialogFragment fragment, View view) {
+		
+		EditText message = (EditText) view.findViewById(R.id.query);
+		Spinner type = (Spinner) view.findViewById(R.id.requestType);
+		ViewFlipper flipper = (ViewFlipper) view.findViewById(R.id.requeststate);
+		flipper.setDisplayedChild(1);
+		
+		new SendRequest(message.getText().toString(), type.getSelectedItemPosition(), 
+				this, view, fragment).execute();
+		
+	}
+	
+	private class SendRequest extends AsyncTask<Integer, Integer, String> {
+
+		private int itemID;
+		private final int IDMB = 1;
+		private final int TITLE = 0;
+		private String code;
+		private Activity a;
+		private View v;
+		private DialogFragment f;
+		
+		public SendRequest(String code, int itemID, Activity a, View v, DialogFragment f) {
+			this.code = code;
+			this.itemID = itemID;
+			this.a = a;
+			this.v = v;
+			this.f = f;
+		}
+		
+		@Override
+		protected String doInBackground(Integer... arg0) {
+			
+			ConnectivityDetector d = new ConnectivityDetector(a);
+			DatabaseManager dm = new DatabaseManager(a);
+			ApiManager man = new ApiManager();
+			
+			if(!d.isConnectionAvailable()) {
+				return "You are not currently connected to a network.";
+			}
+			
+			if(dm.getHash() == null) {
+				return "You are not currently logged in.";
+			}
+			
+			boolean isvalid;
+			
+			if(this.itemID == IDMB) {
+				if(!man.isValidIMDBCode(code)) {
+					return "The IMDB code you supplied is not valid.";
+				}
+			}
+			
+			return man.makeRequest(dm.getHash(), code);
+		}
+		
+		@Override
+		protected void onPostExecute(String response) {
+			
+			ViewFlipper flipper = (ViewFlipper) v.findViewById(R.id.requeststate);
+			flipper.setDisplayedChild(1);
+			
+		    String message = (response == null) ?
+		    		"You movie request is successful" : response;
+		    
+		    Toast.makeText(a, message, Toast.LENGTH_SHORT).show();
+		    
+		    if(response != null) {
+		    	flipper.setDisplayedChild(0);
+		    } else {
+		    	f.dismiss();
+		    }
+			
+		}
+	}
+
+	@Override
+	public void onCancelPressed(DialogFragment fragment) {
+		
+		fragment.dismiss();
+		
 	}
 
 }
