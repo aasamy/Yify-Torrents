@@ -2,12 +2,15 @@ package com.yify.mobile;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.SystemClock;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.DatabaseManager;
+import com.yify.manager.NotificationService;
 import com.yify.manager.ProductAdapter;
 import com.yify.object.AuthObject;
 import com.yify.object.CommentObject;
@@ -18,10 +21,13 @@ import com.yify.object.UpcomingObject;
 import com.yify.view.ViewFlinger;
 import android.widget.ListView;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -29,6 +35,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -207,8 +214,33 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(searchView != null)
+		if(searchView != null) {
 			searchView.setIconified(true);
+		}
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean notifsenabled = prefs.getBoolean("pref_gen_notif", false);
+		String[] timeString = prefs.getString("pref_gen_notif_refresh", "24:00").split(":");
+		
+		int hours = Integer.parseInt(timeString[0]);
+		int minutes = Integer.parseInt(timeString[1]);
+		
+		int totalMinutes = (hours*60) + minutes;
+		
+		Log.e("Minutes till execution", totalMinutes+"");
+		
+		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+		Intent i = new Intent(this, NotificationService.class);
+		
+		PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
+		
+		am.cancel(pi);
+		
+		if(notifsenabled) {
+			Log.d("notifications", "enabled");
+			am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
+					SystemClock.elapsedRealtime() + totalMinutes*60*1000, totalMinutes*60*1000, pi);
+		}
 	}
 	
 	private class MainAsync<Params, Result, T extends UpcomingObject> extends AsyncTask<Params, Result, ArrayList<T>> {
