@@ -51,6 +51,44 @@ public class ApiManager {
 	 */
 	public ApiManager() {
 	}
+	
+	/**
+	 * Uses a seperate web server to handle the latest film calculations.
+	 * @return int the number of new films found.
+	 */
+	public Integer getLatestFilmCount() {
+		
+		String u = "https://www.partsit.com/api/yi/?returnUrl=www.yify-torrents.com&list=MovieList&id=MovieID";
+		URL url = null;
+		
+		try {
+			url = new URL(u);
+		} catch(MalformedURLException e) {
+			return -1;
+		}
+		
+		if(url != null) {
+			
+			JSONObject c = null;
+			
+			try {
+				c = new JSONObject(this.callApi(url, "GET", null));
+			} catch(JSONException e) {
+				return -1;
+			}
+			
+			if(c != null) {
+				
+				int count = c.optInt("c", -1);
+				return count;
+				
+			}
+			
+		}
+		
+		return -1;
+		
+	}
 	/**
 	 * searches the omdb api to check if the entered IMDB code is valid.
 	 * @param code the IMDB code to check.

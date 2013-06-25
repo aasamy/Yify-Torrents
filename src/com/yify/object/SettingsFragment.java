@@ -69,8 +69,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		CheckBoxPreference sea = (CheckBoxPreference) this.findPreference(KEY_ALLOW_RECENT);
 		clearSearch.setEnabled(sea.isChecked());
 		CheckBoxPreference not = (CheckBoxPreference) this.findPreference("pref_gen_notif");
-		TimePreference tp = (TimePreference) this.findPreference("pref_gen_notif_refresh");
-		tp.setEnabled(not.isChecked());
+		//TimePreference tp = (TimePreference) this.findPreference("pref_gen_notif_refresh");
+		//tp.setEnabled(not.isChecked());
 		
 		/* set the clear account dialog */
 		Preference account = this.findPreference("pref_account_clear");
@@ -159,8 +159,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 			}
 		} else if(key.equals("pref_gen_notif")) {
 			CheckBoxPreference not = (CheckBoxPreference) this.findPreference("pref_gen_notif");
-			TimePreference tp = (TimePreference) this.findPreference("pref_gen_notif_refresh");
-			tp.setEnabled(not.isChecked());
+			//TimePreference tp = (TimePreference) this.findPreference("pref_gen_notif_refresh");
+			//tp.setEnabled(not.isChecked());
 		}
 	}
 	
@@ -173,8 +173,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		Preference cle = findPreference("pref_search_clear");
 		cle.setEnabled(sea.isChecked());
 		CheckBoxPreference not = (CheckBoxPreference) this.findPreference("pref_gen_notif");
-		TimePreference tp = (TimePreference) this.findPreference("pref_gen_notif_refresh");
-		tp.setEnabled(not.isChecked());
+		//TimePreference tp = (TimePreference) this.findPreference("pref_gen_notif_refresh");
+		//tp.setEnabled(not.isChecked());
 	}
 	
 	@Override

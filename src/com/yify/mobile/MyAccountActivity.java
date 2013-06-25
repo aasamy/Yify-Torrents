@@ -43,6 +43,19 @@ public class MyAccountActivity extends ActionBarActivity {
 		final DatabaseManager manager = new DatabaseManager(this);
 		
 		Button logout = (Button) findViewById(R.id.logout);
+		
+		Button edit = (Button) findViewById(R.id.edit);
+		edit.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+				Toast.makeText(getApplicationContext(), "Editing is currently unavailable.", Toast.LENGTH_SHORT).show();
+				
+			}
+			
+		});
+		
 		logout.setOnClickListener(new OnClickListener() {
 
 			@Override

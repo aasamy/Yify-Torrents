@@ -17,7 +17,7 @@ public class BootReceiver extends BroadcastReceiver {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		boolean notifsenabled = prefs.getBoolean("pref_gen_notif", false);
-		String[] timeString = prefs.getString("pref_gen_notif_refresh", "24:00").split(":");
+		String[] timeString = "12:0".split(":");
 		
 		int hours = Integer.parseInt(timeString[0]);
 		int minutes = Integer.parseInt(timeString[1]);

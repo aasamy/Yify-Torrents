@@ -93,15 +93,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_menu_share=0x7f02001d;
         public static final int icon_more=0x7f02001e;
         public static final int logo=0x7f02001f;
-        public static final int navigation_accept=0x7f020020;
-        public static final int navigation_next_item=0x7f020021;
-        public static final int navigation_refresh=0x7f020022;
-        public static final int partfinder=0x7f020023;
-        public static final int searchcategory=0x7f020024;
-        public static final int textlines=0x7f020025;
-        public static final int twitter_feed_background=0x7f020026;
-        public static final int viewselector=0x7f020027;
-        public static final int yify=0x7f020028;
+        public static final int logo2=0x7f020020;
+        public static final int navigation_accept=0x7f020021;
+        public static final int navigation_next_item=0x7f020022;
+        public static final int navigation_refresh=0x7f020023;
+        public static final int partfinder=0x7f020024;
+        public static final int searchcategory=0x7f020025;
+        public static final int textlines=0x7f020026;
+        public static final int twitter_feed_background=0x7f020027;
+        public static final int viewselector=0x7f020028;
+        public static final int yifylogo=0x7f020029;
+        public static final int yifylogo2=0x7f02002a;
     }
     public static final class id {
         public static final int _imageName=0x7f090034;

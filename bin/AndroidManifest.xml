@@ -16,7 +16,7 @@
     
     <application android:name="MobileApplication"
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/yifylogo2"
         android:label="Yify-Torrents"
         android:theme="@style/AppTheme" android:restoreAnyVersion="true" android:killAfterRestore="false" android:restoreNeedsApplication="true" android:allowTaskReparenting="true" android:persistent="true">
         
@@ -24,7 +24,7 @@
             android:authorities="com.yify.mobile.SuggestionProvider" />
         <activity
             android:name="com.yify.mobile.MainActivity"
-            android:label="Yift-Torrents" >
+            android:label="Yify-Torrents" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

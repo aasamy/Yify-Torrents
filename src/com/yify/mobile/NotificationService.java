@@ -45,40 +45,29 @@ public class NotificationService extends Service {
 			return;
 		}
 		
-		new LatestMovies(new DatabaseManager(this)).execute();
+		new LatestMovies().execute();
 	}
 	
 	private class LatestMovies extends AsyncTask<Void, Void, Integer> {
 		
-		private DatabaseManager dm;
 		private final int nID = 1;
 		
-		public LatestMovies(DatabaseManager dm) {
-			this.dm = dm;
+		public LatestMovies() {
 		}
 		
 		@Override
 		protected Integer doInBackground(Void... params) {
 			
 			ApiManager manager = new ApiManager();
-			ArrayList<ListObject> list = manager.getList(null, null, null, 0, 10, 1, "date", "desc");
 			
-			ArrayList<Integer> movieids = new ArrayList<Integer>();
-			
-			for(ListObject ob : list) {
-				movieids.add(ob.getMovieID());
-				Log.d("id", ""+ob.getMovieID());
-			}
-			
-			//return this.dm.getNewFilmCount(movieids, true);
-			return list.get(0).getMovieID();
+			return manager.getLatestFilmCount();
 
 		}
 		
 		@Override
 		protected void onPostExecute(Integer response) {
 			
-			if(response != 0) {
+			if(response > 0) {
 			
 				NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
 				.setSmallIcon(R.drawable.logo)
@@ -98,6 +87,8 @@ public class NotificationService extends Service {
 				builder.setContentIntent(resultPendingIntent);
 				NotificationManager manager = (NotificationManager) 
 						NotificationService.this.getSystemService(Context.NOTIFICATION_SERVICE);
+				
+				builder.setVibrate(new long[] {1000, 500, 1000});
 				
 				manager.notify(nID, builder.build());
 				

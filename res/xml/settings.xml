@@ -31,8 +31,7 @@
             android:title="Allow Notifications"
             android:defaultValue="true"
             android:summary="Allow notifications to be sent to this device" />
-        <com.yify.object.TimePreference android:key="pref_gen_notif_refresh"
-            android:title="Check For Latest Films" />
+        
         <Preference
             android:key="pref_gen_imgcache"
             android:title="Clear Image Cache" 

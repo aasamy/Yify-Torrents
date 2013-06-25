@@ -219,7 +219,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean notifsenabled = prefs.getBoolean("pref_gen_notif", false);
-		String[] timeString = prefs.getString("pref_gen_notif_refresh", "24:00").split(":");
+		String[] timeString = "12:00".split(":");
 		
 		int hours = Integer.parseInt(timeString[0]);
 		int minutes = Integer.parseInt(timeString[1]);
