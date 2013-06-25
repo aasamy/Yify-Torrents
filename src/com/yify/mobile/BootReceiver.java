@@ -1,4 +1,5 @@
-package com.yify.manager;
+package com.yify.mobile;
+
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

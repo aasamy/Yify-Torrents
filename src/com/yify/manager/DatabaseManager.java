@@ -212,6 +212,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		
 		String query = "SELECT " + KEY_MOVIEID + " FROM " + TABLE_LATEST;
 		
+		Log.d("query", query);
+		
 		Cursor cursor = db.rawQuery(query, null);
 		
 		if(cursor == null) {

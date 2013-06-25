@@ -1,9 +1,9 @@
-package com.yify.manager;
+package com.yify.mobile;
 
 import java.util.ArrayList;
 
-import com.yify.mobile.ConnectivityDetector;
-import com.yify.mobile.MainActivity;
+import com.yify.manager.ApiManager;
+import com.yify.manager.DatabaseManager;
 import com.yify.mobile.R;
 import com.yify.object.ListObject;
 
@@ -67,9 +67,11 @@ public class NotificationService extends Service {
 			
 			for(ListObject ob : list) {
 				movieids.add(ob.getMovieID());
+				Log.d("id", ""+ob.getMovieID());
 			}
 			
-			return this.dm.getNewFilmCount(movieids, true);
+			//return this.dm.getNewFilmCount(movieids, true);
+			return list.get(0).getMovieID();
 
 		}
 		

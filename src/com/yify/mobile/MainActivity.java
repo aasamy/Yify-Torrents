@@ -10,7 +10,6 @@ import java.util.HashMap;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.DatabaseManager;
-import com.yify.manager.NotificationService;
 import com.yify.manager.ProductAdapter;
 import com.yify.object.AuthObject;
 import com.yify.object.CommentObject;
