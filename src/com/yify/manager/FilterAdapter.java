@@ -4,25 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.yify.mobile.R;
-import com.yify.object.*;
-import com.yify.view.ViewFlinger;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class FilterAdapter<T extends Object> extends BaseAdapter {
@@ -141,7 +134,7 @@ public class FilterAdapter<T extends Object> extends BaseAdapter {
 		}
 		
 		if(entry.get("sub").equals("")) {
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) LayoutParams.MATCH_PARENT, (int) LayoutParams.WRAP_CONTENT);
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.CENTER_VERTICAL);
 			holder.main.setLayoutParams(params);
 		}

@@ -1,21 +1,14 @@
 package com.yify.mobile;
 
-import java.util.ArrayList;
-
 import com.yify.manager.ApiManager;
-import com.yify.manager.DatabaseManager;
 import com.yify.mobile.R;
-import com.yify.object.ListObject;
-
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
@@ -114,6 +107,7 @@ public class NotificationService extends Service {
 		return START_NOT_STICKY;
 	}
 	
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		wakeLock.release();

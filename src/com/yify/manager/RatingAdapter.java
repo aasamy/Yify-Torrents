@@ -20,7 +20,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yify.mobile.CommentActivity;
 import com.yify.mobile.R;
 import com.yify.mobile.RatingActivity;
 import com.yify.object.RequestObject;

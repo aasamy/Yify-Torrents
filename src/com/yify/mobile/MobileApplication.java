@@ -13,7 +13,6 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import android.app.Application;
-import android.graphics.Bitmap.CompressFormat;
 
 public class MobileApplication extends Application {
 
@@ -32,7 +31,6 @@ public class MobileApplication extends Application {
 		.build();
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-		.enableLogging()
 		.threadPoolSize(3)
 		.threadPriority(Thread.NORM_PRIORITY - 1)
 		.discCache(new UnlimitedDiscCache(cacheDir))

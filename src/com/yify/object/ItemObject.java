@@ -1,7 +1,5 @@
 package com.yify.object;
 
-import java.util.HashMap;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import android.os.Parcel;

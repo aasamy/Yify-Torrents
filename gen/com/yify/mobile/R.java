@@ -21,6 +21,7 @@ public final class R {
     public static final class array {
         public static final int action_list=0x7f060000;
         public static final int entries_array=0x7f060001;
+        public static final int menuTitles=0x7f060002;
     }
     public static final class attr {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -50,10 +51,14 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class color {
         public static final int actionbar_title_color=0x7f070000;
+        public static final int black=0x7f070005;
         public static final int blue=0x7f070002;
-        public static final int text_color=0x7f070004;
+        public static final int darkGreen=0x7f070006;
+        public static final int green=0x7f070003;
+        public static final int text_color=0x7f070008;
         public static final int text_white=0x7f070001;
-        public static final int white_opaque=0x7f070003;
+        public static final int white=0x7f070004;
+        public static final int white_opaque=0x7f070007;
     }
     public static final class dimen {
         public static final int actionbar_compat_button_home_width=0x7f080002;
@@ -79,235 +84,251 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int default_tweet=0x7f02000f;
         public static final int defaultprofileimage=0x7f020010;
         public static final int download=0x7f020011;
-        public static final int headtest3=0x7f020012;
-        public static final int ic_action_overflow=0x7f020013;
-        public static final int ic_action_refresh_white=0x7f020014;
-        public static final int ic_action_search=0x7f020015;
-        public static final int ic_action_share=0x7f020016;
-        public static final int ic_home=0x7f020017;
-        public static final int ic_launcher=0x7f020018;
-        public static final int ic_media_fullscreen_shrink=0x7f020019;
-        public static final int ic_media_fullscreen_stretch=0x7f02001a;
-        public static final int ic_media_pause=0x7f02001b;
-        public static final int ic_media_play=0x7f02001c;
-        public static final int ic_menu_share=0x7f02001d;
-        public static final int icon_more=0x7f02001e;
-        public static final int logo=0x7f02001f;
-        public static final int logo2=0x7f020020;
-        public static final int navigation_accept=0x7f020021;
-        public static final int navigation_next_item=0x7f020022;
-        public static final int navigation_refresh=0x7f020023;
-        public static final int partfinder=0x7f020024;
-        public static final int searchcategory=0x7f020025;
-        public static final int textlines=0x7f020026;
-        public static final int twitter_feed_background=0x7f020027;
-        public static final int viewselector=0x7f020028;
-        public static final int yifylogo=0x7f020029;
-        public static final int yifylogo2=0x7f02002a;
+        public static final int drawer_list_background=0x7f020012;
+        public static final int drawer_text_selector=0x7f020013;
+        public static final int headtest3=0x7f020014;
+        public static final int ic_action_overflow=0x7f020015;
+        public static final int ic_action_refresh_white=0x7f020016;
+        public static final int ic_action_search=0x7f020017;
+        public static final int ic_action_share=0x7f020018;
+        public static final int ic_drawer=0x7f020019;
+        public static final int ic_home=0x7f02001a;
+        public static final int ic_launcher=0x7f02001b;
+        public static final int ic_media_fullscreen_shrink=0x7f02001c;
+        public static final int ic_media_fullscreen_stretch=0x7f02001d;
+        public static final int ic_media_pause=0x7f02001e;
+        public static final int ic_media_play=0x7f02001f;
+        public static final int ic_menu_share=0x7f020020;
+        public static final int icon_more=0x7f020021;
+        public static final int logo=0x7f020022;
+        public static final int logo2=0x7f020023;
+        public static final int navigation_accept=0x7f020024;
+        public static final int navigation_next_item=0x7f020025;
+        public static final int navigation_refresh=0x7f020026;
+        public static final int partfinder=0x7f020027;
+        public static final int searchcategory=0x7f020028;
+        public static final int textlines=0x7f020029;
+        public static final int twitter_feed_background=0x7f02002a;
+        public static final int viewselector=0x7f02002b;
+        public static final int yifylogo=0x7f02002c;
+        public static final int yifylogo2=0x7f02002d;
     }
     public static final class id {
-        public static final int _imageName=0x7f090034;
+        public static final int _imageName=0x7f09003d;
         public static final int actionbar_compat=0x7f090000;
         public static final int actionbar_compat_item_refresh=0x7f090003;
         public static final int actionbar_compat_item_refresh_progress=0x7f090002;
         public static final int actionbar_compat_title=0x7f090001;
-        public static final int active=0x7f090069;
-        public static final int activelabel=0x7f090067;
-        public static final int cancel=0x7f090088;
-        public static final int comment_state=0x7f090015;
-        public static final int commentcount=0x7f090070;
-        public static final int comments_loading=0x7f090017;
-        public static final int date=0x7f090008;
-        public static final int desc=0x7f090031;
-        public static final int desc_title=0x7f090030;
-        public static final int downloadButton=0x7f09003a;
-        public static final int edit=0x7f090075;
-        public static final int editText1=0x7f090087;
-        public static final int editquery=0x7f09000d;
-        public static final int filter_listview=0x7f09000f;
-        public static final int filter_title=0x7f09000e;
-        public static final int footrel=0x7f090019;
-        public static final int fr_text=0x7f090027;
-        public static final int fragmentlist=0x7f090078;
-        public static final int full_image=0x7f09001b;
-        public static final int gener_info_title=0x7f09001c;
-        public static final int general=0x7f09006e;
-        public static final int general_layout=0x7f09001d;
-        public static final int genre_text=0x7f09001f;
-        public static final int hash_text=0x7f090096;
-        public static final int image=0x7f090035;
-        public static final int imageViewInner=0x7f090060;
-        public static final int imageViewScroll=0x7f09005f;
-        public static final int imagebutton_movie=0x7f090033;
-        public static final int item_container=0x7f090039;
-        public static final int item_flinger=0x7f090038;
-        public static final int joined=0x7f09006b;
-        public static final int joinedlabel=0x7f09006c;
-        public static final int lang_text=0x7f090029;
-        public static final int latest_container=0x7f09004c;
-        public static final int latest_err=0x7f090051;
-        public static final int latest_flinger=0x7f090053;
-        public static final int latest_loading=0x7f09004f;
-        public static final int latest_state=0x7f09004e;
-        public static final int latest_text=0x7f09004d;
-        public static final int latest_viewflinger_container=0x7f090052;
-        public static final int linearLayout1=0x7f090032;
-        public static final int load_more=0x7f09001a;
-        public static final int loading_latest=0x7f090050;
-        public static final int loading_popular=0x7f090058;
-        public static final int loading_upcoming=0x7f090048;
-        public static final int loginstate=0x7f09003b;
-        public static final int logout=0x7f090076;
-        public static final int main_layout=0x7f090044;
-        public static final int menu_accept=0x7f0900a1;
-        public static final int menu_download=0x7f0900a2;
-        public static final int menu_filter=0x7f0900a0;
-        public static final int menu_home=0x7f09009b;
-        public static final int menu_login=0x7f09009c;
+        public static final int active=0x7f090072;
+        public static final int activelabel=0x7f090070;
+        public static final int cancel=0x7f090091;
+        public static final int comment_state=0x7f09001e;
+        public static final int commentcount=0x7f090079;
+        public static final int comments_loading=0x7f090020;
+        public static final int content_frame=0x7f090007;
+        public static final int date=0x7f090011;
+        public static final int desc=0x7f09003a;
+        public static final int desc_title=0x7f090039;
+        public static final int downloadButton=0x7f090043;
+        public static final int drawer_layout=0x7f090006;
+        public static final int edit=0x7f09007e;
+        public static final int editText1=0x7f090090;
+        public static final int editquery=0x7f090016;
+        public static final int error=0x7f09000e;
+        public static final int filmContainer=0x7f09000a;
+        public static final int filmInner=0x7f09000b;
+        public static final int filter_listview=0x7f090018;
+        public static final int filter_title=0x7f090017;
+        public static final int footrel=0x7f090022;
+        public static final int fr_text=0x7f090030;
+        public static final int fragmentlist=0x7f090081;
+        public static final int full_image=0x7f090024;
+        public static final int gener_info_title=0x7f090025;
+        public static final int general=0x7f090077;
+        public static final int general_layout=0x7f090026;
+        public static final int genre_text=0x7f090028;
+        public static final int hash_text=0x7f09009f;
+        public static final int homeFragment=0x7f090008;
+        public static final int image=0x7f09003e;
+        public static final int imageViewInner=0x7f090069;
+        public static final int imageViewScroll=0x7f090068;
+        public static final int imagebutton_movie=0x7f09003c;
+        public static final int item_container=0x7f090042;
+        public static final int item_flinger=0x7f090041;
+        public static final int joined=0x7f090074;
+        public static final int joinedlabel=0x7f090075;
+        public static final int lang_text=0x7f090032;
+        public static final int latest_container=0x7f090055;
+        public static final int latest_err=0x7f09005a;
+        public static final int latest_flinger=0x7f09005c;
+        public static final int latest_loading=0x7f090058;
+        public static final int latest_state=0x7f090057;
+        public static final int latest_text=0x7f090056;
+        public static final int latest_viewflinger_container=0x7f09005b;
+        public static final int left_drawer=0x7f090009;
+        public static final int linearLayout1=0x7f09003b;
+        public static final int load_more=0x7f090023;
+        public static final int loading=0x7f09000d;
+        public static final int loading_latest=0x7f090059;
+        public static final int loading_popular=0x7f090061;
+        public static final int loading_upcoming=0x7f090051;
+        public static final int loginstate=0x7f090044;
+        public static final int logout=0x7f09007f;
+        public static final int main_layout=0x7f09004d;
+        public static final int menu_accept=0x7f0900aa;
+        public static final int menu_download=0x7f0900ab;
+        public static final int menu_filter=0x7f0900a9;
+        public static final int menu_home=0x7f0900a4;
+        public static final int menu_login=0x7f0900a5;
         public static final int menu_refresh=0x7f090004;
-        public static final int menu_request=0x7f09009f;
-        public static final int menu_search=0x7f09009a;
-        public static final int menu_settings=0x7f09009e;
-        public static final int menu_share=0x7f09009d;
-        public static final int message=0x7f09000a;
-        public static final int movie_err=0x7f090063;
-        public static final int movie_error_state=0x7f090062;
-        public static final int movie_info_listview=0x7f090061;
-        public static final int movie_loading_state=0x7f09005d;
-        public static final int movie_main_state=0x7f09005e;
-        public static final int movie_state=0x7f09005c;
-        public static final int moviesrequested=0x7f090072;
-        public static final int name=0x7f090007;
-        public static final int name_date=0x7f090006;
-        public static final int next_icon=0x7f090018;
-        public static final int overflow=0x7f090009;
+        public static final int menu_request=0x7f0900a8;
+        public static final int menu_search=0x7f0900a3;
+        public static final int menu_settings=0x7f0900a7;
+        public static final int menu_share=0x7f0900a6;
+        public static final int message=0x7f090013;
+        public static final int movie_err=0x7f09006c;
+        public static final int movie_error_state=0x7f09006b;
+        public static final int movie_info_listview=0x7f09006a;
+        public static final int movie_loading_state=0x7f090066;
+        public static final int movie_main_state=0x7f090067;
+        public static final int movie_state=0x7f090065;
+        public static final int moviesrequested=0x7f09007b;
+        public static final int name=0x7f090010;
+        public static final int name_date=0x7f09000f;
+        public static final int next_icon=0x7f090021;
+        public static final int overflow=0x7f090012;
         public static final int pager=0x7f090005;
-        public static final int password=0x7f09003e;
-        public static final int picker=0x7f090094;
-        public static final int popular_container=0x7f090054;
-        public static final int popular_err=0x7f090059;
-        public static final int popular_flinger=0x7f09005b;
-        public static final int popular_loading=0x7f090057;
-        public static final int popular_state=0x7f090056;
-        public static final int popular_text=0x7f090055;
-        public static final int popular_viewflinger_container=0x7f09005a;
-        public static final int profileload=0x7f090065;
-        public static final int profilepicture=0x7f090066;
-        public static final int profilestate=0x7f090064;
-        public static final int ps_text=0x7f090095;
-        public static final int quality_text=0x7f090023;
-        public static final int query=0x7f09008c;
-        public static final int rating_count=0x7f09007c;
-        public static final int rating_cover_image=0x7f09007a;
-        public static final int rating_overflow=0x7f09007d;
-        public static final int rating_pick=0x7f090079;
-        public static final int rating_text=0x7f09002f;
-        public static final int rating_title=0x7f09007b;
-        public static final int ratingstate=0x7f090077;
-        public static final int refresh_twitter=0x7f0900a4;
-        public static final int reg_after=0x7f090043;
-        public static final int reg_email=0x7f090082;
-        public static final int reg_layout=0x7f090040;
-        public static final int reg_or=0x7f090041;
-        public static final int reg_password=0x7f090084;
-        public static final int reg_password_label=0x7f090083;
-        public static final int reg_regbutton=0x7f090085;
-        public static final int reg_username=0x7f090080;
-        public static final int reg_username_label=0x7f09007f;
-        public static final int register=0x7f090042;
-        public static final int reply=0x7f090089;
-        public static final int replystate=0x7f090086;
-        public static final int request=0x7f09008e;
-        public static final int requestType=0x7f09008b;
-        public static final int request_cancel=0x7f09008d;
-        public static final int requests=0x7f090071;
-        public static final int requestsleft=0x7f090073;
-        public static final int requeststate=0x7f09008a;
-        public static final int reso_text=0x7f090025;
-        public static final int rt_text=0x7f09002d;
-        public static final int search_listView=0x7f090091;
-        public static final int search_listrow=0x7f090093;
-        public static final int search_loading=0x7f090090;
-        public static final int search_no_results=0x7f090092;
-        public static final int search_state=0x7f09008f;
-        public static final int search_title=0x7f09000c;
-        public static final int second_image=0x7f090097;
-        public static final int second_text=0x7f090098;
-        public static final int setting_main=0x7f090012;
-        public static final int settings_sub=0x7f090013;
-        public static final int show_twitter=0x7f0900a3;
-        public static final int signinbutton=0x7f09003f;
-        public static final int size_text=0x7f090021;
-        public static final int sort_listview=0x7f090011;
-        public static final int sort_title=0x7f090010;
-        public static final int st_text=0x7f09002b;
-        public static final int table_row1=0x7f09001e;
-        public static final int table_row2=0x7f090020;
-        public static final int table_row3=0x7f090022;
-        public static final int table_row4=0x7f090024;
-        public static final int table_row5=0x7f090026;
-        public static final int table_row6=0x7f090028;
-        public static final int table_row7=0x7f09002a;
-        public static final int table_row8=0x7f09002c;
-        public static final int table_row9=0x7f09002e;
-        public static final int text=0x7f090036;
-        public static final int text2=0x7f090037;
-        public static final int textView1=0x7f09007e;
-        public static final int textView2=0x7f090081;
-        public static final int textView3=0x7f090068;
-        public static final int textfields=0x7f09003c;
-        public static final int torrentsdownloaded=0x7f09006f;
-        public static final int twitter_feed_list=0x7f090099;
-        public static final int upcoming_container=0x7f09000b;
-        public static final int upcoming_err=0x7f090049;
-        public static final int upcoming_flinger=0x7f09004b;
-        public static final int upcoming_loading=0x7f090047;
-        public static final int upcoming_state=0x7f090046;
-        public static final int upcoming_text=0x7f090045;
-        public static final int upcoming_viewflinger_container=0x7f09004a;
-        public static final int user=0x7f09006d;
-        public static final int username=0x7f09003d;
-        public static final int userole=0x7f09006a;
-        public static final int value_layout=0x7f090014;
-        public static final int value_text=0x7f090016;
-        public static final int votesleft=0x7f090074;
+        public static final int password=0x7f090047;
+        public static final int picker=0x7f09009d;
+        public static final int popular_container=0x7f09005d;
+        public static final int popular_err=0x7f090062;
+        public static final int popular_flinger=0x7f090064;
+        public static final int popular_loading=0x7f090060;
+        public static final int popular_state=0x7f09005f;
+        public static final int popular_text=0x7f09005e;
+        public static final int popular_viewflinger_container=0x7f090063;
+        public static final int profileload=0x7f09006e;
+        public static final int profilepicture=0x7f09006f;
+        public static final int profilestate=0x7f09006d;
+        public static final int ps_text=0x7f09009e;
+        public static final int quality_text=0x7f09002c;
+        public static final int query=0x7f090095;
+        public static final int rating_count=0x7f090085;
+        public static final int rating_cover_image=0x7f090083;
+        public static final int rating_overflow=0x7f090086;
+        public static final int rating_pick=0x7f090082;
+        public static final int rating_text=0x7f090038;
+        public static final int rating_title=0x7f090084;
+        public static final int ratingstate=0x7f090080;
+        public static final int refresh_twitter=0x7f0900ad;
+        public static final int reg_after=0x7f09004c;
+        public static final int reg_email=0x7f09008b;
+        public static final int reg_layout=0x7f090049;
+        public static final int reg_or=0x7f09004a;
+        public static final int reg_password=0x7f09008d;
+        public static final int reg_password_label=0x7f09008c;
+        public static final int reg_regbutton=0x7f09008e;
+        public static final int reg_username=0x7f090089;
+        public static final int reg_username_label=0x7f090088;
+        public static final int register=0x7f09004b;
+        public static final int reply=0x7f090092;
+        public static final int replystate=0x7f09008f;
+        public static final int request=0x7f090097;
+        public static final int requestType=0x7f090094;
+        public static final int request_cancel=0x7f090096;
+        public static final int requests=0x7f09007a;
+        public static final int requestsleft=0x7f09007c;
+        public static final int requeststate=0x7f090093;
+        public static final int reso_text=0x7f09002e;
+        public static final int rt_text=0x7f090036;
+        public static final int search_listView=0x7f09009a;
+        public static final int search_listrow=0x7f09009c;
+        public static final int search_loading=0x7f090099;
+        public static final int search_no_results=0x7f09009b;
+        public static final int search_state=0x7f090098;
+        public static final int search_title=0x7f090015;
+        public static final int second_image=0x7f0900a0;
+        public static final int second_text=0x7f0900a1;
+        public static final int setting_main=0x7f09001b;
+        public static final int settings_sub=0x7f09001c;
+        public static final int show_twitter=0x7f0900ac;
+        public static final int signinbutton=0x7f090048;
+        public static final int size_text=0x7f09002a;
+        public static final int sort_listview=0x7f09001a;
+        public static final int sort_title=0x7f090019;
+        public static final int st_text=0x7f090034;
+        public static final int state=0x7f09000c;
+        public static final int table_row1=0x7f090027;
+        public static final int table_row2=0x7f090029;
+        public static final int table_row3=0x7f09002b;
+        public static final int table_row4=0x7f09002d;
+        public static final int table_row5=0x7f09002f;
+        public static final int table_row6=0x7f090031;
+        public static final int table_row7=0x7f090033;
+        public static final int table_row8=0x7f090035;
+        public static final int table_row9=0x7f090037;
+        public static final int text=0x7f09003f;
+        public static final int text2=0x7f090040;
+        public static final int textView1=0x7f090087;
+        public static final int textView2=0x7f09008a;
+        public static final int textView3=0x7f090071;
+        public static final int textfields=0x7f090045;
+        public static final int torrentsdownloaded=0x7f090078;
+        public static final int twitter_feed_list=0x7f0900a2;
+        public static final int upcoming_container=0x7f090014;
+        public static final int upcoming_err=0x7f090052;
+        public static final int upcoming_flinger=0x7f090054;
+        public static final int upcoming_loading=0x7f090050;
+        public static final int upcoming_state=0x7f09004f;
+        public static final int upcoming_text=0x7f09004e;
+        public static final int upcoming_viewflinger_container=0x7f090053;
+        public static final int user=0x7f090076;
+        public static final int username=0x7f090046;
+        public static final int userole=0x7f090073;
+        public static final int value_layout=0x7f09001d;
+        public static final int value_text=0x7f09001f;
+        public static final int votesleft=0x7f09007d;
     }
     public static final class layout {
         public static final int about_pager=0x7f030000;
         public static final int actionbar_compat=0x7f030001;
         public static final int actionbar_indeterminate_progress=0x7f030002;
-        public static final int comment_item=0x7f030003;
-        public static final int cookies_fragment=0x7f030004;
-        public static final int faq_fragment=0x7f030005;
-        public static final int filter=0x7f030006;
-        public static final int filter_item=0x7f030007;
-        public static final int footer=0x7f030008;
-        public static final int full_image=0x7f030009;
-        public static final int general_information=0x7f03000a;
-        public static final int image_cover=0x7f03000b;
-        public static final int image_layout=0x7f03000c;
-        public static final int item=0x7f03000d;
-        public static final int item_second=0x7f03000e;
-        public static final int login_dialog=0x7f03000f;
-        public static final int main=0x7f030010;
-        public static final int pager_layout=0x7f030011;
-        public static final int privacy_fragment=0x7f030012;
-        public static final int profile_layout=0x7f030013;
-        public static final int rating_base=0x7f030014;
-        public static final int rating_frag_base=0x7f030015;
-        public static final int rating_picker=0x7f030016;
-        public static final int rating_row=0x7f030017;
-        public static final int register_layout=0x7f030018;
-        public static final int reply_dialog=0x7f030019;
-        public static final int request_dialog=0x7f03001a;
-        public static final int returns_fragment=0x7f03001b;
-        public static final int search=0x7f03001c;
-        public static final int search_listrow=0x7f03001d;
-        public static final int terms_fragment=0x7f03001e;
-        public static final int timepreference=0x7f03001f;
-        public static final int torrent_information=0x7f030020;
-        public static final int twitter_feed_row=0x7f030021;
-        public static final int twitter_list=0x7f030022;
+        public static final int b_activity_main=0x7f030003;
+        public static final int b_film_container=0x7f030004;
+        public static final int b_home_fragment=0x7f030005;
+        public static final int comment_item=0x7f030006;
+        public static final int cookies_fragment=0x7f030007;
+        public static final int drawer_list_item=0x7f030008;
+        public static final int faq_fragment=0x7f030009;
+        public static final int filter=0x7f03000a;
+        public static final int filter_item=0x7f03000b;
+        public static final int footer=0x7f03000c;
+        public static final int full_image=0x7f03000d;
+        public static final int general_information=0x7f03000e;
+        public static final int image_cover=0x7f03000f;
+        public static final int image_layout=0x7f030010;
+        public static final int item=0x7f030011;
+        public static final int item_second=0x7f030012;
+        public static final int login_dialog=0x7f030013;
+        public static final int main=0x7f030014;
+        public static final int pager_layout=0x7f030015;
+        public static final int privacy_fragment=0x7f030016;
+        public static final int profile_layout=0x7f030017;
+        public static final int rating_base=0x7f030018;
+        public static final int rating_frag_base=0x7f030019;
+        public static final int rating_picker=0x7f03001a;
+        public static final int rating_row=0x7f03001b;
+        public static final int register_layout=0x7f03001c;
+        public static final int reply_dialog=0x7f03001d;
+        public static final int request_dialog=0x7f03001e;
+        public static final int returns_fragment=0x7f03001f;
+        public static final int search=0x7f030020;
+        public static final int search_listrow=0x7f030021;
+        public static final int terms_fragment=0x7f030022;
+        public static final int timepreference=0x7f030023;
+        public static final int torrent_information=0x7f030024;
+        public static final int twitter_feed_row=0x7f030025;
+        public static final int twitter_list=0x7f030026;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;
@@ -318,6 +339,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int alternate_title=0x7f0a0001;
         public static final int app_name=0x7f0a0000;
         public static final int clear=0x7f0a0008;
+        public static final int drawerCloseDesc=0x7f0a0013;
+        public static final int drawerOpenDesc=0x7f0a0012;
         public static final int menu_basket=0x7f0a000c;
         public static final int menu_contact=0x7f0a000f;
         public static final int menu_expand=0x7f0a0006;
@@ -378,7 +401,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:actionbarCompatItemHomeStyle
+          @attr name com.yify.mobile:actionbarCompatItemHomeStyle
         */
         public static final int AppTheme_actionbarCompatItemHomeStyle = 2;
         /**
@@ -388,7 +411,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:actionbarCompatItemStyle
+          @attr name com.yify.mobile:actionbarCompatItemStyle
         */
         public static final int AppTheme_actionbarCompatItemStyle = 1;
         /**
@@ -398,7 +421,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:actionbarCompatProgressIndicatorStyle
+          @attr name com.yify.mobile:actionbarCompatProgressIndicatorStyle
         */
         public static final int AppTheme_actionbarCompatProgressIndicatorStyle = 3;
         /**
@@ -408,7 +431,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:actionbarCompatTitleStyle
+          @attr name com.yify.mobile:actionbarCompatTitleStyle
         */
         public static final int AppTheme_actionbarCompatTitleStyle = 0;
         /** Attributes that can be used with a BezelImageView.
@@ -433,7 +456,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:borderDrawable
+          @attr name com.yify.mobile:borderDrawable
         */
         public static final int BezelImageView_borderDrawable = 1;
         /**
@@ -443,7 +466,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name android:maskDrawable
+          @attr name com.yify.mobile:maskDrawable
         */
         public static final int BezelImageView_maskDrawable = 0;
     };

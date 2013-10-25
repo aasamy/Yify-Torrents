@@ -38,4 +38,12 @@
     <string name="menu_contact">Contact</string>
     <string name="show_twitter">Show Twitter Feed</string>
     <string name="refresh_twitter">Refresh Twitter Feed</string>
+    <string-array name="menuTitles">
+        <item>Home</item>
+        <item>Requests</item>
+        <item>My Account</item>
+        <item>Settings</item>
+    </string-array>
+	<string name="drawerOpenDesc">Drawer Open</string>
+	<string name="drawerCloseDesc">Drawer Closed</string>
 </resources>

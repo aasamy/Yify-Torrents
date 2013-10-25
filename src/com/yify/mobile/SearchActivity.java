@@ -7,11 +7,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.view.LayoutInflater;
@@ -22,11 +20,9 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.yify.object.*;
@@ -321,7 +317,7 @@ public class SearchActivity extends ActionBarActivity implements LoginDialog.Log
 					ListObject o = (ListObject) adapter.getItem(position);
 					
 					Intent intent = new Intent(SearchActivity.this, MovieActivity.class);
-					int i = ((ListObject) o).getMovieID();
+					int i = o.getMovieID();
 					intent.putExtra("id", i);
 					startActivity(intent);
 					

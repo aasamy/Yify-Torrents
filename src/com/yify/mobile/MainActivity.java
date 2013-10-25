@@ -1,59 +1,42 @@
 package com.yify.mobile;
 
+import java.util.ArrayList;
+
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.DialogFragment;
+import android.app.PendingIntent;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.DatabaseManager;
-import com.yify.manager.ProductAdapter;
-import com.yify.object.AuthObject;
-import com.yify.object.CommentObject;
 import com.yify.object.ListObject;
 import com.yify.object.Login;
 import com.yify.object.LoginDialog;
 import com.yify.object.UpcomingObject;
+import com.yify.security.AuthHelper;
+import com.yify.security.State;
 import com.yify.view.ViewFlinger;
-import android.widget.ListView;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.SearchView;
-import android.widget.SearchView.OnSuggestionListener;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
-import android.view.MenuItem;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class MainActivity extends ActionBarActivity implements LoginDialog.LoginDialogListener {
@@ -66,22 +49,39 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 	private SearchView searchView; 
 	private DatabaseManager manager;
 	private boolean loggedIn = false;
-
+	private AuthHelper helper;
+	
+	private final String ACTION_MYACCOUNT = "action_myaccount";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		helper = new AuthHelper(this, new AuthHelper.OnAuthenticatedStateChangeListener() {
+			
+			@Override
+			public void onAuthenticationFailed() {
+				Log.d("MainActivity", "onAuthenticationFailed()");
+			}
+			
+			@Override
+			public void onAuthenticatedStateChange(State state) {
+				Log.d("MainActivity", "onAuthenticatedStateChange("+ (state.isOpen() ? "Open" : "Closed") + "," + (state.hasAction() ? state.getAction() : "NoAction") +")");
+			}
+		});
 		setContentView(R.layout.main);
 		upcomingflipper = (ViewFlipper) findViewById(R.id.upcoming_state);
 		latestFlipper = (ViewFlipper) findViewById(R.id.latest_state);
 		popularFlipper = (ViewFlipper) findViewById(R.id.popular_state);
 		detector = new ConnectivityDetector(this);
 		manager = new DatabaseManager(this);
+		helper.onCreate(savedInstanceState);
 	}
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt("SAVED_INDEX", 1);
+		helper.onSaveInstanceState(outState);
 	}
 	
 	@Override
@@ -121,7 +121,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "LAT"});
 		/* get popular films */
 		new MainAsync<String, Integer, ListObject>().execute(new String[] {"LIST", "POP"});
-		
 		return end;
 	}
 	
@@ -139,7 +138,6 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
 		switch(item.getItemId()) {
 			case R.id.menu_refresh:
 				
@@ -188,14 +186,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
                 startActivity(Intent.createChooser(shareIntent, "Share..."));
                 break;
 			case R.id.menu_login:
-				this.loggedIn = (manager.getLoggedInUserName() == null) ? false : true;
-				if(!this.loggedIn) {
-					DialogFragment login = new LoginDialog();
-					login.show(getFragmentManager(), "login");
-				} else {
-					Intent my = new Intent(MainActivity.this, MyAccountActivity.class);
-					startActivity(my);
-				}
+				helper.requestAuthorisation(ACTION_MYACCOUNT);
 				break;
 			case R.id.menu_settings :
 				Intent set = new Intent(this, SettingsActivity.class);
@@ -240,6 +231,7 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 			am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
 					SystemClock.elapsedRealtime() + totalMinutes*60*1000, totalMinutes*60*1000, pi);
 		}
+		helper.onResume();
 	}
 	
 	private class MainAsync<Params, Result, T extends UpcomingObject> extends AsyncTask<Params, Result, ArrayList<T>> {
@@ -421,6 +413,10 @@ public class MainActivity extends ActionBarActivity implements LoginDialog.Login
 		
 	}
 	
-	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		helper = null;
+	}
 
 }

@@ -6,7 +6,6 @@ import com.yify.mobile.R;
 import com.yify.mobile.SuggestionProvider;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -33,7 +32,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		
 		/* update the state */
 		
-		Preference clearSearch = (Preference) this.findPreference("pref_search_clear");
+		Preference clearSearch = this.findPreference("pref_search_clear");
 		clearSearch.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
 			@Override

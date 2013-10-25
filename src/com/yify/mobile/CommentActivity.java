@@ -2,25 +2,14 @@ package com.yify.mobile;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
@@ -28,13 +17,9 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 import java.util.*;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yify.manager.ApiManager;
 import com.yify.manager.CommentAdapter;
 import com.yify.manager.DatabaseManager;
-import com.yify.manager.FilterAdapter;
 import com.yify.object.*;
 
 public class CommentActivity extends ActionBarActivity implements OnMenuItemClickListener, LoginDialog.LoginDialogListener, 

@@ -18,4 +18,8 @@
     <color name="actionbar_title_color">#224894</color>
     <color name="text_white">#FFFFFF</color>
     <color name="blue">#0099cc</color>
+    <color name="green">#50d518</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="darkGreen">#389511</color>
 </resources>

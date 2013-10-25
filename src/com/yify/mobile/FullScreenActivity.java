@@ -1,16 +1,10 @@
 package com.yify.mobile;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yify.object.ItemObject;
-
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class FullScreenActivity extends ActionBarActivity {

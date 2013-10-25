@@ -7,16 +7,13 @@ import com.yify.manager.DatabaseManager;
 import com.yify.manager.RatingAdapter;
 import com.yify.object.Login;
 import com.yify.object.LoginDialog;
-import com.yify.object.ReplyDialog;
 import com.yify.object.RequestDialog;
 import com.yify.object.RequestObject;
 
 import android.app.ActionBar.Tab;
-import android.app.AlertDialog.Builder;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -54,6 +51,7 @@ public class RatingActivity extends ActionBarActivity implements OnMenuItemClick
 	private Menu menu;
 	private SearchView searchView;
 	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rating_base);
@@ -482,20 +480,24 @@ public class RatingActivity extends ActionBarActivity implements OnMenuItemClick
 		}
  
  
+		@Override
 		public int getCount() {
 			return mTabs.size();
 		}
  
+		@Override
 		public Fragment getItem(int position) {
 			TabInfo info = mTabs.get(position);
 			return Fragment.instantiate(mContext, info.clss.getName(), info.args);
 		}
  
  
+		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 		}
  
  
+		@Override
 		public void onPageSelected(int position) {
 			mActionBar.setSelectedNavigationItem(position);
 			if(menu != null)
@@ -503,9 +505,11 @@ public class RatingActivity extends ActionBarActivity implements OnMenuItemClick
 		}
  
  
+		@Override
 		public void onPageScrollStateChanged(int state) {
 		}
  
+		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {}
  
 		@Override
@@ -520,6 +524,7 @@ public class RatingActivity extends ActionBarActivity implements OnMenuItemClick
 			}
 		}
  
+		@Override
 		public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {}
 	}
 

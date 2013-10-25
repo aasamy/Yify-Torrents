@@ -1,8 +1,6 @@
 package com.yify.object;
 
 import com.yify.mobile.R;
-import com.yify.object.ReplyDialog.ReplyListener;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

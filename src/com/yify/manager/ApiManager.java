@@ -25,7 +25,6 @@ import com.yify.object.RequestObject;
 import com.yify.object.UpcomingObject;
 import com.yify.object.UserObject;
 
-import android.os.DropBoxManager.Entry;
 import android.util.Log;
 /**
  * This is the class that controls the API requests to the YIFY API.

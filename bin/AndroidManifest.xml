@@ -6,7 +6,8 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18"
+        android:maxSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET"/>    
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -24,7 +25,7 @@
         <provider android:name=".SuggestionProvider"
             android:authorities="com.yify.mobile.SuggestionProvider" />
         <activity
-            android:name="com.yify.mobile.MainActivity"
+            android:name="com.yify.beta.MainActivity"
             android:label="Yify-Torrents" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -8,17 +8,13 @@ import com.yify.view.ViewFlinger;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
     
@@ -34,11 +30,13 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         this.isEnabled = isEnabled;
     }
 
-    public int getCount() {
+    @Override
+	public int getCount() {
     	return list.size();
     }
 
-    public Object getItem(int position) {
+    @Override
+	public Object getItem(int position) {
     	
     	if(position < list.size()) {
     		return list.get(position);
@@ -62,7 +60,8 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
     	return false;
     }
 
-    public long getItemId(int position) {
+    @Override
+	public long getItemId(int position) {
         return position;
     }
     
@@ -74,7 +73,8 @@ public class ProductAdapter<T extends UpcomingObject> extends BaseAdapter {
         public Button button;
     }
 
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    @Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         ViewHolder holder;
         if(convertView==null){
